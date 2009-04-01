@@ -1,0 +1,15 @@
+Xylose:  Collection of useful computational utilities
+                    A support library
+    - Co-authored by Air Force Research Lab (U.S. Government)
+    - See AUTHORS for contributors
+
+
+This software is released under the LGPL v3 license.
+
+
+components:
+AUTHORS         A list of those who have contributed with contact info
+ChangeLog       Brief descriptions of changes made between major revisions
+COPYING         Copy of the license used for this package
+INSTALL         Description of how one can install this package
+README          Brief description of this package
