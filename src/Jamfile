@@ -1,0 +1,14 @@
+# this Jamroot is mostly for helping build unit-tests while developing in the
+# source
+
+project /xylose/unit-tests
+    : requirements
+        <library>/xylose//xylose
+        <library>/olson-tools//boost_unit_test_framework
+    #: build-dir build
+    ;
+
+use-project /xylose : ../ ;
+
+build-project xylose/random/test ;
+build-project xylose/test ;

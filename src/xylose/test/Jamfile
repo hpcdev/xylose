@@ -1,0 +1,28 @@
+unit-test pool_allocator : pool_allocator.cpp ;
+unit-test Test_segmented_vector : Test_segmented_vector.cpp ;
+unit-test Time_segmented_vector : Time_segmented_vector.cpp ;
+unit-test TestSingleton : TestSingleton.cpp ;
+unit-test TestIndex : TestIndex.cpp ;
+unit-test TestStack : TestStack.cpp ;
+
+
+unit-test SyncLock_nothreads : SyncLock_nothreads_obj ;
+unit-test SyncLock_pthreads
+    : SyncLock_pthreads_obj
+    : <cflags>-pthread <linkflags>-pthread
+    ;
+unit-test SyncLock_omp
+    : SyncLock_omp_obj
+    : <toolset>gcc:<cflags>-fopenmp
+      <toolset>gcc:<linkflags>-fopenmp
+      <toolset>intel:<cflags>-openmp
+      <toolset>intel:<linkflags>-openmp
+    ;
+
+obj SyncLock_nothreads_obj : SyncLock.cpp ;
+obj SyncLock_pthreads_obj : SyncLock.cpp : <define>USE_PTHREAD <cflags>-pthread  ;
+obj SyncLock_omp_obj
+    : SyncLock.cpp
+    : <toolset>gcc:<cflags>-fopenmp
+      <toolset>intel:<cflags>-openmp
+    ;

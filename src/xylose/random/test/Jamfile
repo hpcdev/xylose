@@ -1,0 +1,5 @@
+echo "Execute ./eval_rand.m (an octave script) to do very, very rough" ;
+echo "analysis of the random number generators." ;
+
+unit-test Kiss : Kiss.cpp ;
+unit-test Crappy : Crappy.cpp ;

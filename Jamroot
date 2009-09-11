@@ -1,0 +1,21 @@
+
+constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 4185 $" ] ;
+
+project /xylose
+    : requirements
+        <include>src
+    : usage-requirements
+        <include>src
+    #: build-dir build
+    ;
+
+alias xylose
+    : # sources
+      [ glob src/xylose/*.hpp ]
+      [ glob src/xylose/detail/*.hpp ]
+      [ glob src/xylose/random/*.hpp ]
+      [ glob src/xylose/random/detail/*.hpp ]
+    : # no build requirements
+    : # no default build
+    : <include>src ;
+

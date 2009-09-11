@@ -1,0 +1,11 @@
+xylose_unit_test( pool_allocator LIBS XyloseUtil )
+#xylose_unit_test( TestCheckedAllocator )
+xylose_unit_test( TestIndex )
+xylose_unit_test( TestStack )
+xylose_unit_test( Test_segmented_vector LIBS XyloseUtil )
+xylose_unit_test( Time_segmented_vector LIBS XyloseUtil )
+#xylose_unit_test( TestTuple )
+#xylose_unit_test( TestTimeFunc )
+#xylose_unit_test( TestCoaxEig )
+
+xylose_unit_test( TestSingleton LIBS XyloseUtil )

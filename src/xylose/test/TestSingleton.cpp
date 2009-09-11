@@ -1,18 +1,18 @@
-#include <xylose/util/Singleton.hpp>
+#include <xylose/Singleton.hpp>
 
 #define BOOST_TEST_MODULE Singleton
 #include <boost/test/unit_test.hpp>
 
 // run this test through valgrind to ensure we are not leaking the instance!
 
-class Test : public xylose::util::Singleton< Test > {
+class Test : public xylose::Singleton< Test > {
 public:
   int x;
 private:
   Test() : x( 42 ) {}
   ~Test() {}
   
-  friend class xylose::util::Singleton< Test >;
+  friend class xylose::Singleton< Test >;
 };
 
 BOOST_AUTO_TEST_CASE( constructor ) {
