@@ -9,6 +9,9 @@ project /xylose
     #: build-dir build
     ;
 
+lib boost_unit_test_framework : : <name>boost_unit_test_framework <link>static ;
+
+
 alias xylose
     : # sources
       [ glob src/xylose/*.hpp ]
