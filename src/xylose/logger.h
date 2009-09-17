@@ -76,8 +76,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef xylose_logger_h
+#define xylose_logger_h
 
 #include <xylose/XSTR.h>
 
@@ -262,5 +262,5 @@ void setLogFile(const char * logfile);
 }} /*namespace xylose::logger */
 #endif 
 
-#endif // LOGGER_H
+#endif // xylose_logger_h
 
