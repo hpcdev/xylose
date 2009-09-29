@@ -31,6 +31,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
 
   BOOST_AUTO_TEST_CASE( insertion ) {
     typedef xylose::Vector<double,3> Vector;
+    using xylose::V3;
 
     xylose::Timer timer_car,
                 timer_vec,
@@ -84,6 +85,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
 
   BOOST_AUTO_TEST_CASE( iterator ) {
     typedef xylose::Vector<double,3> Vector;
+    using xylose::V3;
 
     xylose::Timer timer_car,
                 timer_vec,

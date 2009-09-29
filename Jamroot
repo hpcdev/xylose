@@ -9,11 +9,21 @@ project /xylose
     #: build-dir build
     ;
 
-lib boost_unit_test_framework : : <name>boost_unit_test_framework <link>static ;
+lib boost_unit_test_framework : : <name>boost_unit_test_framework-mt <link>static ;
 
+lib xylose-lib
+    : # sources
+      src/xylose/power.c
+      src/xylose/logger.c
+      [ glob src/xylose/*.cpp ]
+    : <link>static
+      <include>src
+    ;
 
 alias xylose
     : # sources
+      xylose-lib
+      [ glob src/xylose/*.h ] # olson-tools stuff is currently still .h
       [ glob src/xylose/*.hpp ]
       [ glob src/xylose/detail/*.hpp ]
       [ glob src/xylose/random/*.hpp ]
