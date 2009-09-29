@@ -28,14 +28,14 @@
 
 #define BOOST_TEST_MODULE  Vector
 
-#include <olson-tools/Vector.h>
+#include <xylose/Vector.h>
 
 #include <boost/test/unit_test.hpp>
 
 namespace {
-  using olson_tools::Vector;
-  using olson_tools::V3;
-  using olson_tools::make_vector;
+  using xylose::Vector;
+  using xylose::V3;
+  using xylose::make_vector;
 }
 
 BOOST_AUTO_TEST_SUITE( Vector_testsuite );

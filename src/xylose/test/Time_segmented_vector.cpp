@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
       xylose::segmented_vector< Vector, car_size > vec;
       timer_car.start();
       for ( unsigned int i = 0; i < len ; ++i ) {
-        vec.push_back(V3(0,1,(double)i));
+        vec.push_back(V3(0.,1.,(double)i));
       }
       timer_car.stop();
     }
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
       std::vector< Vector > vec;
       timer_vec.start();
       for ( unsigned int i = 0; i < len ; ++i ) {
-        vec.push_back(V3(0,1,(double)i));
+        vec.push_back(V3(0.,1.,(double)i));
       }
       timer_vec.stop();
     }
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
       timer_array.start();
       for ( unsigned int i = 0; i < len ; ++i ) {
         array = (Vector*)realloc(array, sizeof(Vector)*(i+1));
-        array[i] = V3(0,1,(double)i);
+        array[i] = V3(0.,1.,(double)i);
       }
       timer_array.stop();
       free(array);
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
       xylose::segmented_vector< Vector, car_size > vec;
       /* assign everything. */
       for ( unsigned int i = 0; i < len ; ++i ) {
-        vec.push_back(V3(0,1,(double)i));
+        vec.push_back(V3(0.,1.,(double)i));
       }
 
       timer_car.start();
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
       std::vector< Vector > vec;
       /* assign everything. */
       for ( unsigned int i = 0; i < len ; ++i ) {
-        vec.push_back(V3(0,1,(double)i));
+        vec.push_back(V3(0.,1.,(double)i));
       }
 
       timer_vec.start();
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_SUITE( segmented_vector_Timing );
       /* assign everything. */
       array = (Vector*)malloc(sizeof(Vector) * len);
       for ( unsigned int i = 0; i < len ; ++i ) {
-        array[i] = V3(0,1,(double)i);
+        array[i] = V3(0.,1.,(double)i);
       }
 
       timer_array.start();

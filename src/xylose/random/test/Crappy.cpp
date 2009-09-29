@@ -24,6 +24,7 @@ int main () {
 
 
   using xylose::random::Crappy;
+  typedef xylose::make_vector<uint32_t,5u> mkV5;
 
   const int total_rolls = 6000000;
 
@@ -31,14 +32,7 @@ int main () {
   {
     typedef Crappy::SeedVector V5T;
     Crappy r(
-          V5T(
-            VInit,
-            2981107794,
-            1283166457,
-            3823313073,
-            2005073031,
-            2954216106
-          )
+      mkV5()( 2981107794, 1283166457, 3823313073, 2005073031, 2954216106 )
     );
 
     BOOST_CHECK_EQUAL( static_cast<int32_t>(r.randInt()) >= 0 );
@@ -66,14 +60,11 @@ int main () {
       typedef Crappy::SeedVector V5T;
       rv.push_back(
         Crappy(
-          V5T(
-            VInit,
-            sr.randInt(),
-            sr.randInt(),
-            sr.randInt(),
-            sr.randInt(),
-            sr.randInt()
-          )
+          mkV5()( sr.randInt(),
+                  sr.randInt(),
+                  sr.randInt(),
+                  sr.randInt(),
+                  sr.randInt() )
         )
       );
     }
