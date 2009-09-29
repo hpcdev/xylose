@@ -91,10 +91,14 @@
  * \include fast_pow/fortran/stdpow.c
  */
 
-#ifndef MY_OWN_POW
-#define MY_OWN_POW
+#ifndef xylose_power_h
+#define xylose_power_h
 
 
+#ifdef __PGIC__
+/* PGI sucks. */
+extern "C" double log2(double);
+#endif
 
 #ifdef __cplusplus
 
@@ -455,4 +459,4 @@ double logn ( double n, double x );
 }/* namespace xylose */
 #endif 
 
-#endif /* MY_OWN_POW */
+#endif /* xylose_power_h */

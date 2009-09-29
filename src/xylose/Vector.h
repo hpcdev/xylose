@@ -50,8 +50,8 @@
  */
 
 
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef xylose_Vector_h
+#define xylose_Vector_h
 
 #include <xylose/power.h>
 
@@ -1130,4 +1130,4 @@ static const double M_EPS4 = 4 * std::numeric_limits<double>::epsilon();
 
 }/* namespace xylose */
 
-#endif // VECTOR_H
+#endif // xylose_Vector_h
