@@ -11,12 +11,22 @@
 
 namespace xylose {
 
+  namespace detail {
+    /** A simple typedef to build an stl container of a certain segment size out
+     * of the segmented vector.  I had to use this typedef here instead of
+     * directly using make_stl_container in the pool_allocator default args
+     * because the IBM xlC compiler is lame.
+     */
+    typedef xylose::make_stl_container<10000u> DefaultPoolContainerT;
+  }
+
   /** Pooled memory allocator for allocating one item at a time. 
    * By default, the segmented_vector is used for the source of memory to
    * allocate.  Using a segmented_vector helps this class allocate mostly
    * contiguous chunks in memory.  */
   template < typename T,
-             template <typename,typename> class Container = xylose::make_stl_container<10000u>::type,
+             template <typename,typename> class Container =
+               detail::DefaultPoolContainerT::type,
              typename ContainerAlloc = std::allocator<void> >
   class pool_allocator {
     /* TYPEDEFS */
