@@ -4,6 +4,7 @@ unit-test Time_segmented_vector : Time_segmented_vector.cpp ;
 unit-test TestSingleton : TestSingleton.cpp ;
 unit-test TestIndex : TestIndex.cpp ;
 unit-test TestStack : TestStack.cpp ;
+unit-test Vector : Vector.cpp ;
 
 
 unit-test SyncLock_nothreads : SyncLock_nothreads_obj ;
