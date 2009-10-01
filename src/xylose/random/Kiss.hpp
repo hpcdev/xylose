@@ -5,6 +5,8 @@
 
 #include <xylose/Vector.h>
 
+#include <algorithm>
+
 #include <stdint.h>
 
 namespace xylose {
@@ -110,8 +112,9 @@ namespace xylose {
       }
 
       /** (Re)seed the generator from a vector of length seed_length(4). */
-      void seed( const SeedVector & s ) {
-        VNCAST(uint32_t,seed_length,state.val) = s;
+      void seed( const SeedVector & vseed ) {
+        using std::copy;
+        copy( vseed.val, vseed.val+seed_length, state.val );
         state[4] = 0u; /* carry set to zero */
       }
 
