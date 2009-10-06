@@ -1,6 +1,6 @@
 #include <xylose/Index.hpp>
 
-#define BOOST_TEST_MODULE( Index )
+#define BOOST_TEST_MODULE Index 
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE( Index );
