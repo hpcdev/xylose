@@ -26,7 +26,7 @@
  * Questions? Contact Spencer Olson (olsonse@umich.edu) 
  */
 
-#define BOOST_TEST_MODULE  SyncLock
+#define BOOST_TEST_MODULE SyncLock
 
 #include <xylose/SyncLock.h>
 
@@ -53,8 +53,6 @@ namespace {
   };
 }
 
-
-BOOST_AUTO_TEST_SUITE( SyncLock_tests );
 
 BOOST_AUTO_TEST_CASE( SyncLock_class ) {
   SyncLock lock;
@@ -97,6 +95,4 @@ BOOST_AUTO_TEST_CASE( syncronize_Functor_access ) {
   BOOST_CHECK_EQUAL( Synchronize<Functor>::lock.isLocked(), false );
   BOOST_CHECK_EQUAL( f.value, 1 );
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 

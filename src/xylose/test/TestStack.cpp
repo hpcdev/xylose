@@ -1,13 +1,11 @@
 #include <xylose/Stack.hpp>
 
-#define BOOST_TEST_MODULE( Stack )
+#define BOOST_TEST_MODULE Stack
 #include <boost/test/unit_test.hpp>
 
 namespace {
   typedef xylose::Stack< int > IntStack;
 } // namespace anon
-
-BOOST_AUTO_TEST_SUITE( StackSuite );
 
 BOOST_AUTO_TEST_CASE( construct )
 {
@@ -62,6 +60,4 @@ BOOST_AUTO_TEST_CASE( reserve )
   stack.reserve( 128 );
   BOOST_CHECK_EQUAL( stack.capacity(), 200 );
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 

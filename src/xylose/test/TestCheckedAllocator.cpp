@@ -5,10 +5,8 @@
 // sure it's not defined going in here.
 #undef C
 
-#define BOOST_TEST_MODULE( CheckedAllocator )
+#define BOOST_TEST_MODULE CheckedAllocator
 #include <boost/test/unit_test.hpp>
-
-BOOST_AUTO_TEST_SUITE( CheckedAllocatorSuite );
 
 BOOST_AUTO_TEST_CASE( construct )
 {
@@ -18,6 +16,4 @@ BOOST_AUTO_TEST_CASE( construct )
   BOOST_CHECK_EQUAL( *ptr, 42 );
   alloc.deallocate( ptr, 1 );
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 

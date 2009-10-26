@@ -1,10 +1,8 @@
 #include "Tuple.hpp"
 
-#define BOOST_TEST_MODULE( Tuple )
+#define BOOST_TEST_MODULE Tuple
 
 #include <boost/test/unit_test.hpp>
-
-BOOST_AUTO_TEST_SUITE( TupleSuite );
 
 BOOST_AUTO_TEST_CASE( valuePair )
 {
@@ -92,6 +90,4 @@ BOOST_AUTO_TEST_CASE( poorMansSwap )
   BOOST_CHECK_EQUAL( c, 0 );
   BOOST_CHECK_EQUAL( d, 10.0 );
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 

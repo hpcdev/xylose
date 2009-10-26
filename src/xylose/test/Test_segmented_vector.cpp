@@ -1,6 +1,6 @@
 #include <xylose/segmented_vector.hpp>
 
-#define BOOST_TEST_MODULE  segmented_vector
+#define BOOST_TEST_MODULE segmented_vector
 
 #include <boost/test/unit_test.hpp>
 
@@ -17,8 +17,6 @@ namespace {
   };
 
 } // namespace anon
-
-BOOST_AUTO_TEST_SUITE( segmented_vector );
 
 BOOST_AUTO_TEST_CASE( size )
 {
@@ -433,7 +431,4 @@ BOOST_AUTO_TEST_CASE( subtractInteger )
 }
 
 BOOST_AUTO_TEST_SUITE_END(); //Iterator
-
-BOOST_AUTO_TEST_SUITE_END(); //segmented_vector
-
 

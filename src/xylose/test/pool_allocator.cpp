@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE  pool_allocator
+#define BOOST_TEST_MODULE pool_allocator
 
 #include <xylose/pool_allocator.hpp>
 
@@ -18,8 +18,6 @@ namespace {
   };
 }
 
-
-BOOST_AUTO_TEST_SUITE( pool_allocator );
 
 BOOST_AUTO_TEST_CASE( rebind ) {
   typedef A< parent, xylose::pool_allocator<int> > AA;
@@ -45,6 +43,4 @@ BOOST_AUTO_TEST_CASE( direct_allocation ) {
   /** FIXME:  need to have some real tests here. */
   BOOST_CHECK_EQUAL( 0, 0 );
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 
