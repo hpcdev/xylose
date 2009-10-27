@@ -7,7 +7,8 @@ option( UNIT_TEST_XYLOSE "Enable unit tests for the XYLOSE library"
 
 if ( UNIT_TEST_XYLOSE )
   if( NOT Boost_INCLUDE_DIRS )
-    find_package( Boost COMPONENTS test )
+    set( BOOST_USE_STATIC_LIBS ON )
+    find_package( Boost REQUIRED COMPONENTS unit_test_framework )
   endif()
 endif()
 

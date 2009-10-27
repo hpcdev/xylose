@@ -27,10 +27,9 @@
  */
 
 #define BOOST_TEST_MODULE SyncLock
+#include <boost/test/unit_test.hpp>
 
 #include <xylose/SyncLock.h>
-
-#include <boost/test/unit_test.hpp>
 
 namespace {
   using xylose::Synchronize;
