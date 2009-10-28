@@ -36,6 +36,7 @@ add_library( ${PROJECT_NAME}
 
 # utility macro to add a unit test to be shared by all subdirectories.
 macro( xylose_unit_test test_name )
+    find_package( Boost REQUIRED COMPONENTS unit_test_framework )
     include_directories( ${Boost_INCLUDE_DIRS} )
     add_executable( xylose.${test_name}.test ${ARGN} )
     target_link_libraries( xylose.${test_name}.test 
@@ -47,7 +48,7 @@ endmacro()
 # add sub-directories to get the unit tests added recursively
 add_subdirectory( random )
 
-if( UNIT_TEST_XYLOSE )
+if( BUILD_TESTING )
     add_subdirectory( test )
 endif()
 
