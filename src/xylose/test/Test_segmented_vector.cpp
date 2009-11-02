@@ -8,15 +8,13 @@
 
 namespace {
   
-  typedef xylose::segmented_vector< int, 2 > Test_segmented_vector;
-  
-  struct predicate {
-    bool operator()( int value ) const {
-      return ( value == 1 || value == 2 ) ? true : false;
-    }
-  };
+typedef xylose::segmented_vector< int, 2 > Test_segmented_vector;
 
-} // namespace anon
+struct predicate {
+  bool operator()( int value ) const {
+    return ( value == 1 || value == 2 ) ? true : false;
+  }
+};
 
 BOOST_AUTO_TEST_CASE( size )
 {
@@ -431,4 +429,6 @@ BOOST_AUTO_TEST_CASE( subtractInteger )
 }
 
 BOOST_AUTO_TEST_SUITE_END(); //Iterator
+
+} // namespace anon
 

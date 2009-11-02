@@ -8,16 +8,15 @@
 #include <iostream>
 
 namespace {
-  struct parent {};
 
-  template < typename T, typename _Alloc >
-  struct A : public T {
-    typedef typename _Alloc::template rebind<A>::other Alloc;
+struct parent {};
 
-    Alloc allocator;
-  };
-}
+template < typename T, typename _Alloc >
+struct A : public T {
+  typedef typename _Alloc::template rebind<A>::other Alloc;
 
+  Alloc allocator;
+};
 
 BOOST_AUTO_TEST_CASE( rebind ) {
   typedef A< parent, xylose::pool_allocator<int> > AA;
@@ -42,5 +41,7 @@ BOOST_AUTO_TEST_CASE( direct_allocation ) {
 
   /** FIXME:  need to have some real tests here. */
   BOOST_CHECK_EQUAL( 0, 0 );
+}
+
 }
 

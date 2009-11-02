@@ -13,19 +13,18 @@
 
 
 namespace {
-  const unsigned int len = 10000000u;
-  const unsigned int car_size = 10000u;
 
-  template < typename Vector >
-  struct SomeOp {
-    Vector sum;
-    SomeOp() : sum(0.0) {}
-    void operator()( const Vector & v ) {
-      sum += v;
-    }
-  };
-}
+const unsigned int len = 10000000u;
+const unsigned int car_size = 10000u;
 
+template < typename Vector >
+struct SomeOp {
+  Vector sum;
+  SomeOp() : sum(0.0) {}
+  void operator()( const Vector & v ) {
+    sum += v;
+  }
+};
 
 BOOST_AUTO_TEST_CASE( insertion ) {
   typedef xylose::Vector<double,3> Vector;
@@ -149,4 +148,6 @@ BOOST_AUTO_TEST_CASE( iterator ) {
 
   BOOST_CHECK_EQUAL( true, true );
 }
+
+} // namespace anon
 

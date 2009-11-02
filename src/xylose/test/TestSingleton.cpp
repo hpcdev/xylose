@@ -5,6 +5,8 @@
 
 // run this test through valgrind to ensure we are not leaking the instance!
 
+namespace {
+
 class Test : public xylose::Singleton< Test > {
 public:
   int x;
@@ -22,3 +24,6 @@ BOOST_AUTO_TEST_CASE( constructor ) {
 BOOST_AUTO_TEST_CASE( instance ) {
   BOOST_CHECK_EQUAL( Test::instance(), Test::instance() );
 }
+
+} // namespace anon
+

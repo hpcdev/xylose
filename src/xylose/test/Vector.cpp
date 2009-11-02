@@ -33,10 +33,10 @@
 #include <boost/test/unit_test.hpp>
 
 namespace {
-  using xylose::Vector;
-  using xylose::V3;
-  using xylose::make_vector;
-}
+
+using xylose::Vector;
+using xylose::V3;
+using xylose::make_vector;
 
 BOOST_AUTO_TEST_CASE( index_operator ) {
   Vector<double,3> v;
@@ -157,4 +157,6 @@ BOOST_AUTO_TEST_CASE( V_eq ) {
   BOOST_CHECK_EQUAL( v2 == v1, false );
   BOOST_CHECK_EQUAL( v2 == v3, true );
 }
+
+} // namespace anon
 

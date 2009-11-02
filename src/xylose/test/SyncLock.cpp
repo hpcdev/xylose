@@ -32,26 +32,25 @@
 #include <xylose/SyncLock.h>
 
 namespace {
-  using xylose::Synchronize;
-  using xylose::synchronize;
-  using xylose::SyncLock;
-  using xylose::SyncKey;
 
-  struct AStruct {};
+using xylose::Synchronize;
+using xylose::synchronize;
+using xylose::SyncLock;
+using xylose::SyncKey;
 
-  struct Functor {
-    int value;
+struct AStruct {};
 
-    Functor() : value(0) { }
+struct Functor {
+  int value;
 
-    void operator() () {
-      value = 1;
-      BOOST_CHECK_EQUAL( Synchronize<Functor>::lock.isLocked(),
-                         IF_THREADS(true,false) );
-    }
-  };
-}
+  Functor() : value(0) { }
 
+  void operator() () {
+    value = 1;
+    BOOST_CHECK_EQUAL( Synchronize<Functor>::lock.isLocked(),
+                       IF_THREADS(true,false) );
+  }
+};
 
 BOOST_AUTO_TEST_CASE( SyncLock_class ) {
   SyncLock lock;
@@ -94,4 +93,6 @@ BOOST_AUTO_TEST_CASE( syncronize_Functor_access ) {
   BOOST_CHECK_EQUAL( Synchronize<Functor>::lock.isLocked(), false );
   BOOST_CHECK_EQUAL( f.value, 1 );
 }
+
+} // namespace anon
 
