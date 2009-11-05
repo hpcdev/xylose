@@ -152,9 +152,13 @@ BOOST_AUTO_TEST_CASE( largeSort )
   std::sort( test.begin(), test.end() );
 
   LargeContainer::iterator it, end = test.end() - 1;
+  BOOST_TEST_MESSAGE( "BEGIN Failure Only Logging" );
   for ( it = test.begin(); it != end; ++it ) {
-    BOOST_CHECK( *it <= *( it + 1 ) );
+    if ( ! ( *it <= *( it + 1 ) ) ) {
+      BOOST_CHECK( *it <= *( it + 1 ) );
+    }
   }
+  BOOST_TEST_MESSAGE( "END Failure Only Logging" );
 }
 
 BOOST_AUTO_TEST_CASE( get )
@@ -257,17 +261,25 @@ BOOST_AUTO_TEST_CASE( lessThan )
   }
 
   Test_segmented_vector::iterator i, j;
+  BOOST_TEST_MESSAGE( "BEGIN Failure Only Logging" );
   for ( i = test.begin(); i != test.end(); ++i ) {
     for ( j = i + 1; j != test.end(); ++j ) {
-      BOOST_CHECK( i < j );
+      if ( ! ( i < j ) ) {
+        BOOST_CHECK( i < j );
+      }
     }
     if ( i != test.begin() ) {
       for ( j = i - 1; j != test.begin(); --j ) {
-	BOOST_CHECK( !( i < j ) );
+        if ( ! ( ! ( i < j ) ) ) {
+          BOOST_CHECK( !( i < j ) );
+        }
       }
-      BOOST_CHECK( !( i < test.begin() ) );
+      if ( ! ( ! ( i < test.begin() ) ) ) {
+        BOOST_CHECK( !( i < test.begin() ) );
+      }
     }
   }
+  BOOST_TEST_MESSAGE( "END Failure Only Logging" );
 }
 
 BOOST_AUTO_TEST_CASE( dereference )

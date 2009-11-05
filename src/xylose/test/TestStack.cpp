@@ -41,9 +41,14 @@ BOOST_AUTO_TEST_CASE( push_back )
   BOOST_CHECK_EQUAL( stack.size(), 129 );
   BOOST_CHECK_EQUAL( stack.capacity(), 256 );
 
+  // Cut down on Boost.Test logging by only logging failures.
+  BOOST_TEST_MESSAGE( "BEGIN Failure Only Logging" );
   for ( i = 0; i < 129; ++i ) {
-    BOOST_CHECK_EQUAL( stack[i], i );
+    if ( ! ( stack[i] == i ) ) {
+      BOOST_CHECK_EQUAL( stack[i], i );
+    }
   }
+  BOOST_TEST_MESSAGE( "END Failure Only Logging" );
 }
 
 BOOST_AUTO_TEST_CASE( reserve )
