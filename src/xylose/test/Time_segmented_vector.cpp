@@ -8,7 +8,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <vector>
-#include <iostream>
 #include <cmath>
 
 
@@ -64,20 +63,38 @@ BOOST_AUTO_TEST_CASE( insertion ) {
   {
     Vector * array = NULL;
     timer_array.start();
+    unsigned int current_size = 0; 
     for ( unsigned int i = 0; i < len ; ++i ) {
-      array = (Vector*)realloc(array, sizeof(Vector)*(i+1));
+      // This was originally a realloc for every iteration, but
+      // on griffin with mpich-gm, realloc became *terribly slow*
+      // when approaching 'len' and caused this test to foul up
+      // the unit testing system. Instead of using that simple 
+      // approach, the following implementation doubles the 
+      // allocation size every time a realloc is required. 
+      // This is generally considered the best approach, 
+      // but requires quite a bit more code that is highly
+      // error-prone. -- K. R. Walker on 2009-12-04
+      const std::size_t required_size = sizeof( Vector ) * ( i + 1 ); 
+      if ( current_size < required_size ) {
+        if ( !current_size ) {
+          current_size = required_size;
+        } else {
+          current_size *= 2;
+        }
+        // Note that realloc() invokes undefined behavior when
+        // Vector is a non-POD type (it currently is non-POD). 
+        array = (Vector*)realloc( array, current_size );
+      }    
       array[i] = V3(0.,1.,(double)i);
-    }
+    }    
     timer_array.stop();
     free(array);
   }
 
-  std::cout << "insertion timers:\n"
-               "xylose::vec:  " << timer_car << "\n"
-               " std::vec:  " << timer_vec << "\n"
-               "    array:  " << timer_array << std::endl;
-
-  BOOST_CHECK_EQUAL( true, true );
+  BOOST_TEST_MESSAGE( "xylose::vec: " << timer_car );
+  BOOST_TEST_MESSAGE( "   std::vec: " << timer_vec );
+  BOOST_TEST_MESSAGE( "      array: " << timer_array );
+  BOOST_CHECK( true );
 }
 
 BOOST_AUTO_TEST_CASE( iterator ) {
@@ -110,7 +127,7 @@ BOOST_AUTO_TEST_CASE( iterator ) {
     timer_car.start();
     SomeOp<Vector> r = std::for_each(vec.begin(), vec.end(), someOp);
     timer_car.stop();
-    std::cout << "xylose::vec sum:  " << r.sum.to_string(',') << '\n';
+    BOOST_TEST_MESSAGE( "xylose::vec sum: " << r.sum.to_string(',') );
   }
 
   {
@@ -123,7 +140,7 @@ BOOST_AUTO_TEST_CASE( iterator ) {
     timer_vec.start();
     SomeOp<Vector> r = std::for_each(vec.begin(), vec.end(), someOp);
     timer_vec.stop();
-    std::cout << " std::vec sum:  " << r.sum.to_string(',') << '\n';
+    BOOST_TEST_MESSAGE( " std::vec sum: " << r.sum.to_string(',') );
   }
 
   {
@@ -137,16 +154,14 @@ BOOST_AUTO_TEST_CASE( iterator ) {
     timer_array.start();
     SomeOp<Vector> r = std::for_each(array, array+len, someOp);
     timer_array.stop();
-    std::cout << "array sum:  " << r.sum.to_string(',') << '\n';
+    BOOST_TEST_MESSAGE( "    array sum: " << r.sum.to_string(',') );
     free(array);
   }
 
-  std::cout << "iterator timers:\n"
-               "xylose::vec:  " << timer_car << "\n"
-               " std::vec:  " << timer_vec << "\n"
-               "    array:  " << timer_array << std::endl;
-
-  BOOST_CHECK_EQUAL( true, true );
+  BOOST_TEST_MESSAGE( "xylose::vec: " << timer_car );
+  BOOST_TEST_MESSAGE( "   std::vec: " << timer_vec );
+  BOOST_TEST_MESSAGE( "      array: " << timer_array );
+  BOOST_CHECK( true );
 }
 
 } // namespace anon
