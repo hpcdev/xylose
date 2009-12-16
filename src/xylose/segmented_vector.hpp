@@ -209,6 +209,17 @@ namespace xylose {
       (*this)[lhs] = tmp;
     }
 
+    /// Swap the guts of this segmented_vector with another
+    void swap( segmented_vector & other ) {
+      using std::swap;
+      using std::__alloc_swap;
+      this->mData.swap( other.mData );
+      swap( this->mNSegments, other.mNSegments );
+      swap( this->mFirstFreeSegment, other.mFirstFreeSegment);
+      this->mFirstFreeSeat.swap( other.mFirstFreeSeat );
+      /* This seems to be what the GNU vector::swap does. */
+      __alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
+    }
 
     /// Remove an element from the list possibly using a custom deleter
     template< typename DestroyFunctionT >

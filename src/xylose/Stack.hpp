@@ -9,8 +9,8 @@ namespace xylose {
 
   template< typename T, typename AllocT = std::allocator< T > >
   class Stack {
+    /* TYPEDEFS */
   public:
-
     //-- Types to provide std::vector semantics --//
     typedef T value_type;
     typedef T* pointer;
@@ -21,6 +21,20 @@ namespace xylose {
 
     static const size_type kInitialSize = 128;
 
+  private:
+    typedef typename AllocT::template rebind< T >::other Allocator;
+
+
+    /* MEMBER STORAGE */
+  private:
+    pointer mData;
+    size_type mSize;
+    size_type mCapacity;
+    Allocator mAlloc;
+
+
+    /* MEMBER FUNCTIONS */
+  public:
     /// construct a stack with 0 elements and an initial capacity of 128
     Stack() :
       mData( NULL ),
@@ -121,12 +135,16 @@ namespace xylose {
       }
     }
 
-  private:
-
-    pointer mData;
-    size_type mSize;
-    size_type mCapacity;
-    AllocT mAlloc;
+    /// Swap the guts of this Stack with another
+    void swap ( Stack & other ) {
+      using std::swap;
+      using std::__alloc_swap;
+      swap(this->mData, other.mData);
+      swap(this->mSize, other.mSize);
+      swap(this->mCapacity, other.mCapacity);
+      /* This seems to be what the GNU vector::swap does. */
+      __alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
+    }
 
   };
 
