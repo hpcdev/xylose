@@ -27,7 +27,8 @@ namespace xylose {
   template < typename T,
              template <typename,typename> class Container =
                detail::DefaultPoolContainerT::type,
-             typename ContainerAlloc = std::allocator<void> >
+             typename ContainerAlloc = std::allocator<void>,
+             bool noOPDealloc = false >
   class pool_allocator {
     /* TYPEDEFS */
   public:
@@ -54,7 +55,18 @@ namespace xylose {
      * different type. */
     template < typename T2 >
     struct rebind {
-      typedef pool_allocator<T2, Container, ContainerAlloc> other;
+      typedef pool_allocator<
+        T2,
+        Container,
+        ContainerAlloc,
+        noOPDealloc
+      > other;
+    };
+
+    /** Meta function to create a new allocator enabling/disabling the
+     * dealloc function. */
+    template < bool B >
+    struct setDealloc { typedef pool_allocator< T, Container, ContainerAlloc, B > type;
     };
 
   private:
@@ -74,16 +86,21 @@ namespace xylose {
     struct Impl {
     /* MEMBER STORAGE */
     private:
-      ///** oh, the evil of using std::vector<bool> ! */
+      /** oh, the evil of using std::vector<bool> ! 
+       * The used vector should be the same length as the Pool container. 
+       */
       std::vector<bool> used;
       Pool pool;
       PoolIter next;
+      /** A counter to tell how many items are currently allocated. */
+      int number_allocated;
+      /** A resource lock for the memory pool. */
       xylose::SyncLock memLock;
 
       /* MEMBER FUNCTIONS */
     public:
       /** Constructor; sets next allocation to beginning of pool. */
-      Impl() : pool(), next(pool.begin()) { }
+      Impl() : used(), pool(), next(pool.begin()), number_allocated(0) { }
 
       pointer allocate(size_type n, const_pointer p = NULL) {
         if (n != 1) {
@@ -106,7 +123,50 @@ namespace xylose {
         /* mark the item as used and give the memory to the caller */
         used[pi - pool.begin()] = true;
 
+        ++number_allocated;
         return reinterpret_cast<pointer>(pi->bytes);
+      }
+
+      /** Resets the allocator so that 1) all used[] items are false, and 2)
+       * only rsz number of pool items are left in the pool.  This reserve
+       * operation essentially resizes all appropriate vectors/containers so
+       * that only rsz items are left.
+       *
+       * @param rsz
+       *    Target capacity of the pool after all items are freed.  If
+       *    \f$ rsz < 0 \f$, then no attempts will be made to decrease the
+       *    underlying capacity (real memory taken by pool_allocator).<br>
+       *    [Default -1]
+       */
+      void reset( const int & rsz = -1 ) {
+        MemKey memKey( memLock );/* RAII type synchronization */
+        if ( number_allocated != 0 ) {
+          logger::log_severe("pool allocator reset only valid if no "
+                             "objects are allocated ");
+          throw std::bad_alloc();
+        }
+
+        if ( rsz < 0 ) {
+          /* no efforts to release memory */
+          used.clear();
+          pool.clear();
+        } else {
+          /* trying to release memory */
+          std::vector<bool> tmpU;
+          Pool tmpP;
+          used.swap( tmpU );
+          pool.swap( tmpP );
+
+          used.reserve( rsz );
+          pool.reserve( rsz );
+        }
+
+        for ( int i = 0; i < rsz; ++i ) {
+          pool.push_back( PoolItem() );
+          used.push_back(false);
+        }
+
+        next = pool.begin();
       }
 
       void deallocate(pointer p, size_type n) {
@@ -117,11 +177,18 @@ namespace xylose {
         }
 
         MemKey memKey( memLock );/* RAII type synchronization */
+        --number_allocated;
+
+        if ( noOPDealloc )
+          /* This should be dead code for when noOPDealloc is false */
+          return;
+
         PoolIter pi = pool.getIterator(reinterpret_cast<PoolItem*>(p));
 
         if ( pi < next ) {
           if (pi < pool.begin()) {
             logger::log_severe("tried to free an item not in pool allocator");
+            ++number_allocated; /* Need to correct the number allocated. */
             throw std::bad_alloc();
           }
 
@@ -135,6 +202,7 @@ namespace xylose {
 
           if (!(*bi)) {
             logger::log_severe("tried to free an item that was already freed");
+            ++number_allocated; /* Need to correct the number allocated. */
             throw std::bad_alloc();
           }
 
@@ -143,6 +211,7 @@ namespace xylose {
 
           if ( bi == used.rend() ) {
             logger::log_severe("could not find previous freed item in allocator pool");
+            ++number_allocated; /* Need to correct the number allocated. */
             throw std::bad_alloc();
           }
 
@@ -153,6 +222,7 @@ namespace xylose {
           used[pi - pool.begin()] = false;
         } else {
           logger::log_severe("tried to free an item not in pool allocator");
+          ++number_allocated; /* Need to correct the number allocated. */
           throw std::bad_alloc();
         }
       }
@@ -160,23 +230,15 @@ namespace xylose {
     };/* struct Impl */
 
 
-    /* MEMBER STORAGE */
+    /* STATIC STORAGE */
   private:
-    Impl & impl;
+    static Impl impl;
 
 
     /* MEMBER FUNCTIONS */
-  private:
-    static Impl & impl_instance() {
-      /* Is this initialization thread-safe?  Need to do some research
-       * about the standard... */
-      static Impl impl;
-      return impl;
-    }
-
   public:
     /** Constructor; sets next allocation to beginning of pool. */
-    pool_allocator() : impl(impl_instance()) {}
+    pool_allocator() {}
 
     /** convert a reference to an address.  What is the purpose of this function
      * in an allocator?  I'm including it only because it appears that it is
@@ -196,8 +258,24 @@ namespace xylose {
       return impl.allocate(n,p);
     }
 
+    /** Resets the allocator so that 1) all used[] items are false, and 2)
+     * only rsz number of pool items are left in the pool.  This reserve
+     * operation essentially resizes all appropriate vectors/containers so
+     * that only rsz items are left.
+     *
+     * @param rsz
+     *    Target capacity of the pool after all items are freed.  If
+     *    \f$ rsz < 0 \f$, then no attempts will be made to decrease the
+     *    underlying capacity (real memory taken by pool_allocator).<br>
+     *    [Default -1]
+     */
+    void reset( const int & rsz = -1 ) {
+      impl.reset( rsz );
+    }
+
+    /** Deallocate an object. */
     void deallocate(pointer p, size_type n = 1) {
-      return impl.deallocate(p,n);
+      impl.deallocate(p,n);
     }
 
     void construct(pointer p, const T& t = T()) {
@@ -213,6 +291,15 @@ namespace xylose {
       return static_cast<size_type>(-1) / sizeof(value_type);
     }
   };
+
+
+  /* Declare the initialization of the static pool implementation. */
+  template < typename T,
+             template <typename,typename> class C,
+             typename CA,
+             bool D >
+  typename pool_allocator<T,C,CA,D>::Impl pool_allocator<T,C,CA,D>::impl = Impl();
+
 }
 
 #endif // xylose_pool_allocator_h
