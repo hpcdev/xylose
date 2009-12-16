@@ -51,6 +51,17 @@ int main () {
   }
 
   {
+    static const uint64_t mx = total_rolls; //static_cast<uint32_t>(-1);
+    for ( uint64_t i = 0; i <= mx; ++i) {
+      double n = Crappy( static_cast<uint32_t>(i) ).randExc();
+      if ( n >= 1 || n < 0 )
+        std::cout << __FILE__ "got a bad rand nubmer (" <<n
+                  <<") for seed ("<<i<<')' << std::endl;
+    }
+  }
+
+
+  {
     const int n_generators = 100000;
     const int max_iter = total_rolls / n_generators;
 

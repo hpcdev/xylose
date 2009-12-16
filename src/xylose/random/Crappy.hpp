@@ -59,7 +59,7 @@ namespace xylose {
       /* MEMBER FUNCTIONS */
     public:
       /** Constructor. */
-      Crappy() : super() {}
+      Crappy() : super() { }
 
       /**  Constructor with explicit scalar seed value given. */
       Crappy( const uint32_t & iseed ) : super(false) {
@@ -111,6 +111,15 @@ namespace xylose {
           state[i] = std::abs( static_cast<int32_t>(vseed[i]) );
 
         state[state_length-1] = 0;
+
+        /* The first number is often bad if automatic seeding is done.  Thus WE
+         * BURN THROUGH ANOTHER NUMBER HERE.  I've tested the generator for
+         * seeding with a single uint32_t from from the constructor over the
+         * complete range of valid uint32_t numbers.  There are no problems with
+         * that seeding type, but only when we seed the entire vector.  There
+         * must be a more restrictive limit on the values of the items in the
+         * state vector that what I've coded up above. */
+        static_cast<void>( randInt() );
       }
 
       /** Get a const reference to the StateVector. */

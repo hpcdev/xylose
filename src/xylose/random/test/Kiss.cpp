@@ -38,6 +38,16 @@ int main () {
   }
 
   {
+    Kiss r;
+    for ( int i = 0; i < total_rolls; ++i) {
+      double n = r.randExc();
+      if ( n >= 1 || n < 0 )
+        std::cout << __FILE__ "got a bad rand nubmer (" <<n
+                  <<") on "<<i<<"th roll" << std::endl;
+    }
+  }
+
+  {
     const int n_generators = 100000;
     const int max_iter = total_rolls / n_generators;
 
