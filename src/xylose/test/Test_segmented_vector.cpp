@@ -255,6 +255,17 @@ BOOST_AUTO_TEST_CASE( swap )
   BOOST_CHECK_EQUAL( *dst.rbegin(),  9 );
 }
 
+BOOST_AUTO_TEST_CASE( reserve )
+{
+  Test_segmented_vector test;
+  
+  BOOST_CHECK_EQUAL( test.capacity(), 0 );
+  test.reserve( 41 );
+  int cap = std::ceil(41. / test.segment_size)*test.segment_size;
+  BOOST_CHECK_EQUAL( test.size(), 0u );
+  BOOST_CHECK_EQUAL( test.capacity(), cap );
+}
+
 BOOST_AUTO_TEST_SUITE( Iterator );
 
 BOOST_AUTO_TEST_CASE( equal )

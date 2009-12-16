@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <cassert>
+#include <cmath>
 
 namespace xylose {
 
@@ -220,6 +221,9 @@ namespace xylose {
       /* This seems to be what the GNU vector::swap does. */
       __alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
     }
+
+    /// Reserve enough space for n elements
+    void reserve( size_type n );
 
     /// Remove an element from the list possibly using a custom deleter
     template< typename DestroyFunctionT >
@@ -738,6 +742,17 @@ namespace xylose {
     mNSegments++;
     mData.push_back( mAlloc.allocate( segment_size ) );
     mFirstFreeSeat.push_back( 0 );
+  }
+
+  //------------------------------------------------------------------------------
+  template< typename T, unsigned int kSegmentSize, typename Alloc >
+  void segmented_vector< T, kSegmentSize, Alloc >::reserve( size_type n )
+  {
+    size_type segments_needed =
+      static_cast<size_type>(std::ceil(n / static_cast<double>(segment_size)));
+
+    for ( size_type i = mNSegments; i < segments_needed; ++i )
+      appendSegment();
   }
 
 } // namespace xylose
