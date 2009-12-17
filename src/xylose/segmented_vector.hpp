@@ -213,13 +213,13 @@ namespace xylose {
     /// Swap the guts of this segmented_vector with another
     void swap( segmented_vector & other ) {
       using std::swap;
-      using std::__alloc_swap;
+      //using std::__alloc_swap;
       this->mData.swap( other.mData );
       swap( this->mNSegments, other.mNSegments );
       swap( this->mFirstFreeSegment, other.mFirstFreeSegment);
       this->mFirstFreeSeat.swap( other.mFirstFreeSeat );
       /* This seems to be what the GNU vector::swap does. */
-      __alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
+      //__alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
     }
 
     /// Reserve enough space for n elements

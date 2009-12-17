@@ -138,12 +138,12 @@ namespace xylose {
     /// Swap the guts of this Stack with another
     void swap ( Stack & other ) {
       using std::swap;
-      using std::__alloc_swap;
+      //using std::__alloc_swap;
       swap(this->mData, other.mData);
       swap(this->mSize, other.mSize);
       swap(this->mCapacity, other.mCapacity);
       /* This seems to be what the GNU vector::swap does. */
-      __alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
+      //__alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
     }
 
   };
