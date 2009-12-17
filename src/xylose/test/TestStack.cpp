@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_CASE( construct )
 {
   IntStack stack;
 
-  BOOST_CHECK_EQUAL( stack.size(), 0 );
-  BOOST_CHECK_EQUAL( stack.capacity(), 128 );
+  BOOST_CHECK_EQUAL( stack.size(), 0u );
+  BOOST_CHECK_EQUAL( stack.capacity(), 128u );
 }
 
 BOOST_AUTO_TEST_CASE( back )
@@ -34,12 +34,12 @@ BOOST_AUTO_TEST_CASE( push_back )
     stack.push_back( i );
   }
 
-  BOOST_CHECK_EQUAL( stack.size(), 128 );
-  BOOST_CHECK_EQUAL( stack.capacity(), 128 );
+  BOOST_CHECK_EQUAL( stack.size(), 128u );
+  BOOST_CHECK_EQUAL( stack.capacity(), 128u );
   
   stack.push_back( i++ );
-  BOOST_CHECK_EQUAL( stack.size(), 129 );
-  BOOST_CHECK_EQUAL( stack.capacity(), 256 );
+  BOOST_CHECK_EQUAL( stack.size(), 129u );
+  BOOST_CHECK_EQUAL( stack.capacity(), 256u );
 
   // Cut down on Boost.Test logging by only logging failures.
   BOOST_TEST_MESSAGE( "BEGIN Failure Only Logging" );
@@ -55,15 +55,15 @@ BOOST_AUTO_TEST_CASE( reserve )
 {
   IntStack stack;
 
-  BOOST_CHECK_EQUAL( stack.capacity(), 128 );
+  BOOST_CHECK_EQUAL( stack.capacity(), 128u );
 
   stack.reserve( 64 );
-  BOOST_CHECK_EQUAL( stack.capacity(), 128 );
+  BOOST_CHECK_EQUAL( stack.capacity(), 128u );
 
   stack.reserve( 200 );
-  BOOST_CHECK_EQUAL( stack.capacity(), 200 );
+  BOOST_CHECK_EQUAL( stack.capacity(), 200u );
   stack.reserve( 128 );
-  BOOST_CHECK_EQUAL( stack.capacity(), 200 );
+  BOOST_CHECK_EQUAL( stack.capacity(), 200u );
 }
 
 } // namespace anon

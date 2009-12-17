@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE( size )
     test.push_back( i );
   }
 
-  BOOST_CHECK_EQUAL( test.size(), 10 );
+  BOOST_CHECK_EQUAL( test.size(), 10u );
 }
 
 BOOST_AUTO_TEST_CASE( begin )
@@ -261,7 +261,8 @@ BOOST_AUTO_TEST_CASE( reserve )
   
   BOOST_CHECK_EQUAL( test.capacity(), 0 );
   test.reserve( 41 );
-  int cap = std::ceil(41. / test.segment_size)*test.segment_size;
+  int cap =
+    static_cast<int>(std::ceil(41. / test.segment_size)*test.segment_size);
   BOOST_CHECK_EQUAL( test.size(), 0u );
   BOOST_CHECK_EQUAL( test.capacity(), cap );
 }
