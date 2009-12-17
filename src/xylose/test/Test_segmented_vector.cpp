@@ -59,13 +59,13 @@ BOOST_AUTO_TEST_CASE( end )
   
   test.push_back( 1 );
   Test_segmented_vector::iterator result1 = test.end();
-  BOOST_CHECK_EQUAL( result1.mSegment, 0 );
-  BOOST_CHECK_EQUAL( result1.mPosition, 1 );
+  BOOST_CHECK_EQUAL( result1.mSegment, 0u );
+  BOOST_CHECK_EQUAL( result1.mPosition, 1u );
   
   test.push_back( 1 );
   Test_segmented_vector::iterator result2 = test.end();
-  BOOST_CHECK_EQUAL( result2.mSegment, 1 );
-  BOOST_CHECK_EQUAL( result2.mPosition, 0 );
+  BOOST_CHECK_EQUAL( result2.mSegment, 1u );
+  BOOST_CHECK_EQUAL( result2.mPosition, 0u );
 }
 
 BOOST_AUTO_TEST_CASE( constEnd )
@@ -75,13 +75,13 @@ BOOST_AUTO_TEST_CASE( constEnd )
   
   test.push_back( 1 );
   Test_segmented_vector::const_iterator result1 = constTest.end();
-  BOOST_CHECK_EQUAL( result1.mSegment, 0 );
-  BOOST_CHECK_EQUAL( result1.mPosition, 1 );
+  BOOST_CHECK_EQUAL( result1.mSegment, 0u );
+  BOOST_CHECK_EQUAL( result1.mPosition, 1u );
   
   test.push_back( 1 );
   Test_segmented_vector::const_iterator result2 = constTest.end();
-  BOOST_CHECK_EQUAL( result2.mSegment, 1 );
-  BOOST_CHECK_EQUAL( result2.mPosition, 0 );
+  BOOST_CHECK_EQUAL( result2.mSegment, 1u );
+  BOOST_CHECK_EQUAL( result2.mPosition, 0u );
 }
 
 BOOST_AUTO_TEST_CASE( rbegin )
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE( rend )
   
   Test_segmented_vector::reverse_iterator rit = test.rend();
   BOOST_CHECK_EQUAL( rit.mSegment, std::numeric_limits< Test_segmented_vector::size_type >::max() );
-  BOOST_CHECK_EQUAL( rit.mPosition, 1 );
+  BOOST_CHECK_EQUAL( rit.mPosition, 1u );
 }
 
 BOOST_AUTO_TEST_CASE( clear )
@@ -113,13 +113,13 @@ BOOST_AUTO_TEST_CASE( clear )
   }
 
   Test_segmented_vector::iterator end = test.end();
-  BOOST_REQUIRE_EQUAL( end.mSegment, 50 );
-  BOOST_REQUIRE_EQUAL( end.mPosition, 0 );
+  BOOST_REQUIRE_EQUAL( end.mSegment, 50u );
+  BOOST_REQUIRE_EQUAL( end.mPosition, 0u );
 
   test.clear();
   end = test.end();
-  BOOST_CHECK_EQUAL( end.mSegment, 0 );
-  BOOST_CHECK_EQUAL( end.mPosition, 0 );
+  BOOST_CHECK_EQUAL( end.mSegment, 0u );
+  BOOST_CHECK_EQUAL( end.mPosition, 0u );
 }
 
 BOOST_AUTO_TEST_CASE( sort )
@@ -197,8 +197,8 @@ BOOST_AUTO_TEST_CASE( indexPtr )
   int* ptr = test.getPointer( Test_segmented_vector::Index( 0, 1 ) );
   Test_segmented_vector::Index result = test.index< Test_segmented_vector::Index >( ptr );
 
-  BOOST_CHECK_EQUAL( result.mSegment, 0 );
-  BOOST_CHECK_EQUAL( result.mPosition, 1 );
+  BOOST_CHECK_EQUAL( result.mSegment, 0u );
+  BOOST_CHECK_EQUAL( result.mPosition, 1u );
 }
 
 BOOST_AUTO_TEST_CASE( erase )
@@ -259,10 +259,11 @@ BOOST_AUTO_TEST_CASE( reserve )
 {
   Test_segmented_vector test;
   
-  BOOST_CHECK_EQUAL( test.capacity(), 0 );
+  BOOST_CHECK_EQUAL( test.capacity(), 0u );
   test.reserve( 41 );
-  int cap =
-    static_cast<int>(std::ceil(41. / test.segment_size)*test.segment_size);
+  unsigned int cap = static_cast<unsigned int>(
+    std::ceil(41. / test.segment_size) * test.segment_size
+  );
   BOOST_CHECK_EQUAL( test.size(), 0u );
   BOOST_CHECK_EQUAL( test.capacity(), cap );
 }
@@ -346,8 +347,8 @@ BOOST_AUTO_TEST_CASE( decrement )
   }
 
   Test_segmented_vector::iterator it = test.end();
-  BOOST_REQUIRE_EQUAL( it.mSegment, 5 );
-  BOOST_REQUIRE_EQUAL( it.mPosition, 0 );
+  BOOST_REQUIRE_EQUAL( it.mSegment, 5u );
+  BOOST_REQUIRE_EQUAL( it.mPosition, 0u );
   --it;
   BOOST_REQUIRE_EQUAL( *it, 9 );
 
@@ -446,25 +447,25 @@ BOOST_AUTO_TEST_CASE( subtractInteger )
   }
 
   Test::iterator start = test.begin() + 50;
-  BOOST_CHECK_EQUAL( start.mSegment, 2 );
-  BOOST_CHECK_EQUAL( start.mPosition, 10 );
+  BOOST_CHECK_EQUAL( start.mSegment, 2u );
+  BOOST_CHECK_EQUAL( start.mPosition, 10u );
   BOOST_CHECK_EQUAL( *start, 50 );
 
   Test::iterator it = start - 20;
-  BOOST_CHECK_EQUAL( it.mSegment, 1 );
-  BOOST_CHECK_EQUAL( it.mPosition, 10 );
+  BOOST_CHECK_EQUAL( it.mSegment, 1u );
+  BOOST_CHECK_EQUAL( it.mPosition, 10u );
   BOOST_CHECK_EQUAL( *it, 30 );
 
   it = start - 50;
-  BOOST_CHECK_EQUAL( it.mSegment, 0 );
-  BOOST_CHECK_EQUAL( it.mPosition, 0 );
+  BOOST_CHECK_EQUAL( it.mSegment, 0u );
+  BOOST_CHECK_EQUAL( it.mPosition, 0u );
   BOOST_CHECK_EQUAL( *it, 0 );
 
   // FIXME these don't pass at the moment
   //it = start - 55;
   //it = start + 55;
-  //BOOST_CHECK_EQUAL( it.mSegment, 2 );
-  //BOOST_CHECK_EQUAL( it.mPosition, 10 );
+  //BOOST_CHECK_EQUAL( it.mSegment, 2u );
+  //BOOST_CHECK_EQUAL( it.mPosition, 10u );
   //BOOST_CHECK_EQUAL( *it, 50 );
 }
 
