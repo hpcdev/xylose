@@ -1,4 +1,5 @@
 #include <xylose/segmented_vector.hpp>
+#include <xylose/Swap.hpp>
 
 #define BOOST_TEST_MODULE segmented_vector
 
@@ -239,7 +240,7 @@ BOOST_AUTO_TEST_CASE( vectorOfTrainsBug )
   BOOST_CHECK_EQUAL( v[0][0], 42 );
 }
 
-BOOST_AUTO_TEST_CASE( swap )
+BOOST_AUTO_TEST_CASE( swapTest )
 {
   Test_segmented_vector src;
   Test_segmented_vector dst;
@@ -248,7 +249,7 @@ BOOST_AUTO_TEST_CASE( swap )
     src.push_back( i );
   }
 
-  src.swap( dst );
+  ::xylose::swap( src, dst );
   BOOST_CHECK_EQUAL( src.size(),    0u );
   BOOST_CHECK_EQUAL( dst.size(),   10u );
   BOOST_CHECK_EQUAL( *dst.begin(),   0 );

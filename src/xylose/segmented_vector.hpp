@@ -5,6 +5,7 @@
 
 #include <xylose/Index.hpp>
 #include <xylose/Stack.hpp>
+#include <xylose/Swap.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -199,27 +200,20 @@ namespace xylose {
 
     /// Swap two points based on an index
     void swap(const Index& lhs, const Index& rhs) {
-      T tmp = get(rhs);
-      get(rhs) = get(lhs);
-      get(lhs) = tmp;
+      ::xylose::swap( get(lhs), get(rhs) );
     }
 
     void swap(const int lhs, const int rhs) {
-      T tmp = (*this)[rhs];
-      (*this)[rhs] = (*this)[lhs];
-      (*this)[lhs] = tmp;
+      ::xylose::swap( (*this)[lhs], (*this)[rhs] );
     }
 
     /// Swap the guts of this segmented_vector with another
     void swap( segmented_vector & other ) {
-      using std::swap;
-      //using std::__alloc_swap;
-      this->mData.swap( other.mData );
-      swap( this->mNSegments, other.mNSegments );
-      swap( this->mFirstFreeSegment, other.mFirstFreeSegment);
-      this->mFirstFreeSeat.swap( other.mFirstFreeSeat );
-      /* This seems to be what the GNU vector::swap does. */
-      //__alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
+      ::xylose::swap( this->mData, other.mData );
+      ::xylose::swap( this->mNSegments, other.mNSegments );
+      ::xylose::swap( this->mFirstFreeSegment, other.mFirstFreeSegment );
+      ::xylose::swap( this->mFirstFreeSeat, other.mFirstFreeSeat );
+      ::xylose::swap( this->mAlloc, other.mAlloc );
     }
 
     /// Reserve enough space for n elements
@@ -232,7 +226,6 @@ namespace xylose {
 
     /// Remove the last element from the list
     void pop_back(  ) {erase(rend());}
-
 
     /// Erase all elements that match the given predicate
     template< typename PredT, typename DestroyFunctionT > 
@@ -251,6 +244,16 @@ namespace xylose {
     // append a new segment to the list
     void appendSegment();
   };
+
+  template< typename T, 
+            unsigned int kSegmentSize, 
+            typename Alloc >
+  inline void swap( 
+    segmented_vector< T, kSegmentSize, Alloc > & a,
+    segmented_vector< T, kSegmentSize, Alloc > & b )
+  {
+    a.swap( b );
+  }
 
   template< unsigned int kSegmentSize >
   struct make_stl_container {

@@ -1,6 +1,8 @@
 #ifndef xylose_Stack_hpp
 #define xylose_Stack_hpp
 
+#include <xylose/Swap.hpp>
+
 #include <memory>
 
 #include <cassert>
@@ -136,17 +138,19 @@ namespace xylose {
     }
 
     /// Swap the guts of this Stack with another
-    void swap ( Stack & other ) {
-      using std::swap;
-      //using std::__alloc_swap;
-      swap(this->mData, other.mData);
-      swap(this->mSize, other.mSize);
-      swap(this->mCapacity, other.mCapacity);
-      /* This seems to be what the GNU vector::swap does. */
-      //__alloc_swap<Allocator>::_S_do_it(this->mAlloc, other.mAlloc);
+    void swap( Stack & other ) {
+      ::xylose::swap( this->mData, other.mData );
+      ::xylose::swap( this->mSize, other.mSize );
+      ::xylose::swap( this->mCapacity, other.mCapacity );
+      ::xylose::swap( this->mAlloc, other.mAlloc );
     }
 
   };
+
+  template< typename T, typename AllocT >
+  inline void swap( Stack< T, AllocT > & a, Stack< T, AllocT > & b ) {
+    a.swap( b );
+  }
 
 }/* namespace xylose */
 
