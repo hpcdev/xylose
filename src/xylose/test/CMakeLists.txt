@@ -6,6 +6,7 @@ xylose_unit_test( Time_segmented_vector Time_segmented_vector.cpp )
 xylose_unit_test( TestSingleton TestSingleton.cpp )
 xylose_unit_test( SyncLock_nothreads SyncLock.cpp )
 xylose_unit_test( Vector Vector.cpp )
+xylose_unit_test( TestTypedFactory TestTypedFactory.cpp )
 
 # TODO: Remains of Jamfile based testing.  These need to be ported to CMake.
 # xylose_unit_test( SyncLock_pthreads SyncLock.cpp )
