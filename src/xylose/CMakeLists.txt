@@ -5,6 +5,8 @@
 project( Xylose )
 
 set( ${PROJECT_NAME}_HEADERS 
+    AbstractFactory.hpp
+    Factory.hpp
     Index.hpp
     logger.h
     pool_allocator.hpp
@@ -14,6 +16,7 @@ set( ${PROJECT_NAME}_HEADERS
     Stack.hpp
     SyncLock.h
     Timer.h
+    TypedFactory.hpp
     Vector.h
     win_compat.hpp
     XSTR.h
