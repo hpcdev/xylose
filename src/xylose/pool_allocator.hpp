@@ -237,8 +237,21 @@ namespace xylose {
 
     /* MEMBER FUNCTIONS */
   public:
-    /** Constructor; sets next allocation to beginning of pool. */
+    /** Constructor; sets next allocation to beginning of pool.
+     * Since this allocator is stateless (state is stored in static member) this
+     * constructor does nothing.  */
     pool_allocator() {}
+
+    /** Copy constructor--required by stl containers.
+     * Since this allocator is stateless (state is stored in static member) this
+     * constructor does nothing.  */
+    pool_allocator( const pool_allocator & other ) {}
+
+    /** Copy constructor from allocator of different type--required by stl containers.
+     * Since this allocator is stateless (state is stored in static member) this
+     * constructor does nothing. */
+    template < typename T1 >
+    pool_allocator( const pool_allocator<T1,Container,ContainerAlloc,noOPDealloc> & other ) {}
 
     /** convert a reference to an address.  What is the purpose of this function
      * in an allocator?  I'm including it only because it appears that it is

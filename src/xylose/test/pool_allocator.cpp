@@ -4,8 +4,10 @@
 
 #include <xylose/segmented_vector.hpp>
 
-#include <boost/test/unit_test.hpp>
 #include <iostream>
+#include <map>
+
+#include <boost/test/unit_test.hpp>
 
 namespace {
 
@@ -41,6 +43,16 @@ BOOST_AUTO_TEST_CASE( direct_allocation ) {
 
   /** FIXME:  need to have some real tests here. */
   BOOST_CHECK_EQUAL( 0, 0 );
+}
+
+BOOST_AUTO_TEST_CASE( std_map_test ) {
+  std::map<std::string, int, std::less<std::string>, xylose::pool_allocator<std::string> > foo;
+  //std::map<std::string, int, std::less<std::string>, std::allocator<std::string> > foo;
+  std::string a="asdf";
+  foo[a] = 0;
+  ++foo[a];
+
+  BOOST_CHECK_EQUAL( foo[a], 1 );
 }
 
 }
