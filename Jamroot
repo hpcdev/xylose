@@ -6,10 +6,10 @@ project /xylose
         <include>src
     : usage-requirements
         <include>src
-    #: build-dir build
     ;
 
-lib boost_unit_test_framework : : <name>boost_unit_test_framework-mt <link>static ;
+#lib boost_unit_test_framework : : <name>boost_unit_test_framework-mt <link>static ;
+use-project /boost : ../boost ;
 
 lib xylose-lib
     : # sources

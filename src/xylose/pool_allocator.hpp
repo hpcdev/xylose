@@ -66,7 +66,8 @@ namespace xylose {
     /** Meta function to create a new allocator enabling/disabling the
      * dealloc function. */
     template < bool B >
-    struct setDealloc { typedef pool_allocator< T, Container, ContainerAlloc, B > type;
+    struct setDealloc {
+      typedef pool_allocator< T, Container, ContainerAlloc, B > type;
     };
 
   private:
@@ -267,8 +268,8 @@ namespace xylose {
       return &x; 
     }
 
-    pointer allocate(size_type n, const_pointer p = NULL) {
-      return impl.allocate(n,p);
+    pointer allocate(size_type n, std::allocator<void>::const_pointer p = 0) {
+      return impl.allocate(n, reinterpret_cast<const_pointer>(p));
     }
 
     /** Resets the allocator so that 1) all used[] items are false, and 2)

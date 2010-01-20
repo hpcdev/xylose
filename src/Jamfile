@@ -5,8 +5,7 @@ import testing ;
 project /xylose/unit-tests
     : requirements
         <library>/xylose//xylose
-        <library>/xylose//boost_unit_test_framework
-    #: build-dir build
+        <library>/boost//unit_test_framework/<link>static
     ;
 
 use-project /xylose : ../ ;
