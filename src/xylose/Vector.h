@@ -689,7 +689,11 @@ namespace xylose {
   /** Stream output operator. */
   template <typename T, unsigned int L>
   inline std::ostream & operator<< (std::ostream & output, const Vector<T,L> & v) {
-    for (unsigned int i = 0; i < L; ++i) output << v[i] << '\t';
+    const char * sep = "";
+    for (unsigned int i = 0; i < L; ++i) {
+      output << sep << v[i];
+      sep = "\t";
+    }
     return output;
   }
 
