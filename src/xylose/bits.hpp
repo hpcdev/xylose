@@ -80,20 +80,25 @@ namespace xylose {
       return bytes.size() * Tsz;
     }
 
+    /** Number of type T that contain at least nbits bits. */
+    template < typename T >
+    inline size_t numT( const size_t & nbits ) {
+      static const size_t Tsz = 8u * sizeof(T);
+      return (nbits + Tsz - 1u) / Tsz;
+    }
+
     /** Resizes to contain at least nbits bits. */
     template < typename T >
     inline void resize( std::vector<T> & bytes,
                         const size_t & nbits,
                         const T & newvalue = T() ) {
-      static const size_t Tsz = 8u * sizeof(T);
-      bytes.resize( (nbits + Tsz - 1u) / Tsz, newvalue );
+      bytes.resize( numT<T>(nbits), newvalue );
     }
 
     /** Reserves enough room for at least nbits bits. */
     template < typename T >
     inline void reserve( std::vector<T> & bytes, const size_t & nbits ) {
-      static const size_t Tsz = 8u * sizeof(T);
-      bytes.reserve( (nbits + Tsz - 1u) / Tsz );
+      bytes.reserve( numT<T>(nbits) );
     }
 
     /** Unsets all bits. */

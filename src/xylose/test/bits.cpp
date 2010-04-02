@@ -195,6 +195,33 @@ namespace {
 
 
 
+  BOOST_AUTO_TEST_CASE( numT_function ) {
+    using xylose::bits::numT;
+    BOOST_CHECK_EQUAL( numT<uint8_t>(1u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint8_t>(7u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint8_t>(8u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint8_t>(9u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint8_t>(16u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint8_t>(17u), 3u );
+
+    BOOST_CHECK_EQUAL( numT<uint16_t>(1u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint16_t>(16u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint16_t>(17u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint16_t>(32u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint16_t>(33u), 3u );
+
+    BOOST_CHECK_EQUAL( numT<uint32_t>(1u),  1u );
+    BOOST_CHECK_EQUAL( numT<uint32_t>(32u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint32_t>(33u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint32_t>(64u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint32_t>(65u), 3u );
+
+    BOOST_CHECK_EQUAL( numT<uint64_t>(1u),  1u );
+    BOOST_CHECK_EQUAL( numT<uint64_t>(64u), 1u );
+    BOOST_CHECK_EQUAL( numT<uint64_t>(65u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint64_t>(128u), 2u );
+    BOOST_CHECK_EQUAL( numT<uint64_t>(129u), 3u );
+  }
 
 
 
