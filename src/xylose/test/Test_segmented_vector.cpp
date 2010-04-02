@@ -269,6 +269,20 @@ BOOST_AUTO_TEST_CASE( reserve )
   BOOST_CHECK_EQUAL( test.capacity(), cap );
 }
 
+BOOST_AUTO_TEST_CASE( resize )
+{
+  Test_segmented_vector test;
+  
+  BOOST_CHECK_EQUAL( test.capacity(), 0u );
+  test.resize( 41 );
+  unsigned int cap = static_cast<unsigned int>(
+    std::ceil(41. / test.segment_size) * test.segment_size
+  );
+  BOOST_CHECK_EQUAL( test.size(), 41u );
+  BOOST_CHECK_EQUAL( test.capacity(), cap );
+}
+
+
 BOOST_AUTO_TEST_SUITE( Iterator );
 
 BOOST_AUTO_TEST_CASE( equal )

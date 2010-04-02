@@ -2,9 +2,9 @@
 #define xylose_pool_allocator_h
 
 #include <xylose/segmented_vector.hpp>
-
 #include <xylose/logger.h>
 #include <xylose/SyncLock.h>
+#include <xylose/bits.hpp>
 
 #include <vector>
 #include <cassert>
@@ -85,12 +85,15 @@ namespace xylose {
 
 
     struct Impl {
+    /* TYPEDEFS */
+      /** oh, the evil of using std::vector<bool> !  */
+      typedef std::vector<unsigned char> UsedBits;
+
     /* MEMBER STORAGE */
     private:
-      /** oh, the evil of using std::vector<bool> ! 
-       * The used vector should be the same length as the Pool container. 
-       */
-      std::vector<bool> used;
+      /** The used vector should be the same length as the Pool container
+       * divided by 8. */
+      UsedBits used;
       Pool pool;
       PoolIter next;
       /** A counter to tell how many items are currently allocated. */
@@ -111,18 +114,22 @@ namespace xylose {
         }
 
         MemKey memKey( memLock );/* RAII type synchronization */
+
         if (next == pool.end()) {
           /* need to expand the allocation pool */
           pool.push_back( PoolItem() );
           next = pool.end();
           --next;
-          used.push_back(false);
+
+          /* push a new blank byte if necessary. */
+          bits::resize( used, pool.size() );
         }
 
         PoolIter pi = next;
         next += next->next_offset;
+
         /* mark the item as used and give the memory to the caller */
-        used[pi - pool.begin()] = true;
+        bits::set( used, pi - pool.begin() );
 
         ++number_allocated;
         return reinterpret_cast<pointer>(pi->bytes);
@@ -139,7 +146,7 @@ namespace xylose {
        *    underlying capacity (real memory taken by pool_allocator).<br>
        *    [Default -1]
        */
-      void reset( const int & rsz = -1 ) {
+      void reset( int rsz = -1 ) {
         MemKey memKey( memLock );/* RAII type synchronization */
         if ( number_allocated != 0 ) {
           logger::log_severe("pool allocator reset only valid if no "
@@ -153,19 +160,18 @@ namespace xylose {
           pool.clear();
         } else {
           /* trying to release memory */
-          std::vector<bool> tmpU;
+          UsedBits tmpU;
           Pool tmpP;
           used.swap( tmpU );
           pool.swap( tmpP );
 
-          used.reserve( rsz );
-          pool.reserve( rsz );
         }
 
-        for ( int i = 0; i < rsz; ++i ) {
-          pool.push_back( PoolItem() );
-          used.push_back(false);
-        }
+        /* we'll go ahead and initialize each of the pool items right now so
+         * that allocate doesn't have to. */
+        rsz = pool.capacity();
+        bits::resize( used, rsz );
+        pool.resize( rsz );
 
         next = pool.begin();
       }
@@ -196,31 +202,62 @@ namespace xylose {
           /* We're in luck.  This deallocation is really easy. */
           pi->next_offset = (next - pi);
           next = pi;
-          used[pi - pool.begin()] = false;
+
+          bits::unset( used, pi - pool.begin() );
         } else if ( pi < pool.end() ) {
+          int pi_idx = pi - pool.begin();
+          int used_byte_idx  = pi_idx / 8u;
+          int used_bit_idx   = pi_idx % 8u;
+
+          assert( used.size() == ( (pool.size() + 7u) / 8u ) );
+          int used_byte_ridx = ((pool.size()-1u) / 8u) - used_byte_idx;
+
           /* we have to search for unused items lower in index. */
-          std::vector<bool>::reverse_iterator bi = used.rbegin() + (pool.end()-pi - 1);
+          UsedBits::reverse_iterator bi = used.rbegin() + used_byte_ridx;
 
-          if (!(*bi)) {
-            logger::log_severe("tried to free an item that was already freed");
+          if (!(*bi & ( 1 << used_bit_idx ))) {
+            logger::log_severe(
+              "tried to free an item that was already freed:  "
+              "%lu of %lu items", pi - pool.begin(), pool.size()
+            );
             ++number_allocated; /* Need to correct the number allocated. */
             throw std::bad_alloc();
           }
 
-          /* now search for the next item not allocated. */
-          for (++bi; bi != used.rend() && (*bi); ++bi);
-
-          if ( bi == used.rend() ) {
-            logger::log_severe("could not find previous freed item in allocator pool");
-            ++number_allocated; /* Need to correct the number allocated. */
-            throw std::bad_alloc();
+          /* first search for any unused items within the same byte. */
+          int unused_bit = used_bit_idx-1;
+          {
+            const UsedBits::value_type & mixed_byte = *bi;
+            while ( unused_bit >= 0 && mixed_byte & (1 << unused_bit) )
+              --unused_bit;
           }
 
-          PoolIter i = pool.begin() + (used.rend() - bi - 1);
+          if ( unused_bit < 0 ) {
+            /* now search for the next byte with an item not allocated. */
+            for (++bi; bi != used.rend() && (*bi) == 0xff; ++bi);
+
+            if ( bi == used.rend() ) {
+              logger::log_severe("could not find previous freed item in allocator pool");
+              ++number_allocated; /* Need to correct the number allocated. */
+              throw std::bad_alloc();
+            }
+
+            /* now search for the particular unused bit. */
+            unused_bit = 7;
+            {
+              const UsedBits::value_type & mixed_byte = *bi;
+              while ( unused_bit >= 0 && mixed_byte & (1 << unused_bit) )
+                --unused_bit;
+            }
+          }
+
+          assert( unused_bit >= 0 );
+
+          PoolIter i = pool.begin() + (used.rend() - bi - 1 + unused_bit);
           int pi_minus_i = (pi - i);
           pi->next_offset = i->next_offset - pi_minus_i;
           i->next_offset = pi_minus_i;
-          used[pi - pool.begin()] = false;
+          bits::unset( used, pi - pool.begin() );
         } else {
           logger::log_severe("tried to free an item not in pool allocator");
           ++number_allocated; /* Need to correct the number allocated. */
@@ -276,6 +313,10 @@ namespace xylose {
      * only rsz number of pool items are left in the pool.  This reserve
      * operation essentially resizes all appropriate vectors/containers so
      * that only rsz items are left.
+     * NOTE:  this operation will fail unless deallocate has been called for all
+     * items in the pool.  Further note that this operation is only really
+     * helpful for when the noOPDealloc template parameter is true (Default is
+     * false).
      *
      * @param rsz
      *    Target capacity of the pool after all items are freed.  If

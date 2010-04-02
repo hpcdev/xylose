@@ -60,6 +60,14 @@ int main () {
     }
   }
 
+  {
+    Crappy r;
+    std::ofstream out("test_crappy_randExc.dat");
+    for ( int i = 0; i < total_rolls; ++i)
+      out << r.randExc() << '\n';
+    out.close();
+  }
+
 
   {
     const int n_generators = 100000;

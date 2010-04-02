@@ -48,6 +48,14 @@ int main () {
   }
 
   {
+    Kiss r;
+    std::ofstream out("test_kiss_randExc.dat");
+    for ( int i = 0; i < total_rolls; ++i)
+      out << r.randExc() << '\n';
+    out.close();
+  }
+
+  {
     const int n_generators = 100000;
     const int max_iter = total_rolls / n_generators;
 

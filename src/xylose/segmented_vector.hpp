@@ -219,6 +219,11 @@ namespace xylose {
     /// Reserve enough space for n elements
     void reserve( size_type n );
 
+    /** Resize so that n elements are used, initializing the new elements with
+     * the given value. 
+     */
+    void resize( size_type n, const_reference newvalue = T() );
+
     /// Remove an element from the list possibly using a custom deleter
     template< typename DestroyFunctionT >
     void erase( const ReverseIndex& index, const DestroyFunctionT& destroy );
@@ -756,6 +761,17 @@ namespace xylose {
 
     for ( size_type i = mNSegments; i < segments_needed; ++i )
       appendSegment();
+  }
+
+  //------------------------------------------------------------------------------
+  template< typename T, unsigned int kSegmentSize, typename Alloc >
+  void segmented_vector< T, kSegmentSize, Alloc >::
+  resize( size_type n, const_reference newvalue )
+  {
+    /* first, we'll try and reserve all the necessary space */
+    this->reserve( n );
+    for ( size_type i = this->size(); i < n; ++i )
+      this->push_back( newvalue );
   }
 
 } // namespace xylose
