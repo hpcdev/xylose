@@ -132,7 +132,8 @@ namespace xylose {
         bits::set( used, pi - pool.begin() );
 
         ++number_allocated;
-        return reinterpret_cast<pointer>(pi->bytes);
+        std::allocator<void>::pointer retval = pi->bytes;
+        return reinterpret_cast<pointer>(retval);
       }
 
       /** Resets the allocator so that 1) all used[] items are false, and 2)
