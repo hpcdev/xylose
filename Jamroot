@@ -1,34 +1,150 @@
+# Usage:
+#
+#   bjam [options] [properties] [install|stage]
+#
+#   Builds and installs Xylose.
+#
+# Targets and Related Options:
+#
+#   install                 Install headers and compiled library files to the
+#   =======                 configured locations (below).
+#
+#   --prefix=<PREFIX>       Install architecture independent files here.
+#                           Default; C:\Xylose on Win32
+#                           Default; /usr/local on Unix. Linux, etc.
+#
+#   --exec-prefix=<EPREFIX> Install architecture dependent files here.
+#                           Default; <PREFIX>
+#
+#   --libdir=<DIR>          Install library files here.
+#                           Default; <EPREFIX>/lib
+#
+#   --includedir=<HDRDIR>   Install header files here.
+#                           Default; <PREFIX>/include
+#
+#   stage                   Build and install only compiled library files
+#   =====                   to the ./stage directory.
+#
+# Other Options:
+#
+#   --build-dir=DIR         Build in this location instead of building
+#                           within the distribution tree. Recommended!
+#
+#   --help                  This message.
+#
+# Properties:
+#
+#   toolset=toolset         Indicates the toolset to build with.
+#
+#   variant=debug|release   Select the build variant
+#
+#   link=static|shared      Whether to build static or shared libraries
+#
+#   threading=single|multi  Whether to build single or multithreaded binaries
+# 
+#   runtime-link=static|shared      
+#                           Whether to link to static or shared C and C++ runtime.
+#   
 
-constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 4185 $" ] ;
+import mpi ; # for converting xml2-config output to features.
+import path ; # for getting a better glob
+import package ; # used for installing whole package (provides --prefix related
+                 # options )
+
+
+path-constant TOP : . ;
+
+# For xylose we did not yet use signed/annotated tags, therefore the --tags
+# option for describe
+constant VERSION : [ SHELL "printf `cd $(TOP); git describe --tags 2> /dev/null` || printf xylose-0.1.0 " ] ;
+
+local xml2-features = [ mpi.cmdline_to_features [ SHELL "printf '%s ' compiler `xml2-config --cflags --libs`" ] ] ;
+
+use-project /boost : ../boost ;
 
 project /xylose
     : requirements
         <include>src
+        <library>/boost//headers
+        <define>XYLOSE_VERSION=\\\"$(VERSION)\\\"
     : usage-requirements
         <include>src
+        <library>/boost//headers
+        <define>XYLOSE_VERSION=\\\"$(VERSION)\\\"
     ;
 
-#lib boost_unit_test_framework : : <name>boost_unit_test_framework-mt <link>static ;
-use-project /boost : ../boost ;
+alias headers : : : : <include>src ;
 
-lib xylose-lib
-    : # sources
+alias xml
+    :
+    :
+    :
+    : <library>/xylose//headers
+      $(xml2-features)
+    ;
+
+lib xylose
+    : # sources and required components
       src/xylose/power.c
       src/xylose/logger.c
       [ glob src/xylose/*.cpp ]
-    : <link>static
+    : # build requirements
+      <link>static
+      <include>src
+    : # no default build
+    : #usage requirements
       <include>src
     ;
 
-alias xylose
-    : # sources
-      xylose-lib
-      [ glob src/xylose/*.h ] # olson-tools stuff is currently still .h
-      [ glob src/xylose/*.hpp ]
-      [ glob src/xylose/detail/*.hpp ]
-      [ glob src/xylose/random/*.hpp ]
-      [ glob src/xylose/random/detail/*.hpp ]
-    : # no build requirements
-    : # no default build
-    : <include>src ;
 
+# installation configuration
+
+# options:
+install-properties =
+    <install-no-version-symlinks>on
+    ;
+
+if [ modules.peek : NT ] {
+    install-properties += <install-default-prefix>C:/Xylose ;
+} else if [ modules.peek : UNIX ] {
+    install-properties += <install-default-prefix>/usr/local ;
+}
+
+
+# the list of libraries to build and install
+local libraries = xylose ;
+# all headers to install
+local all_headers = [ path.glob-tree src : *.h *.hpp *.cpp : .svn ] ;
+# docs to install
+local docs = [ path.glob-tree docs/api/html docs/api/latex : * : .svn ] ;
+
+
+# Complete install allowing --prefix and related command line options
+alias install : install-code install-docs ;
+explicit install ;
+
+# install code allowing --prefix and related command line options
+package.install install-code
+    : $(install-properties)
+      <install-source-root>$(TOP)/src
+    :
+    : $(libraries)
+    : $(all_headers)
+    ;
+explicit install-code ;
+
+# install data allowing --prefix and related command line options
+package.install install-docs
+    : $(install-properties)
+      <install-source-root>$(TOP)
+      <install-header-subdir>../share/xylose
+    :
+    :
+    : $(docs)
+    ;
+explicit install-docs ;
+
+
+# install the libs into a staging dir
+install stage : $(libraries) ;
+explicit stage ;

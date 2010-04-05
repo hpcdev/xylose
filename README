@@ -8,8 +8,13 @@ This software is released under the LGPL v3 license.
 
 
 components:
+Jamroot         Overall Boost.Jam build file.
+CMakeLists.txt  Overall CMake build file.
 AUTHORS         A list of those who have contributed with contact info
 ChangeLog       Brief descriptions of changes made between major revisions
-COPYING         Copy of the license used for this package
+COPYING         Copy of the GPL v3 used for this package
+COPYING.LESSER  Copy of the LGPL v3 extention of GPL v3 used for this package
 INSTALL         Description of how one can install this package
 README          Brief description of this package
+docs/           documentation, including doxygen generated api documentation
+src/            source code

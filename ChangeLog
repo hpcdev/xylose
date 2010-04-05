@@ -1,0 +1,292 @@
+commit b30125c064a8d4b4a2cf241e519b84d223d0c955
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 14:36:57 2010 -0600
+
+    Imported /olson-tools//xml into xylose as well as <olson-tools/strutil.h>.
+
+commit 5e933fe7d61b4b9612d39b234ebe7df0d21e8420
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 13:41:23 2010 -0600
+
+    Tweaked the allocate() return cast to shutup compiler about strict aliasing
+    rules.
+
+commit 0e70efd7a30375eaee2e23a24a7f4ae2796aa8d7
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Fri Apr 2 19:07:03 2010 +0000
+
+    added forgotten test case for bits
+
+commit f30c2960907ee3c5bdd048cbb1b69a93b76b21db
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Fri Apr 2 19:04:12 2010 +0000
+
+    added small reused function to calculate number of bytes that contain at least n bits
+
+commit 3fa85972dc70aabb854b5edc8a58493d13e14626
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Fri Apr 2 18:19:41 2010 +0000
+
+    added missing unit tests to Jamfile and CMakeLists.txt
+
+commit fff979a8d3a2d62ac7fa846688dfc56727099390
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Fri Apr 2 18:19:38 2010 +0000
+
+    Fixed pool_allocator for IBM and added bit-set modification tools.
+    
+    Also added:
+    1) resize feature to segmented_vector and the appropriate unit test,
+    2) More tests for random numbers,
+    3) More aggressive tests for pool_allocator.
+
+commit 31dbbfa130b35be5dbe5433a3ccea995eaed9cb9
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Jan 20 18:16:11 2010 +0000
+
+    Pool allocator interface standard compatibility improved.  Compiles now on IBM.
+
+commit e561581d0c383b70963013eae85d7e889881b4c0
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Fri Jan 8 23:03:19 2010 +0000
+
+    improved interface compliance of pool_allocator to std::alllocator
+
+commit 3f83a5775fabbcf32dbd80b52327830ba5f38042
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Wed Dec 30 18:54:48 2009 +0000
+
+    Added headers to dependent sources in CMakeLists.
+
+commit afa18a51ce66c92828deb3979ac8a42f2b32c3d3
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Wed Dec 30 16:28:55 2009 +0000
+
+    Added a typed factory to instantiate subclasses of factory objects using a
+    single parameter constructor.
+
+commit 594601846fc8a078761096a7103ed7a893563cdc
+Author: K. R. Walker <krwalker@stellarscience.com>
+Date:   Tue Dec 29 22:34:15 2009 +0000
+
+    Fix swap() implementation and usage on IBM VisualAge/xlC 8.0 and gcc 3.2 and 3.4:
+      1. Added <xylose/Swap.hpp> which is a copy of <boost/utility/swap.hpp> with 's/boost/xylose/g' applied.
+      2. Changed idiomatic 'using std::swap; swap(a,b);' to '::xylose::swap(a,b);'. This fully-qualified call moves the idiom to a common place (while also working around various compiler bugs) and also provides a workaround for IBM VisualAge/xlC 8.0. xlC always tries to call the member function even when a using declaration should make a nonmember name visible.
+      3. Renamed Test_segmented_vector.cpp's 'swap' test case name to 'swapTest' to work around gcc 3.2 and 3.4's issue with ambiguous usage of swap (function vs struct constructor).
+      4. Added nonmember swap for Stack and segmented_vector as suggested by Scott Meyers in Effective C++.
+      5. Use xylose::swap for implementation of segmented_vector::swap(index,index) and swap(int,int).
+
+commit 8da3bec53a6f8dec83b1f3f8d0db66be5ab40dfe
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Dec 17 16:29:59 2009 +0000
+
+    killed more compiler warnings
+
+commit 9650ca9ef74564dc457ec4c920df497d911505ea
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Dec 17 01:18:09 2009 +0000
+
+    got rid of a couple of warnings when building unit tests
+
+commit 7d0513836fed8dedc5816d373b1d74409c1cc3be
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Dec 17 01:18:07 2009 +0000
+
+    mistakenly implemented c++0x swap functionality--a little premature; commented it out
+
+commit 697cb4e5dba1bc760a5181efdaaee6a001341f1a
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Dec 16 23:31:25 2009 +0000
+
+    added tiny bits of documentation and test case tweaking for RNGs
+
+commit f71d1df8163bcaff4668d6e58337dc79dd0da488
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Dec 16 23:31:23 2009 +0000
+
+    Added postponed cleanup feature to pool_allocator.
+
+commit 65836801879570a338dfd752250e6b9a59fb386e
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Dec 16 23:31:21 2009 +0000
+
+    Added reserve feature to segmented_vector
+
+commit 11c60d04e9d8bc90369efa4bf2c90847769a0a0e
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Dec 16 23:31:19 2009 +0000
+
+    Added vector::swap feature to segmented_vector
+
+commit c28af2be8291a5f4d713f50a62dc2e06d4d976c7
+Author: K. R. Walker <krwalker@stellarscience.com>
+Date:   Fri Dec 4 22:39:11 2009 +0000
+
+    * Changed std::cout to BOOST_TEST_MESSAGE (moves out-of-band text to in-band for
+      XML output).
+    * Changed Time_segmented_vector's array insertion test to use a better
+      reallocation algorithm. Although the original was simple and straightforward,
+      on griffin, with mpich-gm, performing a realloc ever iteration proved to be
+      extremely slow and would foul up the unit test system.
+
+commit d732bf22cbb101fec603fad7e378ca4e2809aaf0
+Author: K. R. Walker <krwalker@stellarscience.com>
+Date:   Thu Nov 5 00:04:07 2009 +0000
+
+    Attempt to cut down on the Boost.Test log file size by only logging errors inside large loops.
+
+commit 896cd69ce371331a3df043555ba372acea487414
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Nov 3 23:56:57 2009 +0000
+
+    use of va_start brought in line with standard
+
+commit 53e53b7a5204d84e7ce514406047d1c80632f383
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Mon Nov 2 22:23:35 2009 +0000
+
+    Placed all unit tests in the anonymous namespace to avoid the possibility of
+    name conflicts on systems with finnicky compilers.
+
+commit 641e6692bea4c64015c54070700ae47cac3c0437
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Mon Nov 2 22:10:27 2009 +0000
+
+    Removed spurious unit test source.
+
+commit 6058df5c06f67bb9e52702468a7c90ad42174372
+Author: K. R. Walker <krwalker@stellarscience.com>
+Date:   Wed Oct 28 16:05:56 2009 +0000
+
+    Merged in some efforts made elsewhere to simplify unit test builds.
+
+commit d393c35bca0061b237e763e9b2b52b5b7b24a58d
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Tue Oct 27 16:45:51 2009 +0000
+
+    Added new type Factory.  Improved/updated unit test builds.
+
+commit bd38fc8c712c05d997eeb6d366cfe78bf66b9341
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Mon Oct 26 22:22:47 2009 +0000
+
+    Updated CMake files to check for pre-set Boost_INCLUDE_DIRS and Boost_LIBRARIES
+    to try before falling back on the system FindBoost module.
+
+commit e7b0ec27631eae46340d1857459308abab845e4a
+Author: K. R. Walker <krwalker@stellarscience.com>
+Date:   Mon Oct 26 20:43:33 2009 +0000
+
+    * Fix #define BOOST_TEST_MACRO lines. (Remove parens)
+    * Remove superfluous BOOST_AUTO_TEST_SUITE macros.
+
+commit 53ad0d3bdd2ffd1b5cc24d74d27d97afb3b5888c
+Author: Will Dicharry <wdicharry@stellarscience.com>
+Date:   Tue Oct 6 21:21:53 2009 +0000
+
+    Set up the xylose library to compile as a standalone project.
+
+commit 0ddc937f4e655989a4e7a694758c6be2c2ee91c8
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Oct 1 22:10:21 2009 +0000
+
+    Improved import of ::log2 or redef when log2 is a macro.
+    SyncLock uses spinlocks when using pthreads now.
+
+commit 9583f7b18e31e6550147fb7a9f5105a263b36cf9
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Oct 1 21:21:33 2009 +0000
+
+    Kiss seed(vector) now uses std::copy--kills 'type punning' compiler warning.
+
+commit 958d814eee08abea97890346677955da2a66286b
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:49:05 2009 +0000
+
+    fixed xylose::pool_allocator problem for IBM compiler
+
+commit b3d8b08f379161712b87e61a1a9b895e42ceda20
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:49:03 2009 +0000
+
+    updated from olson-tools/power.h:  fixes for pgi
+
+commit e2dced051b1479cc308f922f33999d39c89cec3e
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:49:00 2009 +0000
+
+    forgot to import new V3 macro in Time_segmented_vector.cpp; tweaked Jamroot
+
+commit 357657402423ba6e084ea32ffea967ac9a917000
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:48:58 2009 +0000
+
+    updated new use for Vector class and changed namespaces for test/Vector.cpp
+
+commit 6ea300d8832842cd9e3423041be938a3615ba6c4
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:48:56 2009 +0000
+
+    added unit test from olson-tools for Vector.h
+
+commit 85659b3cc6771b14337ac3fb8e7140f352dbbb84
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:48:54 2009 +0000
+
+    updated Vector.h/power.h from olson-tools to fix compiler problems
+
+commit 7091f33ac727103011583b2ca65a3ffc37b8f3f5
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Sep 29 22:48:49 2009 +0000
+
+    Fixed power.h for PGI and tweaked ifdef guards.
+
+commit 27528fa85292f5cd0df31a457ebb0f121f822907
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Sep 17 21:57:53 2009 +0000
+
+    changed header guards to be xylose specific in logger.h
+
+commit 7657b4bdec7a673df11f0dc835637d78e61162d9
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Sep 17 21:53:24 2009 +0000
+
+    tweaked bjam stuff to pull in boost_unit_test_framework directly
+
+commit f5be23b455e199fc7041750de5ffe15d8778dfab
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Fri Sep 11 22:52:53 2009 +0000
+
+    Lots and lots of changes:
+    
+    1.  The random number generator has been moved into the xylose library.  The old
+    Crappy generator was implemented in the newer generic framework and the
+    testsuite completed successfully using this generator.  In the near future,
+    we'll change a template parameter in the bottom of rand.hpp to switch to the
+    new, more glorious, Kiss generator.
+        Because the new generator classes generally have unsigned state vectors, I
+    had to change the cell packing.
+    Therefore:  RESTART FILES BUILT PRIOR TO THIS VERSION WILL NOT WORK ANY MORE!!!!
+    Note again: RESTART FILES BUILT PRIOR TO THIS VERSION WILL NOT WORK ANY MORE!!!!
+    
+    2.  The xylose library has been overhauled in structure and in content.
+        a.  There are several pieces that depended on olson-tools.  These pieces
+        have been extracted out of olson-tools and inserted into the xylose library.
+        b.  Traincars have been renamed 'segmented_vector' and moved into the xylose
+        library.
+    If you have new stuff for the xylose library, please remember to push it back into
+    the mainline version.  The mainline version will retain build configuration
+    files for both CMake and BJam, with CMake still being the officially supported
+    build system.
+
+commit f84ee3bedd7836c1d944edf61de0b9b51fc2c9b3
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Apr 1 21:26:41 2009 +0000
+
+    Creating trunk copy of new xylose lib.
+
+commit 434ff1fa45a708dff6eaaf98a347152bf046b83f
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Wed Apr 1 15:00:00 2009 -0600
+
+    Initial commit.

@@ -1,4 +1,72 @@
 Installation Instructions
 *************************
 
-FIXME:  create install and instructions for it
+This project uses both the Boost.Build and CMake system which separately
+automatically track link, include, and other dependencies among any number of
+libraries and projects.  You may use either the Boost.Build or CMake build
+systems independently.  Below, you should find instructions for using either
+Boost.Build, CMake, or a general system-style installtion.
+
+Boost.Build:
+  If you use Boost.Build, integrating this library into your own project is
+  EASY.  No installation beyond storing Xylose somewhere on your harddrive.  To
+  use Xylose in your Boost.Build project, you simply include a line like:
+
+      use-project /xylose : path/to/xylose ;
+
+  where the path/to/xylose path can be either relative or absolute.  
+  This library has several sub-libraries that are useful and which will
+  invoke the proper linking to external libraries as needed.
+
+      /xylose//headers    : only provides <include> dependencies
+      /xylose//xml        : invokes linking to the external libxml2 library.
+      /xylose//xylose     : invokes linking to all xylose libraries and
+                            dependencies.
+
+  External libraries required by various components:
+    libxml2
+        This external library is only required for the /xylose//xml component.
+        libxml2 should be installed somewhere on your system and the xml2-config
+        command from that installation should be in your path.
+
+
+CMake:
+  CMake files also accompany the package and make it easier to use in a
+  CMake environment.  To use in a CMake environment, just add appropriate
+  lines to your master CMakeLists.txt file, such as
+
+      add_subdirectory(xylose)
+
+  You will also have to include the proper line for the include paths, such
+  as:
+      include_directories(
+        ${CMAKE_SOURCE_DIR}/path/to/your/code
+        ${CMAKE_SOURCE_DIR}/xylose/src
+      )
+
+
+General Install:
+  These instructions are for installing this software into a standard layout
+  where libraries are installed to  <prefix>/lib
+  and headers are installed to      <prefix>/include
+  DEFAULT:  <prefix> = /usr/local
+
+  For a simple install, just do:
+  
+      bjam install
+  
+  To change the installation path, use
+  
+      bjam --prefix=/path/to/install/into/ install
+  
+  For help on other options, execute
+  
+      bjam --help
+
+
+  External library installations required:
+    physical
+        If the <xml/physical_parse.h> header is needed.
+    libxml2
+        If <xml/*.h> headers are needed.
+
