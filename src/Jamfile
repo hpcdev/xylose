@@ -10,5 +10,4 @@ project /xylose/unit-tests
 
 use-project /xylose : ../ ;
 
-build-project xylose/random/test ;
-build-project xylose/test ;
+build-project xylose ;

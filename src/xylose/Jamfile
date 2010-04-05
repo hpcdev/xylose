@@ -1,0 +1,3 @@
+build-project random ;
+build-project xml ;
+build-project test ;
