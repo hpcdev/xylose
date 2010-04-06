@@ -32,10 +32,21 @@ set( ${PROJECT_NAME}_SOURCES
     Timer.cpp
 )
 
+find_package( LibXml2 )
+
+if( LIBXML2_FOUND )
+    include_directories( ${LIBXML2_INCLUDE_DIR} )
+    add_definitions( ${LIBXML2_DEFINITIONS} )
+endif()
+
 add_library( ${PROJECT_NAME} 
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES}
 )
+
+if( LIBXML2_FOUND )
+    target_link_libraries( ${LIBXML2_LIBRARIES} )
+endif()
 
 # utility macro to add a unit test to be shared by all subdirectories.
 macro( xylose_unit_test test_name )
@@ -50,6 +61,7 @@ endmacro()
 
 # add sub-directories to get the unit tests added recursively
 add_subdirectory( random )
+add_subdirectory( xml )
 
 if( BUILD_TESTING )
     add_subdirectory( test )
