@@ -6,19 +6,33 @@ project( Xylose )
 
 set( ${PROJECT_NAME}_HEADERS 
     AbstractFactory.hpp
+    bits.hpp
+    data_set.h
+    detail/Iterator.hpp
     Factory.hpp
     Index.hpp
     logger.h
     pool_allocator.hpp
     power.h
+    random/Crappy.hpp
+    random/detail/RandBase.hpp
+    random/Kiss.hpp
     segmented_vector.hpp
     Singleton.hpp
     Stack.hpp
+    strutil.h
+    Swap.hpp
     SyncLock.h
     Timer.h
     TypedFactory.hpp
+    upper_triangle.h
     Vector.h
     win_compat.hpp
+    xml/Context.h
+    xml/Doc.h
+    xml/error.h
+    xml/physical_parse.h
+    xml/vector_parse.h
     XSTR.h
 )
 
@@ -45,7 +59,7 @@ add_library( ${PROJECT_NAME}
 )
 
 if( LIBXML2_FOUND )
-    target_link_libraries( ${LIBXML2_LIBRARIES} )
+    target_link_libraries( ${PROJECT_NAME} ${LIBXML2_LIBRARIES} )
 endif()
 
 # utility macro to add a unit test to be shared by all subdirectories.
