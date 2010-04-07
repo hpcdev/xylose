@@ -26,12 +26,12 @@
  * Questions? Contact Spencer Olson (olsonse@umich.edu) 
  */
 
-#ifndef olson_tools_upper_triangle_h
-#define olson_tools_upper_triangle_h
+#ifndef xylose_upper_triangle_h
+#define xylose_upper_triangle_h
 
 #include <vector>
 
-namespace olson_tools {
+namespace xylose {
 
   /** The symmetric fix for the order of indices for the upper_triangular class.
    * This class helps guarantee that the indices are in the right order for the
@@ -118,6 +118,6 @@ namespace olson_tools {
     }
   };
 
-} /* namespace olson_tools */
+} /* namespace xylose */
 
-#endif // olson_tools_upper_triangle_h
+#endif // xylose_upper_triangle_h

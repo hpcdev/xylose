@@ -23,9 +23,6 @@ namespace xylose {
      * the highest.  
      * This operation is used for creating intial seeds of random number
      * generators.
-     *
-     * @todo This function will be moved into the new xylose(xylose)::bits
-     * namespace.
      */
     template < typename T >
     inline T reverse( T v ) {
