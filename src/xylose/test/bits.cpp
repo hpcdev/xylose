@@ -156,7 +156,9 @@ namespace {
 
   template < typename T >
   void check_ostream( const std::string & ans ) {
-    using xylose::bits::operator<<;
+    //using xylose::bits::operator<<;
+    //temporary change in using to support older gcc 3.2
+    using namespace xylose::bits;
     std::vector<T> bytes;
     bytes.push_back(0xff);
 
@@ -167,8 +169,10 @@ namespace {
 
   template < typename T >
   void check_istream( const std::string & ans ) {
-    using xylose::bits::operator<<;
-    using xylose::bits::operator>>;
+    //using xylose::bits::operator<<;
+    //using xylose::bits::operator>>;
+    //temporary change in using to support older gcc 3.2
+    using namespace xylose::bits;
     std::vector<T> bytes;
     std::istringstream istr("10110011" "10001111" "00001111" "10000011" "1111");
     istr >> bytes;
@@ -180,8 +184,10 @@ namespace {
 
   template < typename T >
   void check_reverse( const std::string & ans ) {
-    using xylose::bits::operator<<;
-    using xylose::bits::operator>>;
+    //using xylose::bits::operator<<;
+    //using xylose::bits::operator>>;
+    //temporary change in using to support older gcc 3.2
+    using namespace xylose::bits;
     std::vector<T> bytes;
     std::istringstream istr("10110011" "10001111" "00001111" "10000011" "1111");
     istr >> bytes;
