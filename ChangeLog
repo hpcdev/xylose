@@ -1,3 +1,79 @@
+commit e8c29cf7be666ee5e09bc9e8b99c11a3ad8a5255
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Mon Apr 12 12:20:11 2010 -0600
+
+    Added/tweaked some documentation.  Added masthead to files.
+
+commit 3094011a823c1e9f65bba3a72d6a93608aed4205
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 12 11:04:23 2010 -0600
+
+    Added fix to support older GCC 3.2(.3) compiler which seemingly doesn't support
+    using statments completely.
+
+commit 4e8cc0e779914703384d843d178970f1319bfc37
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 12 10:05:28 2010 -0600
+
+    Fixed compiler problems for older GCC and PGI.
+    
+    GCC 3.2.X seems to understand the template disambiguation keyword differently
+    than all the other compilers I have access to right now.  I'm not exactly sure
+    what the standard dictates--it might be that the older GCC is slightly more
+    correct.  At any rate, the new syntax used appears to be accepted by all other
+    compilers I've tried (pathscale 3.2, GCC 4.1.2, GCC 4.4.?, Intel 11, PGI ?, IBM
+    XL v?).
+
+commit fd0f7a6e769de5a3303749819d39404fc0dda11e
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Wed Apr 7 16:10:10 2010 -0600
+
+    some documentation updated--other minor changes
+
+commit a07406e452a0e88647ea98bb47e2c1f13da3009c
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Tue Apr 6 16:09:06 2010 -0600
+
+    cmake tweaks
+
+commit 9f92bce94d3e74c29e575b954b28923fed33f130
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Tue Apr 6 11:21:44 2010 -0600
+
+    Added xylose::xml unit tests to cmake build.
+
+commit af7a8a0bf07865457a37b4db12590ba6dcf96d41
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 15:11:16 2010 -0600
+
+    fixed xylose/xml/test/Jamfile to require the correct /xylose//xml library
+
+commit 490a7205c2ae8f32b052a55488e129836051b73d
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 14:56:58 2010 -0600
+
+    updated format for data_set.h
+
+commit 6f4b66a9d909bdc93256ee3c76ef5599aa1dda5a
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 14:56:13 2010 -0600
+
+    imported olson_tools::data_set (xml x-y data set)
+
+commit 2fd902b726fea3c2a953d4ac19b843cf559f4ee1
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 14:43:57 2010 -0600
+
+    imported olson_tools::upper_triangle storage class for upper-trianglular square
+    matrices.  This also supports square matrices that are symmetic about the
+    diagonal.
+
+commit 74d68633e9cf314ed14f2ab519ae5fdd6ea33e90
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Mon Apr 5 14:38:16 2010 -0600
+
+    Finally updated package information (authors, installation, change-log)...
+
 commit b30125c064a8d4b4a2cf241e519b84d223d0c955
 Author: Spencer E. Olson <olsonse@asok>
 Date:   Mon Apr 5 14:36:57 2010 -0600
