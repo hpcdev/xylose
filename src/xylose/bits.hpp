@@ -36,11 +36,15 @@ namespace xylose {
       return r;
     }
 
+#if !defined( __PGIC__ )
+    /* For some reason, the other compilers thing int8_t and char are different
+     * types. */
     /** Must specialize for signed types because (-1)>>1u == -1 */
     template<>
     inline char reverse( char v ) {
       return static_cast<char>( reverse( static_cast<uint8_t>(v) ) );
     }
+#endif
 
     /** Must specialize for signed types because (-1)>>1u == -1 */
     template<>

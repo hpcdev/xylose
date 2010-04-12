@@ -21,7 +21,7 @@ namespace xylose {
       for ( ; i != end; ++i ) {
         const xml::Context & x1 = *i;
         try {
-          T val = x1.parse< T >();
+          T val = x1.template parse< T >();
           out.push_back( val );
         } catch ( const xml::error & e ) {
           /* we ignore this error and keep trying other children. */

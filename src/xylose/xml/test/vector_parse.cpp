@@ -23,7 +23,7 @@ namespace {
 
   template < typename T >
   static void parse_item( Value<T> & out, const xml::Context & x ) {
-    out.value = x.parse< T >();
+    out.value = x.template parse< T >();
   }
 
 
