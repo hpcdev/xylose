@@ -1,6 +1,7 @@
 /*==============================================================================
  * Public Domain Contributions 2010 United States Government                   *
  * as represented by the U.S. Air Force Research Laboratory.                   *
+ * Portions copyright Copyright (C) 2010 Stellar Science                       *
  *                                                                             *
  * This file is part of xylose                                                 *
  *                                                                             *
@@ -20,37 +21,26 @@
  -----------------------------------------------------------------------------*/
 
 
-#ifndef xylose_xml_vector_parse_h
-#define xylose_xml_vector_parse_h
+/** \file
+ * Dummy file for documenting some of the general namespaces. 
+ */
 
-#include <xylose/xml/Doc.h>
+#ifndef xylose___namespace___h
+#define xylose___namespace___h
 
-#include <vector>
-
+/** The Xylose library:  a collection of useful computational tools. */
 namespace xylose {
-  namespace xml {
 
-    template < typename T >
-    static inline void parse_item( std::vector<T> & out, const Context & x ) {
-      /* first make sure the vector is clean */
-      out.clear();
+  /** Collection of random number generators that fit a common interface.
+   * The generators here are suitable for different applications.  Some require
+   * only a small memory foot print due to small state vectors and some require
+   * a much larger memory foot print while also providing much higher quality
+   * generators (think Mersenne Twister)*/
+  namespace random { }
 
-      xml::Context::list x_list = x.eval("child::node()");// get all children
-      xml::Context::list::iterator i = x_list.begin();
-      xml::Context::list::iterator end = x_list.end();
+  /** Simple, C++, context-aware, XML representation to greatly ease the
+   * use/integration of XML::XPath, XML::XInclude, and libxml2. */
+  namespace xml { }
+}
 
-      /* Now we iterate through the children trying parse_item<T> on each. */
-      for ( ; i != end; ++i ) {
-        const xml::Context & x1 = *i;
-        try {
-          T val = x1.template parse< T >();
-          out.push_back( val );
-        } catch ( const xml::error & e ) {
-          /* we ignore this error and keep trying other children. */
-        }
-      }
-
-    }
-  } /* namespace xylose::xml */
-} /* namespace xylose */
-#endif // xylose_xml_vector_parse_h
+#endif // xylose___namespace___h
