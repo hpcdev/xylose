@@ -21,6 +21,7 @@
 
 
 #include <xylose/random/Crappy.hpp>
+#include <xylose/Timer.h>
 
 #include <fstream>
 #include <vector>
@@ -118,6 +119,26 @@ int main () {
       }
     }
     out.close();
+  }
+
+  {
+    Crappy r;
+    unsigned long junk = 0u;
+    xylose::Timer timer;
+    timer.start();
+    for ( unsigned long i = 0; i < 100000000UL; ++i ) {
+      junk ^= r.randInt();
+    }
+    timer.stop();
+    if ( junk == 0 )
+      /* make sure that junk isn't optimized away */
+      std::cout << "blarney" << std::endl;
+
+    std::cout << "Generation rate:  "
+              << (1e2 / timer.dt) << " million per second \n"
+                 "                  "
+              << (1e2 / timer.dt_cpu_time) << " million per cpu second \n"
+              << std::endl;
   }
 
   return 0;
