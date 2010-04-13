@@ -74,6 +74,7 @@ macro( xylose_unit_test test_name )
 endmacro()
 
 # add sub-directories to get the unit tests added recursively
+add_subdirectory( nsort )
 add_subdirectory( random )
 if( LIBXML2_FOUND )
     add_subdirectory( xml )
