@@ -24,7 +24,6 @@
 #define xylose_random_Kiss
 
 #include <xylose/random/detail/RandBase.hpp>
-
 #include <xylose/Vector.h>
 
 #include <algorithm>
@@ -168,7 +167,7 @@ namespace xylose {
       }
 
       /** Save the StateVector to an external storage. */
-      void save( StateVector & s ) {
+      void save( StateVector & s ) const {
         s = state;
       }
 

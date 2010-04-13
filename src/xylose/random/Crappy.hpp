@@ -150,7 +150,7 @@ namespace xylose {
       }
 
       /** Save the StateVector to an external storage. */
-      void save( StateVector & s ) {
+      void save( StateVector & s ) const {
         s = state;
       }
 
