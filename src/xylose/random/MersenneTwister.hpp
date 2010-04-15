@@ -96,7 +96,7 @@ namespace xylose {
 
     protected:
       /** Length of internal state vector. */
-      static const int internal_state_length = 624; // must be signed
+      static const unsigned int internal_state_length = 624;
 
       /** InternalStateVector type. */
       typedef xylose::Vector<uint32_t, internal_state_length> InternalStateVector;
@@ -151,7 +151,7 @@ namespace xylose {
       /* initializes state with a seed */
       void seed( const uint32_t & s ) {
         state[0]= s & 0xffffffffUL;
-        for ( int j=1; j < internal_state_length; ++j ) {
+        for ( unsigned int j = 1; j < internal_state_length; ++j ) {
           state[j] = 1812433253UL * (state[j-1] ^ (state[j-1] >> 30)) + j; 
           /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
           /* In the previous versions, MSBs of the seed affect   */
@@ -169,11 +169,11 @@ namespace xylose {
       template < unsigned int key_length >
       void seed( const xylose::Vector<uint32_t, key_length> & init_key ) {
         seed(19650218UL); // not sure why we seed like this first.
-        int i = 1;
-        for ( int k = ( internal_state_length > key_length ?
-                        internal_state_length : key_length ),
-                  j = 0;
-                  k; --k ) {
+        unsigned int i = 1u;
+        for ( unsigned int k = ( internal_state_length > key_length ?
+                                 internal_state_length : key_length ),
+                           j = 0;
+                           k; --k ) {
           state[i] = (state[i] ^ ((state[i-1] ^ (state[i-1] >> 30)) * 1664525UL))
                    + init_key[j] + j; /* non linear */
 
@@ -181,20 +181,20 @@ namespace xylose {
 
           if ( i >= internal_state_length  ) {
             state[0] = state[internal_state_length-1];
-            i = 1;
+            i = 1u;
           }
 
           if ( j >= key_length )
             j = 0;
         }
 
-        for ( int k= internal_state_length - 1; k; --k ) {
+        for ( unsigned int k = internal_state_length - 1; k; --k ) {
           state[i] = (state[i] ^ ((state[i-1] ^ (state[i-1] >> 30)) * 1566083941UL))
                    - i; /* non linear */
           ++i;
           if ( i >= internal_state_length ) {
             state[0] = state[internal_state_length-1];
-            i = 1;
+            i = 1u;
           }
         }
 
@@ -210,16 +210,18 @@ namespace xylose {
         // if (finished_initialization==0)
         //   init_genrand(5489UL);
 
-        left = internal_state_length;
+        static const int N = internal_state_length; // must be signed
+
+        left = N;
         next = &state[0];
         
-        for ( int j=internal_state_length-M+1; --j; ++p )
+        for ( int j=N-M+1; --j; ++p )
           *p = p[M] ^ twist(p[0], p[1]);
 
         for ( int j = M; --j; ++p ) 
-          *p = p[M-internal_state_length] ^ twist(p[0], p[1]);
+          *p = p[M-N] ^ twist(p[0], p[1]);
 
-        *p = p[M-internal_state_length] ^ twist(p[0], state[0]);
+        *p = p[M-N] ^ twist(p[0], state[0]);
       }
 
       /* generates a random number on [0,0xffffffff]-interval */

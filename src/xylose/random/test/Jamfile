@@ -3,3 +3,4 @@ echo "analysis of the random number generators." ;
 
 unit-test Kiss : Kiss.cpp ;
 unit-test Crappy : Crappy.cpp ;
+unit-test MersenneTwister : MersenneTwister.cpp ;
