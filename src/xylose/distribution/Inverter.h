@@ -82,7 +82,7 @@
 #ifndef xylose_distribution_Inverter_h
 #define xylose_distribution_Inverter_h
 
-#include <xylose/random/Kiss.h>
+#include <xylose/random/Kiss.hpp>
 
 namespace xylose {
   namespace distribution {

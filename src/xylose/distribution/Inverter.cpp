@@ -169,7 +169,7 @@ namespace xylose {
 
 
     template < typename RNG >
-    inline const Inverter & Inverter<RNG>::operator=(const Inverter & that) {
+    inline const Inverter<RNG> & Inverter<RNG>::operator=(const Inverter & that) {
       copyLq(that.L, that.q);
       return *this;
     }
