@@ -1,0 +1,15 @@
+echo "" ;
+echo "" ;
+echo "After building testXML, do  './testXML xpath-query'" ;
+echo "" ;
+echo "" ;
+echo "" ;
+
+path-constant XML_EXAMPLE : ./file.xml ;
+
+exe testXML
+    : testXML.cpp
+      /xylose//xml /physical//calc
+    : <define>XML_FILENAME=\\\"$(XML_EXAMPLE)\\\"
+    ;
+

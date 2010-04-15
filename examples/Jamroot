@@ -1,0 +1,11 @@
+
+path-constant EXAMPLES_TOP : . ;
+
+project /xylose/examples ;
+
+use-project /xylose : ../ ;
+
+build-project nsort ;
+build-project timer ;
+build-project xml ;
+

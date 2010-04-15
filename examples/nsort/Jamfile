@@ -1,0 +1,5 @@
+exe testNSort : testNSort_obj ;
+exe timeNSort : timeNSort_obj /xylose//xylose ;
+
+obj testNSort_obj : testNSort.cpp /xylose//headers ;
+obj timeNSort_obj : testNSort.cpp /xylose//headers : <define>DO_TIMING ;
