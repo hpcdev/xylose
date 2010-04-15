@@ -75,7 +75,9 @@ endmacro()
 
 # add sub-directories to get the unit tests added recursively
 add_subdirectory( random )
-add_subdirectory( xml )
+if( LIBXML2_FOUND )
+    add_subdirectory( xml )
+endif()
 
 if( BUILD_TESTING )
     add_subdirectory( test )
