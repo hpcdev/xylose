@@ -1,3 +1,60 @@
+commit 9986ba9ad602ec8eec11cf4fe980013334d46c31
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Apr 15 17:24:12 2010 -0600
+
+    minor fixes for distribution::Inverter
+
+commit d9ee395e8df123745fd9c048f4df27634b7206ca
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Thu Apr 15 17:10:30 2010 -0600
+
+    imported a few example/sample cases from olson-tools
+
+commit 697900d23ab7ae5fe5019e92abc9e8fc632dfe34
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Thu Apr 15 15:40:01 2010 -0600
+
+    Added MersenneTwister (MT) to unit tests; other minor MT changes.
+
+commit 78d92ad6c7b73945a4b3899134523813c112a5d9
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Tue Apr 13 15:15:30 2010 -0600
+
+    Many additions due to CHIMP requirements.
+    
+    Imported:
+        olson_tools::nsort
+        olson_tools::distribution
+        olson_tools::IteratorRange
+        and other supporting pieces from olson_tools.
+    
+    Added a new Mersenne Twister random number generator.  This follows the same
+    interface and implementation style as the other generators.
+
+commit f23937109d81b1007d1c11ade29b8ee3ef272026
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Thu Apr 15 14:41:56 2010 -0600
+
+    xml directory (and its unit tests) are skipped if libxml2 is not found in cmake build
+
+commit 64c87f414799abded4c8275ac5c8fdbaf561546b
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Apr 13 14:57:53 2010 -0600
+
+    very minor format and const decl tweaks
+
+commit f94f1f7499ae46a230f9f9b8d6a81253d1a797d7
+Author: Spencer E. Olson <olsonse@asok>
+Date:   Tue Apr 13 11:47:13 2010 -0600
+
+    added timing tests for Crappy and Kiss random number generators
+
+commit 01386627bd8cd3b5c74c433a8eb1a89affdc8440
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Mon Apr 12 12:24:39 2010 -0600
+
+    updated changelog
+
 commit e8c29cf7be666ee5e09bc9e8b99c11a3ad8a5255
 Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
 Date:   Mon Apr 12 12:20:11 2010 -0600
