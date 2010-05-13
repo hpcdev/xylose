@@ -157,6 +157,21 @@ namespace xylose {
       return *this;
     }
 
+    /* ITERATOR ACCESS */
+    /** Random access iterator */
+    typedef T* iterator;
+    /** Random access const iterator */
+    typedef const T* const_iterator;
+
+    /** Get an iterator to the beginning of the vector. */
+    inline iterator begin() { return val; }
+    /** Get a const iterator to the beginning of the vector. */
+    inline const_iterator begin() const { return val; }
+    /** Get an iterator to the end of the vector. */
+    inline iterator end() { return val + L; }
+    /** Get a const iterator to the end of the vector */
+    inline const_iterator end() const { return val + L; }
+
 
     /* ***** MATH TYPE OPERATIONS THAT ARE MEMBERS. */
     /** Apply std::abs(double) to all elements and save.  

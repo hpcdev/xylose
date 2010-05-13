@@ -111,7 +111,7 @@ namespace xylose {
        * of the XML tree. */
       template <class T>
       T query(const std::string & q) const
-      throw (nonsingle_result_error) {
+      throw (nonsingle_result_error, error) {
         assertOpen();
         return root_context.query<T>(q);
       }
