@@ -61,6 +61,7 @@ constant VERSION : [ SHELL "printf `cd $(TOP); git describe --tags 2> /dev/null`
 local xml2-features = [ mpi.cmdline_to_features [ SHELL "printf '%s ' compiler `xml2-config --cflags --libs`" ] ] ;
 
 use-project /boost : ../boost ;
+use-project /physical : ../physical ;
 
 project /xylose
     : requirements
