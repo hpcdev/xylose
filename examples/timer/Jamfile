@@ -1,1 +1,2 @@
 exe testTimer : testTimer.cpp /xylose//xylose ;
+install convenient-copy : testTimer : <location>. ;

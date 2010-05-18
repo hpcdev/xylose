@@ -13,3 +13,4 @@ exe testXML
     : <define>XML_FILENAME=\\\"$(XML_EXAMPLE)\\\"
     ;
 
+install convenient-copy : testXML : <location>. ;
