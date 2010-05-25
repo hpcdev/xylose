@@ -644,6 +644,34 @@ namespace xylose {
     return retval;
   }
 
+  /** Component-wise maximum operation between two vectors.
+   * @return reference to temporary (type Vector<T1,L>).
+   *
+   * @see compMin.
+   */
+  template <typename T1, typename T2, unsigned int L>
+  inline const Vector<T1,L> compMax( const Vector<T1,L> & v1,
+                                     const Vector<T2,L> & v2 ) {
+    Vector<T1,L> retval;
+    for (unsigned int i = 0; i < L; ++i)
+      retval[i] = std::max(v1[i], v2[i]);
+    return retval;
+  }
+
+  /** Component-wise maximum operation between two vectors.
+   * @return reference to temporary (type Vector<T1,L>).
+   *
+   * @see compMax.
+   */
+  template <typename T1, typename T2, unsigned int L>
+  inline const Vector<T1,L> compMin( const Vector<T1,L> & v1,
+                                     const Vector<T2,L> & v2 ) {
+    Vector<T1,L> retval;
+    for (unsigned int i = 0; i < L; ++i)
+      retval[i] = std::min(v1[i], v2[i]);
+    return retval;
+  }
+
   /** Compute the maximum value in the Vector.
    */
   template <typename T, unsigned int L>
@@ -652,6 +680,19 @@ namespace xylose {
     for (unsigned int i = 1; i < L; ++i) {
       T vi = v[i];
       if (retval < vi)
+        retval = vi;
+    }
+    return retval;
+  }
+
+  /** Compute the minimum value in the Vector.
+   */
+  template <typename T, unsigned int L>
+  inline T min (const Vector<T,L> & v) {
+    T retval = v[0];
+    for (unsigned int i = 1; i < L; ++i) {
+      T vi = v[i];
+      if (retval > vi)
         retval = vi;
     }
     return retval;
