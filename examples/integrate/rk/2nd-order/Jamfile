@@ -1,0 +1,3 @@
+exe testrk : testrk.cpp /xylose//xylose : <define>WRITE_SOLN ;
+
+install convenient-copy : testrk : <location>. ;

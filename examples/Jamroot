@@ -5,6 +5,7 @@ project /xylose/examples ;
 
 use-project /xylose : ../ ;
 
+build-project integrate ;
 build-project nsort ;
 build-project timer ;
 build-project xml ;
