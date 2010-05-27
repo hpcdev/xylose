@@ -1,0 +1,2 @@
+exe testtiming : testtiming.cpp /xylose//headers ;
+install convenient-copy : testtiming : <location>. ;
