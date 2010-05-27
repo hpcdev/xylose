@@ -1,0 +1,2 @@
+exe testdist : testdist.cpp /xylose//headers ;
+install convenient-copy : testdist : <location>. ;
