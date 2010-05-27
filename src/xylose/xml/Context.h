@@ -38,6 +38,18 @@
 namespace xylose {
   namespace xml {
 
+    /** A hanging text node (allocator) to be used with Context::extend. */
+    struct Text {
+      xmlNodePtr node;
+
+      Text( const std::string & text )
+        : node( xmlNewText( reinterpret_cast<const xmlChar*>(text.c_str()) ) ) { }
+
+      ~Text() {
+        xmlFreeNode( node );
+      }
+    };
+
     /** A simple class to represent a single (node-specific) XML context.  */
     struct Context {
       /* TYPEDEFS */
@@ -224,6 +236,25 @@ namespace xylose {
       
         return retval;
       }
+
+      void extend( const Context & x ) {
+        xmlAddChildList( this->node, xmlCopyNodeList(x.node) );
+      }
+
+      template < typename SetOrList >
+      void extend( const SetOrList & xl ) {
+        for ( typename SetOrList::const_iterator i = xl.begin(),
+                                                 e = xl.end();
+                                                i != e;
+                                                  ++i ) {
+          xmlAddChildList( this->node, xmlCopyNodeList(i->node) );
+        }
+      }
+
+      void extend( const Text & x ) {
+        xmlAddChildList( this->node, xmlCopyNodeList(x.node) );
+      }
+
     };
 
 

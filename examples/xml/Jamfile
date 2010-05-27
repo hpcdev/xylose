@@ -6,6 +6,7 @@ echo "" ;
 echo "" ;
 
 path-constant XML_EXAMPLE : ./file.xml ;
+path-constant XML_EXAMPLE2 : ./file-2.xml ;
 
 exe testXML
     : testXML.cpp
@@ -13,4 +14,11 @@ exe testXML
     : <define>XML_FILENAME=\\\"$(XML_EXAMPLE)\\\"
     ;
 
-install convenient-copy : testXML : <location>. ;
+exe simple
+    : simple.cpp
+      /xylose//xml /physical//calc
+    : <define>XML_FILENAME=\\\"$(XML_EXAMPLE)\\\"
+      <define>XML_FILENAME2=\\\"$(XML_EXAMPLE2)\\\"
+    ;
+
+install convenient-copy : testXML simple : <location>. ;

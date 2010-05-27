@@ -80,7 +80,7 @@ namespace xylose {
         /* Create xpath evaluation context.  It isn't my fault that the libxml
          * guys force me to do a reinterpret cast. */
         root_context.assign( xmlXPathNewContext(doc),
-                             reinterpret_cast<xmlNodePtr>(doc) );
+                             xmlDocGetRootElement(doc) );
         try {
           root_context.assertContext("unable to create root XPath context");
         } catch (error & e) {
@@ -138,6 +138,16 @@ namespace xylose {
       Context find(const std::string & q) const throw(nonsingle_result_error) {
         assertOpen();
         return root_context.find(q);
+      }
+
+      /** Save the xml document to file.
+       * @param filename
+       * if filename == "-", then stdout will be used. 
+       * @param encoding [Default ISO-8859-1].
+       */
+      void save( const std::string & filename,
+                 const std::string & encoding = "ISO-8859-1" ) {
+        xmlSaveFormatFileEnc(filename.c_str(), this->doc, encoding.c_str(), 1 );
       }
     };
 
