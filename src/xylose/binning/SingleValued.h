@@ -61,14 +61,15 @@ namespace xylose {
      * int), then the user will have to specialize BlockAdder::* for SingleValued
      * using the standard specializations below.  
      *
-     * @param TKey
-     *     The type of the histogram key (double, int, ...).
+     * @tparam TKey
+     *    The type of the histogram key (double, int, ...).
      *
-     * @param nbins
+     * @tparam nbins
      *     The number of bins to use for the histogram.
      *
-     * @param TBin
-     *     The type of data to histogram (double, int, ...).
+     * @tparam TBin
+     *     The type of data to histogram (double, int, ...)
+     *    [Default:  int].
      */
     template <class TKey, unsigned int nbins, class TBin = int>
     class SingleValued {

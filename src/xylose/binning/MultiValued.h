@@ -70,23 +70,30 @@ namespace xylose {
      * int), then the user will have to specialize BlockAdder::* for SingleValued
      * using the standard specializations below.  
      *
-     * @param TKey
+     * @tparam TKey
      *     The type of the key to base histogram (double, int, ...).
      *
-     * @param T2
+     * @tparam T2
      *     The base type of the Vector<T2,L> data to store (double, int, ...).
      *
-     * @param L
+     * @tparam L
      *     The length of the Vector<T2,L> data to store.
      *
-     * @param nbins
+     * @tparam nbins
      *     The number of bins to use for the histogram.
      *
      * @see SingleValued for a generic histogramming only class.
      */
     template <class TKey, class T2, unsigned int L, unsigned int nbins>
     class MultiValued {
+      /* TYPEDEFS */
+    public:
+      /** The multi-valued binned data. */
+      typedef Vector<T2,L> MultiBinType;
 
+
+      /* MEMBER STORAGE */
+    private:
       /** The maximum of the data range within which to histogram. */
       double max;
 
@@ -102,21 +109,26 @@ namespace xylose {
     public:
 
       /** Summed up bin-data. */
-      Vector<T2,L> bins[nbins];
+      MultiBinType bins[nbins];
 
       /** Histogram of binning. */
       int hist[nbins];
 
       /** Constructor.
        * @param mn
-       *     Expected minimum of the data.
+       *    Expected minimum of the data.
        *
        * @param mx
-       *     Expected maximum of the data.
+       *    Expected maximum of the data.
+       *
+       * @param nl
+       *    The number of data lines between blank lines (zero == never)
+       *    [Default: 0].
        */
-      inline MultiValued(const double & mn = 0.0, const double & mx = 0.0, const int & _penl_mod = 0) {
-        init(mn,mx);
-        print_extra_newline_mod = _penl_mod;
+      inline MultiValued( const double & mn = 0.0,
+                          const double & mx = 0.0,
+                          const int & nl = 0 ) {
+        init(mn,mx,nl);
 
         #ifdef USE_MPI
           /* just to ensure that this is not optimized away. */
@@ -126,15 +138,18 @@ namespace xylose {
       }
 
       /** Initialize the binning. */
-      inline void init(const double & mn, const double & mx) {
+      inline void init( const double & mn,
+                        const double & mx,
+                        const int & nl = 0 ) {
         max = mx;
         min = mn;
+        print_extra_newline_mod = nl;
         scale = (mn==0 && mx==0 ? DBL_MAX : double(nbins)/(max - min) * 0.999999);
         clearBins();
       }
 
       /** Add a value to the histogram. */
-      inline void bin(const TKey & key, const Vector<T2,L> & v) {
+      inline void bin(const TKey & key, const MultiBinType & v) {
         register int i = int( ( (key<max?(key>min?key:min):max) - min) * scale);
         bins[i] += v;
         hist[i]++;
@@ -250,7 +265,7 @@ namespace xylose {
             double min;
             double scale;
             int print_extra_newline_mod;
-            Vector<T2,L> bins[nbins];
+            MultiBinType bins[nbins];
             int hist[nbins];
           }
       */
@@ -280,7 +295,7 @@ namespace xylose {
             double min;
             double scale;
             int print_extra_newline_mod;
-            Vector<T2,L> bins[nbins];
+            MultiBinType bins[nbins];
             int hist[nbins];
           }
       */
@@ -310,7 +325,7 @@ namespace xylose {
             double min;
             double scale;
             int print_extra_newline_mod;
-            Vector<T2,L> bins[nbins];
+            MultiBinType bins[nbins];
             int hist[nbins];
           }
       */
