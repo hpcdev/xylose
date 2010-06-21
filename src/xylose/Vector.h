@@ -69,7 +69,6 @@
 #include <algorithm>
 
 #include <cmath>
-#include <cstring>
 #include <cstdarg>
 
 
@@ -124,7 +123,8 @@ namespace xylose {
 
     /** Zero the Vector. */
     inline const Vector & zero () {
-      memset (&this->val[0], 0, sizeof(T)*L);
+      using std::fill;
+      fill( val, val+L, 0 );
       return *this;
     }
 
