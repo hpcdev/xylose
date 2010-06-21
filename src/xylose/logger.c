@@ -140,7 +140,7 @@ void setLogProgramName_(const char * prog) {
     setLogProgramName(prog);
 }
 
-#define Program (ProgramName != NULL ? ProgramName : "some cool program")
+#define Program (ProgramName != NULL ? ProgramName : "")
 
 /*
 ** logThreadPid
