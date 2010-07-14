@@ -392,8 +392,8 @@ namespace {
     BOOST_CHECK_EQUAL( test_set<uint16_t>(),  0x8082u );
     BOOST_CHECK_EQUAL( test_set< int32_t>(), -0x7fffff7e );
     BOOST_CHECK_EQUAL( test_set<uint32_t>(),  0x80000082u );
-    BOOST_CHECK_EQUAL( test_set< int64_t>(), -0x7fffffffffffff7eL );
-    BOOST_CHECK_EQUAL( test_set<uint64_t>(),  0x8000000000000082uL );
+    BOOST_CHECK_EQUAL( test_set< int64_t>(), -0x7fffffffffffff7eLL );
+    BOOST_CHECK_EQUAL( test_set<uint64_t>(),  0x8000000000000082uLL );
   }
 
   BOOST_AUTO_TEST_CASE( unset ) {
@@ -403,8 +403,8 @@ namespace {
     BOOST_CHECK_EQUAL( test_unset<uint16_t>(),  0x7f7du );
     BOOST_CHECK_EQUAL( test_unset< int32_t>(),  0x7fffff7d );
     BOOST_CHECK_EQUAL( test_unset<uint32_t>(),  0x7fffff7du );
-    BOOST_CHECK_EQUAL( test_unset< int64_t>(),  0x7fffffffffffff7dL );
-    BOOST_CHECK_EQUAL( test_unset<uint64_t>(),  0x7fffffffffffff7duL );
+    BOOST_CHECK_EQUAL( test_unset< int64_t>(),  0x7fffffffffffff7dLL );
+    BOOST_CHECK_EQUAL( test_unset<uint64_t>(),  0x7fffffffffffff7duLL );
   }
 
   BOOST_AUTO_TEST_CASE( setAll ) {
