@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_SUITE( XML_tests );//{
        * root_context.find(".") operation really did point to the xmlDoc.
        */
       BOOST_CHECK_EQUAL(
-        reinterpret_cast<xmlNodePtr>(doc.doc),
+        xmlDocGetRootElement(doc.doc),
         doc.root_context.node
       );
 
