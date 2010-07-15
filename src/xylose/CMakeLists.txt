@@ -4,6 +4,12 @@
 
 project( Xylose )
 
+set( VERSION xylose-0.1.0-13-g06b298f )
+
+add_definitions(
+    -DXYLOSE_VERSION=\"${VERSION}\"
+)
+
 set( ${PROJECT_NAME}_HEADERS 
     AbstractFactory.hpp
     bits.hpp
