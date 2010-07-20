@@ -43,7 +43,7 @@ namespace xylose {
       private:
         typedef _2D<_dir0,_dir1> twoD;
       public:
-        typedef tag::_3D<_dir0,_dir1,_dir> tag;
+        typedef map::tag::_3D<_dir0,_dir1,_dir> tag;
         typedef void super;
 
         template <unsigned int _depth> 

@@ -40,7 +40,7 @@ namespace xylose {
        * takes a single argument of the const Particle &. 
        * */
       struct species_only {
-        typedef tag::species_only tag;
+        typedef map::tag::species_only tag;
         typedef void super;
 
         template<class Particle>

@@ -42,7 +42,7 @@ namespace xylose {
        * */
       template <class T>
       struct w_species : T {
-        typedef tag::w_species tag;
+        typedef map::tag::w_species tag;
         typedef T super;
         const unsigned int n_species;
 

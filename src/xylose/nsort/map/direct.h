@@ -33,7 +33,7 @@ namespace xylose {
 
       /** maps x<pivot to 0 and x>= pivot to 1. */
       struct direct {
-        typedef tag::direct tag;
+        typedef map::tag::direct tag;
         typedef void super;
 
         template <class T>

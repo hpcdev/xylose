@@ -38,7 +38,7 @@ namespace xylose {
       template < unsigned int _dir0, unsigned int _dir1, unsigned int _dir2 >
       struct remap< _3D<_dir0,_dir1,_dir2> >
         : remap_base< _3D<_dir0,_dir1,_dir2>, 8u > {
-        typedef tag::remap_3D tag;
+        typedef map::tag::remap_3D tag;
         typedef remap_base< _3D<_dir0,_dir1,_dir2>, 8u > super;
         /** Default constructor required by wrapping components. */
         remap() {}

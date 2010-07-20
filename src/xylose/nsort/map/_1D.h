@@ -43,7 +43,7 @@ namespace xylose {
       template <unsigned int _dir>
       struct _1D : pivot {
         /* TYPEDEFS */
-        typedef tag::_1D<_dir> tag;
+        typedef map::tag::_1D<_dir> tag;
         typedef void super;
 
         template <unsigned int _depth> 

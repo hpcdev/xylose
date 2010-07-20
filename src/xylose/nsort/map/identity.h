@@ -38,7 +38,7 @@ namespace xylose {
       * */
       template <class T>
       struct identity : T {
-        typedef tag::identity tag;
+        typedef map::tag::identity tag;
         typedef T super;
 
         identity() {}

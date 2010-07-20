@@ -43,7 +43,7 @@ namespace xylose {
        * */
       template < typename T , unsigned int _nval = 0u >
       struct remap_base : T {
-        typedef tag::remap_base tag;
+        typedef map::tag::remap_base tag;
         typedef T super;
 
         /* STORAGE MEMBER(S) */

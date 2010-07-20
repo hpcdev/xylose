@@ -95,7 +95,7 @@ namespace xylose {
       */
       template <class DIMS>
       struct pivot_ctor : DIMS {
-        typedef tag::pivot_ctor tag;
+        typedef map::tag::pivot_ctor tag;
         typedef DIMS super;
 
         /* ** BEGIN CONSTRUCTORS ** */
