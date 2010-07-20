@@ -4,7 +4,7 @@
 
 project( Xylose )
 
-set( VERSION xylose-0.1.0-13-g06b298f )
+set( VERSION xylose-0.1.1-1-g4bd0cc3 )
 
 add_definitions(
     -DXYLOSE_VERSION=\"${VERSION}\"
