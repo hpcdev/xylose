@@ -27,8 +27,8 @@
 #include <xylose/nsort/tweak/Null.h>
 #include <xylose/ref_of.h>
 
-#include <string.h>
 #include <ostream>
+#include <algorithm>
 
 namespace xylose {
 
@@ -111,8 +111,9 @@ namespace xylose {
                 val_map & map, NSortTweaker & nsortTweaker ) {
         int * ptr = new int[n_values];
 
-        memset(bin, 0, sizeof(int)*n_values);
-        memset(ptr, 0, sizeof(int)*n_values);
+        using std::fill;
+        fill(bin, bin + n_values, 0);
+        fill(ptr, ptr + n_values, 0);
 
         /* first count the number of occurrences for each value. */
         for (Iter i = Ai; i < Af; ++i)
