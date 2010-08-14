@@ -63,13 +63,13 @@ int main() {
     Vector<double,4u> p;
     nextvalues(p);
 
-    for ( int j = 0; j < 4u; ++j )
+    for ( unsigned int j = 0; j < 4u; ++j )
       bins[j].bin(p[j]);
 
   }
 
   std::ofstream outf("dist.dat");
-  for ( int j = 0; j < 4u; ++j )
+  for ( unsigned int j = 0; j < 4u; ++j )
     bins[j].print(outf,"") << "\n\n";
   outf.close();
 
