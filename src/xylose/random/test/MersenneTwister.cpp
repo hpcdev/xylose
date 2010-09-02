@@ -19,17 +19,20 @@
  *                                                                             *
  -----------------------------------------------------------------------------*/
 
+#define BOOST_TEST_MODULE random_MersenneTwister
 
 #include <xylose/random/MersenneTwister.hpp>
 #include <xylose/Timer.h>
+
+#include <boost/test/unit_test.hpp>
 
 #include <fstream>
 #include <vector>
 #include <iostream>
 
 
-int main () {
-  std::cout << 
+BOOST_AUTO_TEST_CASE( generation ) {
+  BOOST_TEST_MESSAGE(
     "This program is for generating binary output files from the MersenneTwister random\n"
     "number generator.  There are two files generated which can be used as\n"
     "input to a random number testing package (such as DIEHARD by George\n"
@@ -43,7 +46,7 @@ int main () {
     "           instances.  For each iteration, all the generators are\n"
     "           sequentially queried such that each number in the file\n"
     "           is from the same RNG generation as the numbers around it.\n"
-            << std::endl;
+  );
 
 
   using xylose::random::MersenneTwister;
@@ -65,8 +68,9 @@ int main () {
     for ( int i = 0; i < total_rolls; ++i) {
       double n = r.randExc();
       if ( n >= 1 || n < 0 )
-        std::cout << __FILE__ "got a bad rand nubmer (" <<n
-                  <<") on "<<i<<"th roll" << std::endl;
+        BOOST_CHECK_MESSAGE( n >= 0 && n < 1,
+          __FILE__ "got a bad rand nubmer (" <<n <<") on "<<i<<"th roll"
+        );
     }
   }
 
@@ -107,17 +111,17 @@ int main () {
       junk ^= r.randInt();
     }
     timer.stop();
-    if ( junk == 0 )
-      /* make sure that junk isn't optimized away */
-      std::cout << "blarney" << std::endl;
 
-    std::cout << "Generation rate:  "
-              << (1e2 / timer.dt) << " million per second \n"
-                 "                  "
-              << (1e2 / timer.dt_cpu_time) << " million per cpu second \n"
-              << std::endl;
+    /* make sure that junk isn't optimized away */
+    BOOST_CHECK_EQUAL( junk, junk );
+
+    BOOST_TEST_MESSAGE(
+      "Generation rate:  "
+      << (1e2 / timer.dt) << " million per second \n"
+         "                  "
+      << (1e2 / timer.dt_cpu_time) << " million per cpu second"
+    );
   }
 
-  return 0;
 }
 
