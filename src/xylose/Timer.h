@@ -34,10 +34,15 @@
 #include <string>
 #include <iostream>
 #include <cassert>
-#include <time.h>
-#include <sys/time.h>
-#include <sys/times.h>
-#include <string.h>
+
+#ifndef WIN32
+#  include <sys/time.h>
+#  include <sys/times.h>
+#else
+#  include <xylose/detail/windblows.h>
+#endif
+
+#include <cstring>
 
 
 namespace xylose {
