@@ -25,14 +25,17 @@
 #ifdef WIN32
 
 #include <windows.h>
+#include <unistd.h>
 #include <ctime>
 
 namespace xylose {
   namespace detail {
 
-    struct timezone {
-      int  tz_minuteswest; /* minutes W of Greenwich */
-      int  tz_dsttime;     /* type of dst correction */
+    struct tms {
+      clock_t tms_utime; /* user time */
+      clock_t tms_stime; /* system time */
+      clock_t tms_cutime; /* user time of children */
+      clock_t tms_cstime; /* system time of children */
     };
 
 
@@ -46,7 +49,7 @@ namespace xylose {
       /* MEMBER FUNCTIONS */
       GetTimeOfDay();
 
-      int operator() (struct timeval *tv, struct timezone *tz) {
+      int operator() (timeval *tv, void *tz) {
         LARGE_INTEGER t;
         if (usePerformanceCounter)
           QueryPerformanceCounter(&t);
@@ -61,7 +64,7 @@ namespace xylose {
         t.QuadPart   -= offset.QuadPart;
         double microseconds = static_cast<double>(t.QuadPart)
                             / frequencyToMicroseconds;
-        t.QuadPart    = microseconds;
+        t.QuadPart    = static_cast<LONGLONG>(microseconds);
         tv->tv_sec    = t.QuadPart / 1000000;
         tv->tv_usec   = t.QuadPart % 1000000;
         return 0;
@@ -73,17 +76,17 @@ namespace xylose {
 
 
 /* import this into :: namespace. */
-using xylose::detail::timezone;
+using xylose::detail::tms;
 
 /** The replacement function on windows. */
-inline gettimeofday( struct timeval * tv, struct timezone * tz ) {
-  static GetTimeOfDay gtd;
-  return gtd(tv,tz);
+inline int gettimeofday( timeval * tv, void * tz ) {
+  static xylose::detail::GetTimeOfDay gtd = xylose::detail::GetTimeOfDay();
+  return gtd(tv,NULL);
 }
 
 
-inline times( struct tms * t ) {
-  t->tms_utime = std::clock() * CLOCKS_PER_SEC / seconds_per_clock_tick;
+inline clock_t times( struct tms * t ) {
+  return (t->tms_utime = std::clock());
 }
 
 #endif // WIN32

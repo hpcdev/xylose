@@ -33,5 +33,10 @@
 #include <unistd.h>
 
 namespace xylose {
-  const double Timer::seconds_per_clock_tick = 1.0 / sysconf(_SC_CLK_TCK);
+  const double Timer::seconds_per_clock_tick
+    #ifndef WIN32
+      = 1.0 / sysconf(_SC_CLK_TCK);
+    #else
+      = CLOCKS_PER_SEC;
+    #endif
 } /*namespace xylose*/

@@ -71,7 +71,4 @@ namespace xylose {
   }
 }
 
-
-GetTimeOfDay gettimeofday = GetTimeOfDay();
-
 #endif // WIN32
