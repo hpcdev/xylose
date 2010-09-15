@@ -99,6 +99,8 @@ namespace xylose {
      *     [Default xylose::random::Kiss]
      *
      * @see Inverter::Inverter constructor.
+     * @see DiscreteInverter for optimally inverting a discrete dataset while
+     *      maintaining efficiency of memory use.
      * */
     template < typename RNG = xylose::random::Kiss >
     class Inverter {

@@ -1,0 +1,4 @@
+exe vector : vector.cpp /xylose//headers ;
+exe file : file.cpp /xylose//headers ;
+exe stream : stream.cpp /xylose//headers ;
+install convenient-copy : vector file stream : <location>. ;
