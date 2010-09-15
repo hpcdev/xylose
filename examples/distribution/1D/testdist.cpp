@@ -6,11 +6,11 @@
 #include <xylose/distribution/Gaussian.h>
 #include <xylose/distribution/Maxwellian2D.h>
 #include <xylose/distribution/Maxwellian3D.h>
+#include <xylose/compat/math.hpp>
 
 #include <iostream>
 #include <fstream>
 
-#include <cmath>
 #include <cstdlib>
 
 

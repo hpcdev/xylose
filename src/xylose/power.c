@@ -118,12 +118,11 @@ double fast_log2_( double * x ) {
 }
 
 #elif defined(_MSC_VER)
-/* microsoft doesn't provide it at all... */
-#define _USE_MATH_DEFINES // for C
-#include <math.h>
-double log2( double arg ) {
-  return log(arg) / M_LN2;
-}
+  /* microsoft doesn't provide it at all... */
+  #include <xylose/compat/math.hpp>
+  double log2( double arg ) {
+    return log(arg) / M_LN2;
+  }
 #endif // USE_SPENCERS_FAST_POW
 
 double logn ( double n, double x ) {

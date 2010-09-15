@@ -1,10 +1,10 @@
 #include <xylose/binning/Extender.h>
 #include <xylose/binning/SingleValued.h>
 #include <xylose/distribution/Inverter.h>
+#include <xylose/compat/math.hpp>
 
 #include <iostream>
 #include <fstream>
-#include <cmath>
 
 /** A sinc distribution for use.  */
 struct SincDistribution {

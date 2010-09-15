@@ -23,6 +23,7 @@
 
 #define BOOST_TEST_MODULE segmented_vector_Timing
 
+#include <xylose/compat/math.hpp>
 #include <xylose/segmented_vector.hpp>
 
 #include <xylose/Timer.h>
@@ -31,7 +32,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <vector>
-#include <cmath>
 
 
 namespace {

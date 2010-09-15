@@ -24,6 +24,7 @@
 #ifndef xylose_segmented_vector_hpp
 #define xylose_segmented_vector_hpp
 
+#include <xylose/compat/math.hpp>
 #include <xylose/detail/Iterator.hpp>
 
 #include <xylose/Index.hpp>
@@ -36,7 +37,6 @@
 #include <vector>
 
 #include <cassert>
-#include <cmath>
 
 namespace xylose {
 

@@ -20,83 +20,49 @@
  *                                                                             *
  -----------------------------------------------------------------------------*/
 
-/** \file
- * Windows compatibility layer for <math.h> ( expm1, lgamma, cbrt).
- */
+#include <xylose/compat/math.hpp>
 
-#ifndef xylose_compat_math_hpp
-#define xylose_compat_math_hpp
+#ifdef WIN32
 
-#ifndef WIN32
+double expm1(double d) {
+  const double sxth = 1./6;
+  const double tw4th = 1./24;
+  if (fabs(d) < 1e-4 )
+    return (d + 0.5*d*d + sxth*d*d*d + tw4th*d*d*d*d);
+  else
+    return exp(d) - 1.0;
+}
 
-  #ifndef __cplusplus
-    #include <math.h>
-  #else
-    #include <cmath>
-  #endif
+double lgamma(double x) {
+  double cof[] = {
+    76.18009172947146,
+    -86.50532032941677,
+    24.01409824083091,
+    -1.231739572450155,
+    0.1208650973866179e-2,
+    -0.5395239384953e-5
+  };
+
+  double y = x;
+  double tmp = x + 5.5;
+  double ser = 1.000000000190015;
+  int j = 0;
+  tmp -= ((x + 0.5) * log(tmp));
+
+  for ( j = 0; j < 6; ++j ) {
+    y += 1;
+    ser += cof[j] / y;
+  }
+  return -tmp + log(2.5066282746310005*ser / x);
+}
+
+double cbrt(double x) {
+  return pow(x,1./3.);
+}
 
 #else
-
-  #define _USE_MATH_DEFINES
-
-  #ifndef __cplusplus
-    #include <math.h>
-    double expm1(double);
-    double lgamma(double);
-    double cbrt(double);
-  #else
-
-
-
-//--------- C++ -----------
-#include <cmath>
-namespace xylose {
-  namespace compat {
-
-    inline double expm1( const double & d ) {
-      const double sxth = 1./6;
-      const double tw4th = 1./24;
-      if (std::abs(d) < 1e-4 )
-        return (d + 0.5*d*d + sxth*d*d*d + tw4th*d*d*d*d);
-      else
-        return std::exp(d) - 1.0;
-    }
-
-    inline double lgamma( const double & x ) {
-      double cof[] = {
-        76.18009172947146,
-        -86.50532032941677,
-        24.01409824083091,
-        -1.231739572450155,
-        0.1208650973866179e-2,
-        -0.5395239384953e-5
-      };
-
-      double y = x;
-      double tmp = x + 5.5;
-      tmp -= ((x + 0.5) * std::log(tmp));
-      double ser = 1.000000000190015;
-
-      for ( int j = 0; j < 6; ++j ) {
-        y += 1;
-        ser += cof[j] / y;
-      }
-      return -tmp + std::log(2.5066282746310005*ser / x);
-    }
-
-    inline double cbrt(const double & x) {
-      return std::pow(x,1./3.);
-    }
-
-  }/* namespace xylose::compat */
-}/* namespace xylose::compat */
-
-
-/* import xylose::compat into :: */
-using namespace xylose::compat;
-
-#endif // C++
-
+/* shut the compiler up and define something... */
+double xylose_dummy_function() {
+  return 1.0;
+}
 #endif // WIN32
-
-#endif // xylose_compat_math_hpp

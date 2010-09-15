@@ -71,8 +71,8 @@
 #define xylose_distribution_Maxwellian2D_h
 
 #include <xylose/power.h>
+#include <xylose/compat/math.hpp>
 
-#include <cmath>
 
 namespace xylose {
   namespace distribution {

@@ -3,10 +3,10 @@
 #include <iterator>
 #include <stdlib.h>
 #include <algorithm>
-#include <math.h>
 #include <time.h>
 #include <fstream>
 
+#include <xylose/compat/math.hpp>
 #include <xylose/nsort/NSort.h>
 #include <xylose/nsort/map/_3D.h>
 #include <xylose/nsort/map/w_species.h>

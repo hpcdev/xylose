@@ -62,12 +62,12 @@
 
 #include <xylose/Vector.h>
 #include <xylose/power.h>
+#include <xylose/compat/math.hpp>
 
 #include <limits>
 #include <sstream>
 #include <ostream>
 
-#include <cmath>
 #include <cstring>
 #include <cstdarg>
 

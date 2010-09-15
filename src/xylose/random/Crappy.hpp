@@ -40,10 +40,9 @@
 
 */
 
-#include <xylose/random/detail/RandBase.hpp>
 #include <xylose/Vector.h>
-
-#include <cmath>
+#include <xylose/compat/math.hpp>
+#include <xylose/random/detail/RandBase.hpp>
 
 
 namespace xylose {

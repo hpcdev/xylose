@@ -70,7 +70,7 @@
 #ifndef xylose_distribution_stream_fraction_h
 #define xylose_distribution_stream_fraction_h
 
-#include <cmath>
+#include <xylose/compat/math.hpp>
 
 namespace xylose {
   namespace distribution {

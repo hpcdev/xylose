@@ -99,11 +99,7 @@
 /* include cmath so that we get log2 and std::pow */
 #  if !defined(USE_SPENCERS_FAST_POW) && !defined(DOXYGEN_SKIP)
 
-#    ifdef _MSC_VER
-#      define _USE_MATH_DEFINES // for C
-#    endif
-
-#    include <cmath>
+#    include <xylose/compat/math.hpp>
 
 #    if defined(log2) || defined(_MSC_VER)
        /* some compilers use a define for log2.
@@ -124,7 +120,7 @@
 namespace xylose {
 #else
 #  if !defined(USE_SPENCERS_FAST_POW) && !defined(DOXYGEN_SKIP)
-#     include <math.h>
+#     include <xylose/compat/math.hpp>
 #  endif
 #endif 
 

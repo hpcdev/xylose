@@ -1,7 +1,7 @@
 #include <xylose/Timer.h>
+#include <xylose/compat/math.hpp>
 
 #include <iostream>
-#include <cmath>
 
 int main() {
   double r = 0.0;

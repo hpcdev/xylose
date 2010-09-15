@@ -53,13 +53,13 @@
  * Copyright 2005-2009 Spencer E. Olson
  */
 
-#include <xylose/integrate/rk5.h>
 #include <xylose/strutil.h>
+#include <xylose/integrate/rk5.h>
+#include <xylose/compat/math.hpp>
 
 #include <limits>
 #include <sstream>
 #include <stdexcept>
-#include <cmath>
 
 
 namespace xylose {

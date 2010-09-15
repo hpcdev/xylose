@@ -66,6 +66,7 @@ set( ${PROJECT_NAME}_SOURCES
     Stack.cpp
     Timer.cpp
     compat/sys/time.cpp
+    compat/math.c
 )
 
 find_package( LibXml2 )
