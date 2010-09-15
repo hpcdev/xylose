@@ -755,7 +755,7 @@ namespace xylose {
    */
   template < typename T, unsigned int L >
   struct make_vector {
-    Vector<T,L> operator() ( T t0, ...) {
+    Vector<T,L> operator() ( T t0, ...) const {
       Vector<T,L> retval;
       retval[0] = t0;
 
@@ -775,7 +775,7 @@ namespace xylose {
    */
   template < typename T >
   struct make_vector<T,3u> {
-    Vector<T,3u> operator() ( const T & t0, const T & t1, const T & t2 ) {
+    Vector<T,3u> operator() ( const T & t0, const T & t1, const T & t2 ) const {
       Vector<T,3u> retval;
       retval[0] = t0;
       retval[1] = t1;
