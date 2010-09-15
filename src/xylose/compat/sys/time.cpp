@@ -34,7 +34,7 @@ namespace xylose {
 
 
 
-#include <xylose/compat/sys/time.h>
+#include <xylose/compat/sys/time.hpp>
 
 namespace xylose {
   namespace compat {

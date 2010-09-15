@@ -43,8 +43,17 @@ namespace xylose {
       clock_t tms_cstime; /* system time of children */
     };
 
+    /** Return the CPU time used by this process.  In this semi-fake
+     * implementation for windows, only the user time > 0.  All other times are
+     * set to zero. */
     inline clock_t times( struct tms * t ) {
-      return (t->tms_utime = std::clock());
+      clock_t result = std::clock();
+      if (t) {
+        t->tms_stime = t->tms_cutime = t->tms_cstime = 0;
+        t->tms_utime = result;
+      }
+
+      return result;
     }
 
   }/* namespace xylose::compat */

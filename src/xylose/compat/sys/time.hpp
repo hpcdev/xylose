@@ -30,11 +30,35 @@
 #  include <sys/time.h>
 #else
 
+#if defined(USE_WINSOCK)
+// you will also have to link to ws2_32.lib
+#  include <winsock2.h> // for gethostname
+#endif
+
 #include <windows.h>
+
+
 #include <ctime>
 
 namespace xylose {
   namespace compat {
+
+    #ifndef USE_WINSOCK
+    /** timeval defined when POSIX not available. */
+    struct timeval {
+      /** seconds */
+      time_t tv_sec;
+      /** microseconds.  Type is supposed to support [-1, 1000000] */
+      int tv_usec;
+    };
+    #endif
+
+    /** timezone defined when POSIX not available.  */
+    struct timezone {
+      int tz_minuteswest;     /* minutes west of Greenwich */
+      int tz_dsttime;         /* type of DST correction */
+    };
+
 
     struct GetTimeOfDay {
       /* STORAGE MEMBERS */
@@ -46,7 +70,9 @@ namespace xylose {
       /* MEMBER FUNCTIONS */
       GetTimeOfDay();
 
-      int operator() (timeval *tv, void *tz) {
+      /** gettimeofday implementation on Windows.  Note that the timezone
+       * structure is ignored currently. */
+      int operator() (timeval *tv, timezone *tz) {
         LARGE_INTEGER t;
         if (usePerformanceCounter)
           QueryPerformanceCounter(&t);
@@ -62,17 +88,17 @@ namespace xylose {
         double microseconds = static_cast<double>(t.QuadPart)
                             / frequencyToMicroseconds;
         t.QuadPart    = static_cast<LONGLONG>(microseconds);
-        tv->tv_sec    = t.QuadPart / 1000000;
-        tv->tv_usec   = t.QuadPart % 1000000;
+        tv->tv_sec    = static_cast<long>(t.QuadPart / 1000000);
+        tv->tv_usec   = static_cast<long>(t.QuadPart % 1000000);
         return 0;
       }
     };
 
 
     /** The replacement function on windows. */
-    inline int gettimeofday( timeval * tv, void * tz ) {
-      static xylose::detail::GetTimeOfDay gtd = xylose::detail::GetTimeOfDay();
-      return gtd(tv,NULL);
+    inline int gettimeofday( timeval * tv, timezone * tz ) {
+      static xylose::compat::GetTimeOfDay gtd = xylose::compat::GetTimeOfDay();
+      return gtd(tv,tz);
     }
 
   }/* namespace xylose::compat */
@@ -83,4 +109,4 @@ using namespace xylose::compat;
 
 #endif // WIN32
 
-#endif // xylose_detail_compat_sys_time_hpp
+#endif // xylose_compat_sys_time_hpp

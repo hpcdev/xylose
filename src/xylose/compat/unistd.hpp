@@ -32,14 +32,15 @@
 #else
 
 
-#include <windows.h>
-
-#define USE_WINSOCK
-
-#ifdef USE_WINSOCK
+#if defined(USE_WINSOCK)
 // you will also have to link to ws2_32.lib
 #  include <winsock2.h> // for gethostname
 #endif
+
+#include <windows.h>
+#include <direct.h> // for _getcwd, chdir
+#include <io.h> // for _unlink
+#include <stdio.h> // for _unlink
 
 #include <ctime>
 
@@ -72,6 +73,21 @@ namespace xylose {
         default:
           return -1;
       }
+    }
+
+
+    inline char * getcwd(char * buf, const size_t & size) {
+      return _getcwd(buf, size);
+    }
+
+
+    inline int chdir(const char * path) {
+      return _chdir(path);
+    }
+
+
+    inline int _unlink( const char *path ) {
+      return _unlink(path);
     }
 
   }/* namespace xylose::compat */

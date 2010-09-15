@@ -98,10 +98,17 @@
 
 /* include cmath so that we get log2 and std::pow */
 #  if !defined(USE_SPENCERS_FAST_POW) && !defined(DOXYGEN_SKIP)
+
+#    ifdef _MSC_VER
+#      define _USE_MATH_DEFINES // for C
+#    endif
+
 #    include <cmath>
 
-#    ifdef log2
-       /* some compilers use a define for log2 */
+#    if defined(log2) || defined(_MSC_VER)
+       /* some compilers use a define for log2.
+        * Microsoft just doesn't seem to provide it at all...
+        */
 #      undef log2
        template < typename T >
        inline T log2( const T & arg ) {

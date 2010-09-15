@@ -6,8 +6,13 @@ project( Xylose )
 
 set( VERSION xylose-0.1.1-1-g4bd0cc3 )
 
+if( MSVC )
+  set(USE_WINSOCK -DUSE_WINSOCK)
+  set( WS2_32 ws2_32.lib )
+endif()
+
 add_definitions(
-    -DXYLOSE_VERSION=\"${VERSION}\"
+    -DXYLOSE_VERSION=\"${VERSION}\" ${USE_WINSOCK}
 )
 
 set( ${PROJECT_NAME}_HEADERS 
@@ -73,7 +78,7 @@ add_library( ${PROJECT_NAME}
 )
 
 if( LIBXML2_FOUND )
-    target_link_libraries( ${PROJECT_NAME} ${LIBXML2_LIBRARIES} )
+    target_link_libraries( ${PROJECT_NAME} ${LIBXML2_LIBRARIES} ${WS2_32} )
 endif()
 
 # utility macro to add a unit test to be shared by all subdirectories.
