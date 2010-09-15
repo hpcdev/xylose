@@ -57,8 +57,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <time.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 #ifdef __CYGWIN__
@@ -75,6 +73,9 @@
 #elif defined(N_PLAT_NLM)
 #  error some more work needs to be done before this will compile for NetWare
 #else
+
+#  include <sys/types.h>
+#  include <unistd.h>
 #  include <syslog.h>
 
 #  ifdef USE_PTHREAD

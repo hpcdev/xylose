@@ -29,18 +29,25 @@
 #ifndef xylose_bits_hpp
 #define xylose_bits_hpp
 
+#include <boost/cstdint.hpp>
+
 #include <vector>
 #include <ostream>
 #include <istream>
 #include <cassert>
-
-#include <stdint.h>
 
 namespace xylose {
 
   /** Routines to modify, access, read-in, print-out, the individual bits in a
    * vector of bytes. */
   namespace bits {
+
+    using  boost::int8_t;
+    using boost::uint8_t;
+    using  boost::int16_t;
+    using boost::uint16_t;
+    using  boost::int32_t;
+    using boost::uint32_t;
 
     /* {***** BEGIN OPERATIONS ON NATIVE TYPES (char,int,long,...) ***** */
 

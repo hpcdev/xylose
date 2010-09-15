@@ -41,11 +41,9 @@
 */
 
 #include <xylose/random/detail/RandBase.hpp>
-
 #include <xylose/Vector.h>
 
 #include <cmath>
-#include <stdint.h>
 
 
 namespace xylose {

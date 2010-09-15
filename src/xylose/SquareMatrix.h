@@ -63,7 +63,6 @@
 #include <xylose/Vector.h>
 #include <xylose/power.h>
 
-
 #include <limits>
 #include <sstream>
 #include <ostream>
@@ -71,7 +70,6 @@
 #include <cmath>
 #include <cstring>
 #include <cstdarg>
-#include <stdint.h>
 
 
 namespace xylose {

@@ -28,8 +28,6 @@
 
 #include <algorithm>
 
-#include <stdint.h>
-
 namespace xylose {
   namespace random {
 

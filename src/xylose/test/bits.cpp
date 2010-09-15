@@ -25,6 +25,7 @@
 
 #include <xylose/bits.hpp>
 
+#include <boost/cstdint.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <string>
@@ -32,9 +33,18 @@
 #include <iterator>
 #include <sstream>
 
-#include <stdint.h>
 
 namespace {
+
+  using  boost::int8_t;
+  using boost::uint8_t;
+  using  boost::int16_t;
+  using boost::uint16_t;
+  using  boost::int32_t;
+  using boost::uint32_t;
+  using  boost::int64_t;
+  using boost::uint64_t;
+
 
   template < typename T >
   size_t test_size() {

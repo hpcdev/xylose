@@ -23,6 +23,7 @@ set( ${PROJECT_NAME}_HEADERS
     random/Crappy.hpp
     random/detail/RandBase.hpp
     random/Kiss.hpp
+    random/MersenneTwister.hpp
     segmented_vector.hpp
     Singleton.hpp
     Stack.hpp
@@ -33,7 +34,13 @@ set( ${PROJECT_NAME}_HEADERS
     TypedFactory.hpp
     upper_triangle.h
     Vector.h
-    win_compat.hpp
+    compat/unistd.hpp
+    compat/stdio.hpp
+    compat/compat.hpp
+    compat/sys/times.hpp
+    compat/sys/time.hpp
+    compat/math.hpp
+    compat/strings.hpp
     xml/Context.h
     xml/Doc.h
     xml/error.h
@@ -50,6 +57,7 @@ set( ${PROJECT_NAME}_SOURCES
     Singleton.cpp
     Stack.cpp
     Timer.cpp
+    compat/sys/time.cpp
 )
 
 find_package( LibXml2 )

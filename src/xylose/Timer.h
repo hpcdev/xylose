@@ -31,16 +31,12 @@
 #ifndef xylose_Timer_h
 #define xylose_Timer_h
 
+#include <xylose/compat/sys/time.hpp>
+#include <xylose/compat/sys/times.hpp>
+
 #include <string>
 #include <iostream>
 #include <cassert>
-
-#ifndef WIN32
-#  include <sys/time.h>
-#  include <sys/times.h>
-#else
-#  include <xylose/detail/windblows.h>
-#endif
 
 #include <cstring>
 

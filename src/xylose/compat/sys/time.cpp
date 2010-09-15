@@ -19,56 +19,68 @@
  *                                                                             *
  -----------------------------------------------------------------------------*/
 
-#ifdef WIN32
-
-#include <xylose/detail/windblows.h>
 
 
-namespace {
+#ifndef WIN32
+/* just something small to keep compiler from complaining about an empty file */
+namespace xylose {
+  namespace compat {
+    namespace {
+      static const int IgnoreThisValue = 1.0;
+    }
+  }/* namespace xylose::compat */
+}/* namespace xylose */
+#else
 
-  /* a replacement for gettimeofday on windows. */
-  LARGE_INTEGER getFILETIMEoffset() {
-    SYSTEMTIME s;
-    FILETIME f;
-    LARGE_INTEGER t;
 
-    s.wYear = 1970;
-    s.wMonth = 1;
-    s.wDay = 1;
-    s.wHour = 0;
-    s.wMinute = 0;
-    s.wSecond = 0;
-    s.wMilliseconds = 0;
-    SystemTimeToFileTime(&s, &f);
-    t.QuadPart = f.dwHighDateTime;
-    t.QuadPart <<= 32;
-    t.QuadPart |= f.dwLowDateTime;
-    return t;
-  }
 
-}
+#include <xylose/compat/sys/time.h>
 
 namespace xylose {
-  namespace detail {
+  namespace compat {
 
 
-      GetTimeOfDay::GetTimeOfDay() {
-        LARGE_INTEGER performanceFrequency;
-        usePerformanceCounter
-          = static_cast<bool>(QueryPerformanceFrequency(&performanceFrequency));
+    namespace {
 
-        if (usePerformanceCounter) {
-          QueryPerformanceCounter(&offset);
-          frequencyToMicroseconds
-            = static_cast<double>(performanceFrequency.QuadPart / 1000000.);
-        } else {
-          offset = getFILETIMEoffset();
-          frequencyToMicroseconds = 10.;
-        }
+      /* a replacement for gettimeofday on windows. */
+      LARGE_INTEGER getFILETIMEoffset() {
+        SYSTEMTIME s;
+        FILETIME f;
+        LARGE_INTEGER t;
+
+        s.wYear = 1970;
+        s.wMonth = 1;
+        s.wDay = 1;
+        s.wHour = 0;
+        s.wMinute = 0;
+        s.wSecond = 0;
+        s.wMilliseconds = 0;
+        SystemTimeToFileTime(&s, &f);
+        t.QuadPart = f.dwHighDateTime;
+        t.QuadPart <<= 32;
+        t.QuadPart |= f.dwLowDateTime;
+        return t;
       }
 
+    }
 
-  }
-}
+    GetTimeOfDay::GetTimeOfDay() {
+      LARGE_INTEGER performanceFrequency;
+      usePerformanceCounter
+        = static_cast<bool>(QueryPerformanceFrequency(&performanceFrequency));
+
+      if (usePerformanceCounter) {
+        QueryPerformanceCounter(&offset);
+        frequencyToMicroseconds
+          = static_cast<double>(performanceFrequency.QuadPart / 1000000.);
+      } else {
+        offset = getFILETIMEoffset();
+        frequencyToMicroseconds = 10.;
+      }
+    }
+
+
+  }/* namespace xylose::compat */
+}/* namespace xylose */
 
 #endif // WIN32

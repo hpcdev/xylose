@@ -25,14 +25,19 @@
 
 #include <xylose/Vector.h>
 
+#include <boost/cstdint.hpp>
+
 #include <cstdio>
 #include <ctime>
 #include <cstdlib>
 #include <climits>
-#include <stdint.h>
 
 namespace xylose {
   namespace random {
+
+    using  boost::int32_t;
+    using boost::uint32_t;
+
     namespace detail {
       using xylose::Vector;
 

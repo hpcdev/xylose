@@ -19,17 +19,22 @@
  *                                                                             *
  -----------------------------------------------------------------------------*/
 
-#ifndef xylose_detail_windblows_h
-#define xylose_detail_windblows_h
+/** \file
+ * Windows compatibility layer for <sys/times.h>.
+ */
 
-#ifdef WIN32
+#ifndef xylose_compat_sys_times_hpp
+#define xylose_compat_sys_times_hpp
+
+#ifndef WIN32
+#  include <sys/times.h>
+#else
 
 #include <windows.h>
-#include <unistd.h>
 #include <ctime>
 
 namespace xylose {
-  namespace detail {
+  namespace compat {
 
     struct tms {
       clock_t tms_utime; /* user time */
@@ -38,57 +43,16 @@ namespace xylose {
       clock_t tms_cstime; /* system time of children */
     };
 
+    inline clock_t times( struct tms * t ) {
+      return (t->tms_utime = std::clock());
+    }
 
-    struct GetTimeOfDay {
-      /* STORAGE MEMBERS */
-      LARGE_INTEGER offset;
-      double frequencyToMicroseconds;
-      bool usePerformanceCounter;
-
-
-      /* MEMBER FUNCTIONS */
-      GetTimeOfDay();
-
-      int operator() (timeval *tv, void *tz) {
-        LARGE_INTEGER t;
-        if (usePerformanceCounter)
-          QueryPerformanceCounter(&t);
-        else {
-          FILETIME f;
-          GetSystemTimeAsFileTime(&f);
-          t.QuadPart = f.dwHighDateTime;
-          t.QuadPart <<= 32;
-          t.QuadPart |= f.dwLowDateTime;
-        }
-
-        t.QuadPart   -= offset.QuadPart;
-        double microseconds = static_cast<double>(t.QuadPart)
-                            / frequencyToMicroseconds;
-        t.QuadPart    = static_cast<LONGLONG>(microseconds);
-        tv->tv_sec    = t.QuadPart / 1000000;
-        tv->tv_usec   = t.QuadPart % 1000000;
-        return 0;
-      }
-    };
-
-  }/* namespace xylose::detail */
+  }/* namespace xylose::compat */
 }/* namespace xylose */
 
-
-/* import this into :: namespace. */
-using xylose::detail::tms;
-
-/** The replacement function on windows. */
-inline int gettimeofday( timeval * tv, void * tz ) {
-  static xylose::detail::GetTimeOfDay gtd = xylose::detail::GetTimeOfDay();
-  return gtd(tv,NULL);
-}
-
-
-inline clock_t times( struct tms * t ) {
-  return (t->tms_utime = std::clock());
-}
+/* import xylose::compat into :: namespace. */
+using namespace xylose::compat;
 
 #endif // WIN32
 
-#endif // xylose_detail_windblows_h
+#endif // xylose_detail_compat_sys_times_hpp
