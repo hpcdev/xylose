@@ -7,12 +7,15 @@ project( Xylose )
 set( VERSION xylose-0.1.1-1-g4bd0cc3 )
 
 if( MSVC )
-  set(USE_WINSOCK -DUSE_WINSOCK)
-  set( WS2_32 ws2_32.lib )
+    set( USE_WINSOCK TRUE )
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/compat/config.hpp.in
+        ${CMAKE_CURRENT_BINARY_DIR}/compat/config.hpp
+    )
 endif()
 
 add_definitions(
-    -DXYLOSE_VERSION=\"${VERSION}\" ${USE_WINSOCK}
+    -DXYLOSE_VERSION=\"${VERSION}\"
 )
 
 set( ${PROJECT_NAME}_HEADERS 
@@ -78,7 +81,7 @@ add_library( ${PROJECT_NAME}
 )
 
 if( LIBXML2_FOUND )
-    target_link_libraries( ${PROJECT_NAME} ${LIBXML2_LIBRARIES} ${WS2_32} )
+    target_link_libraries( ${PROJECT_NAME} ${LIBXML2_LIBRARIES} )
 endif()
 
 # utility macro to add a unit test to be shared by all subdirectories.

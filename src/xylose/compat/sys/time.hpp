@@ -30,6 +30,8 @@
 #  include <sys/time.h>
 #else
 
+#include <xylose/compat/config.hpp>
+
 #if defined(USE_WINSOCK)
 // you will also have to link to ws2_32.lib
 #  include <winsock2.h> // for gethostname
