@@ -77,6 +77,9 @@ namespace xylose {
     }
 
 
+    #if WIN32_POSIX_REMOVED_COMPLETELY
+    //MSDN docs say that these won't exist(?), but they seem to...
+
     inline char * getcwd(char * buf, const size_t & size) {
       return _getcwd(buf, size);
     }
@@ -87,9 +90,10 @@ namespace xylose {
     }
 
 
-    inline int _unlink( const char *path ) {
+    inline int unlink( const char *path ) {
       return _unlink(path);
     }
+    #endif
 
   }/* namespace xylose::compat */
 }/* namespace xylose::compat */
