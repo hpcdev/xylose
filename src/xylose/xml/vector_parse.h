@@ -31,7 +31,7 @@ namespace xylose {
   namespace xml {
 
     template < typename T >
-    static inline void parse_item( std::vector<T> & out, const Context & x ) {
+    inline void parse_item( std::vector<T> & out, const Context & x ) {
       /* first make sure the vector is clean */
       out.clear();
 

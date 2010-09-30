@@ -44,7 +44,7 @@ namespace {
   };
 
   template < typename T >
-  static void parse_item( Value<T> & out, const xml::Context & x ) {
+  void parse_item( Value<T> & out, const xml::Context & x ) {
     out.value = x.template parse< T >();
   }
 
@@ -56,7 +56,7 @@ namespace {
     ABCValue() : a(0), b(0), c(0) {}
   };
 
-  static void parse_item( ABCValue & out, const xml::Context & x ) {
+  void parse_item( ABCValue & out, const xml::Context & x ) {
     out.a = x.query< double >("a");
     out.b = x.query< double >("b");
     out.c = x.query< double >("c");

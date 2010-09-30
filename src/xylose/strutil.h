@@ -40,6 +40,8 @@
 #include <algorithm>
 #include <stdexcept>
 
+#include <cctype>
+
 namespace xylose {
 
 struct string_error : std::runtime_error {

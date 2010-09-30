@@ -276,7 +276,7 @@ namespace xylose {
     /** Generic parse_item implementation that will match for any type that has
      * an istream extraction operation defined. */
     template <class A>
-    static inline void parse_item(A & out, const Context & x) {
+    inline void parse_item(A & out, const Context & x) {
       try {
         out = xylose::from_string<A>(x.text());
       } catch (xylose::string_error& e) {
@@ -287,7 +287,7 @@ namespace xylose {
     /** Special implementation of parse_item for string return values.  This one
      * is specially implemented because of its glaring simplicity--no need to
      * use an extraction operation when we already have a string. */ 
-    static inline void parse_item(std::string & out, const Context & x) {
+    inline void parse_item(std::string & out, const Context & x) {
       out = x.text();
     }
 
