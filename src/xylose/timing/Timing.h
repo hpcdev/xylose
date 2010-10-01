@@ -34,12 +34,16 @@
 
 #include <xylose/timing/element/Base.h>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vector>
 #include <stdexcept>
 
 
 namespace xylose {
   namespace timing {
+
+    typedef boost::ptr_vector<element::Base> TimingsVector;
 
     /** Generic timing class.  
      * This class can be used to change a particular value in a controlled
@@ -52,7 +56,7 @@ namespace xylose {
       /* MEMBER STORAGE */
     public:
       /** Vector of timing elements for this Timing class. */
-      std::vector<element::Base *> timings;
+      TimingsVector timings;
 
     private:
       /** Value of the timer. 
@@ -120,7 +124,7 @@ namespace xylose {
         double t_i = 0.0, t_f = 0.0;
         int i = 0;
         for (; ((unsigned int)i) < timings.size(); ++i) {
-          element::Base & te = *timings[i];
+          element::Base & te = timings[i];
 
           t_i = t_f;         /* absolute start of this interval. */
           t_f = t_i + te.dt; /* absolute   end of this interval. */
@@ -137,7 +141,7 @@ namespace xylose {
 
         /* set the current value according to the relative time for the ith
          * time interval. */
-        current_val = timings[i]->getValue(t_absolute - t_i);
+        current_val = timings[i].getValue(t_absolute - t_i);
       }
     };
 

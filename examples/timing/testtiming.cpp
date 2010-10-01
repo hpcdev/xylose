@@ -3,7 +3,6 @@
 #include <xylose/timing/Printer.h>
 #include <xylose/timing/element/Exponential.h>
 
-#include <vector>
 #include <fstream>
 
 //#include <cfloat>
@@ -62,7 +61,7 @@ int main() {
     ScaledScalarField sfield;
     ScaledVectorField vfield;
 
-    std::vector<timing::element::Base*> gtimings;
+    timing::TimingsVector gtimings;
     gtimings.push_back(new timing::element::Exponential(3.*ms, 1.0, 0.0, 0.0));
     gtimings.push_back(new timing::element::Exponential(3.*ms, 1.0, 0.0, 1.0));
     gtimings.push_back(new timing::element::Exponential(3.*ms, 1.0, 0.0, 1.0));
@@ -71,7 +70,7 @@ int main() {
     gravity.timing.timings = gtimings;
 
     sfield.bg = 1.0;
-    std::vector<timing::element::Base*> stimings;
+    timing::TimingsVector stimings;
     stimings.push_back(new timing::element::Exponential(2.*ms, 1.0, 0.0, 0.0));
     stimings.push_back(new timing::element::Exponential(4.*ms, 1.0, 0.0, 5.0));
     stimings.push_back(new timing::element::Exponential(1.*ms, 1.0, 0.0, 8.0));
@@ -80,7 +79,7 @@ int main() {
     sfield.timing.timings = stimings;
 
     vfield.bg = V3(1.0,-1.0,-.5);
-    std::vector<timing::element::Base*> vtimings;
+    timing::TimingsVector vtimings;
     vtimings.push_back(new timing::element::Exponential(4.*ms, 1.0, 0.0, 0.0));
     vtimings.push_back(new timing::element::Exponential(2.*ms, 1.0, 0.0, 3.0));
     vtimings.push_back(new timing::element::Exponential(5.*ms, 1.0, 0.0, 7.0));

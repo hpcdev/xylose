@@ -68,11 +68,11 @@ namespace xylose {
 
         /* MEMBER FUNCTIONS */
         /** Constructor. */
-        Exponential( const double & _dt   = 0.0,
+        Exponential( const double & dt   = 0.0,
                      const double & exp   = 1.0,
                      const double & vi    = 0.0,
                      const double & vf    = 1.0 ) :
-          super(_dt),
+          super(dt),
           exponent(fabs(exp)),
           reverse(exp < 0.0),
           val_i(vi), val_f(vf) { }
@@ -96,6 +96,11 @@ namespace xylose {
             return val_f + (  (val_i - val_f) * fast_pow((1.0 - tau) + eps10, exponent));
           else /* forward */
             return val_i + (  (val_f - val_i) * fast_pow(tau, exponent));
+        }
+
+        /** Create a clone. */
+        virtual Base * clone() const {
+          return new Exponential(*this);
         }
       };
 
