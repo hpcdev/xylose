@@ -70,6 +70,7 @@
 #ifndef xylose_distribution_stream_fraction_h
 #define xylose_distribution_stream_fraction_h
 
+#include <xylose/power.h>
 #include <xylose/compat/math.hpp>
 
 namespace xylose {
@@ -85,8 +86,8 @@ namespace xylose {
      * @param beta
      *     m/(2kT).
      *
-     * Note that return value of this function is negative.  Also note that
-     * upstream_fraction + downstream_fraction == 1.
+     * Note that upstream_fraction <= 0 <= downstream_fraction.
+     * Also note that upstream_fraction + downstream_fraction == 1.
      *
      * @see downstream_fraction.
      */
@@ -110,8 +111,8 @@ namespace xylose {
      * @param beta
      *     m/(2kT).
      *
-     * Note that return value of this function is negative.  Also note that
-     * upstream_fraction + downstream_fraction == 1.
+     * Note that upstream_fraction <= 0 <= downstream_fraction.
+     * Also note that upstream_fraction + downstream_fraction == 1.
      *
      * @see upstream_fraction.
      */
