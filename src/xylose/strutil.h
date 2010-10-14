@@ -44,44 +44,59 @@
 
 namespace xylose {
 
-struct string_error : std::runtime_error {
+  struct string_error : std::runtime_error {
     typedef std::runtime_error super;
     string_error(const std::string & s) : super(s) {}
-};
+  };
 
-template< class T>
-inline std::string to_string( const T & Value)
-{
+  template < typename T >
+  inline std::string to_string( const T & Value ) {
     std::stringstream streamOut;
     streamOut << Value;
     return streamOut.str( );
-}
+  }
 
-//  specialization for string.
-template< >
-inline std::string to_string( const std::string & Value)
-{
+  //  specialization for string.
+  template<>
+  inline std::string to_string( const std::string & Value ) {
     return Value;
-}
+  }
 
-template< class T>
-inline T from_string( const std::string & ToConvert)
-{
-    std::stringstream streamIn( ToConvert);
-    T ReturnValue = T( );
+  template < typename T >
+  inline T & from_string( const std::string & ToConvert, T & ReturnValue ) {
+    std::stringstream streamIn(ToConvert);
     streamIn >> ReturnValue;
-    if (!streamIn)
-        throw string_error("could not convert from string");
+    if ( !streamIn )
+      throw string_error("could not convert from string");
     return ReturnValue;
-}
+  }
 
-inline std::string tolower( const std::string & ToLower) {
+  // specialization for string
+  template<>
+  inline std::string & from_string( const std::string & ToConvert,
+                                          std::string & ReturnValue ) {
+    return ReturnValue = ToConvert;
+  }
+
+  template < typename T >
+  inline T from_string( const std::string & ToConvert ) {
+    T ReturnValue = T( );
+    return from_string( ToConvert, ReturnValue );
+  }
+
+  // specialization for string
+  template<>
+  inline std::string from_string<std::string>( const std::string & ToConvert ) {
+    return ToConvert;
+  }
+
+  inline std::string tolower( const std::string & ToLower ) {
     std::string retval;
     std::transform(ToLower.begin(), ToLower.end(),
                    retval.begin(),
                    static_cast<int(*)(int)>(std::tolower));
     return retval;
-}
+  }
 
 }/* namespace xylose */
 
