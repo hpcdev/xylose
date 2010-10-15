@@ -38,9 +38,9 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 #include <stdexcept>
-
-#include <cctype>
+#include <locale>
 
 namespace xylose {
 
@@ -49,6 +49,7 @@ namespace xylose {
     string_error(const std::string & s) : super(s) {}
   };
 
+  /** Convert any item to a string--requires that operator<<(T) exists. */
   template < typename T >
   inline std::string to_string( const T & Value ) {
     std::stringstream streamOut;
@@ -62,6 +63,7 @@ namespace xylose {
     return Value;
   }
 
+  /** Convert any item from a string--requires that operator>>(T) exists. */
   template < typename T >
   inline T & from_string( const std::string & ToConvert, T & ReturnValue ) {
     std::stringstream streamIn(ToConvert);
@@ -78,6 +80,7 @@ namespace xylose {
     return ReturnValue = ToConvert;
   }
 
+  /** Convert any item from a string--requires that operator>>(T) exists. */
   template < typename T >
   inline T from_string( const std::string & ToConvert ) {
     T ReturnValue = T( );
@@ -90,12 +93,57 @@ namespace xylose {
     return ToConvert;
   }
 
-  inline std::string tolower( const std::string & ToLower ) {
-    std::string retval;
-    std::transform(ToLower.begin(), ToLower.end(),
-                   retval.begin(),
-                   static_cast<int(*)(int)>(std::tolower));
+  /** Transform a string to lower case. */
+  inline std::string tolower( const std::string & ToLower,
+                              const std::locale & loc = std::locale() ) {
+    std::string retval = ToLower;
+    const std::ctype<char> & ct = std::use_facet< std::ctype<char> >(loc);
+    std::transform(retval.begin(), retval.end(), retval.begin(),
+                   std::bind1st( std::mem_fun( &std::ctype<char>::tolower ), &ct ));
     return retval;
+  }
+
+  /** Transform a string to upper case. */
+  inline std::string toupper( const std::string & ToUpper,
+                              const std::locale & loc = std::locale() ) {
+    std::string retval = ToUpper;
+    const std::ctype<char> & ct = std::use_facet< std::ctype<char> >(loc);
+    std::transform(retval.begin(), retval.end(), retval.begin(),
+                   std::bind1st( std::mem_fun( &std::ctype<char>::toupper ), &ct ));
+    return retval;
+  }
+
+  /** Strip leading whitespace from a string to create a new string. */
+  inline std::string lstrip( const std::string & s,
+                             const std::locale & loc = std::locale() ) {
+    std::string::size_type pos = 0u;
+    const std::string::size_type sz = s.size();
+    while ( pos < sz && std::isspace(s[pos], loc) )
+      ++pos;
+
+    if ( pos >= sz )
+      return "";
+    else
+      return s.substr( pos );
+  }
+
+  /** Strip trailing whitespace from a string to create a new string. */
+  inline std::string rstrip( const std::string & s,
+                             const std::locale & loc = std::locale() ) {
+    std::string::size_type epos = s.size();
+    while ( epos > 0u && std::isspace(s[epos - 1u], loc) )
+      --epos;
+
+    if ( epos == 0u )
+      return "";
+    else
+      return s.substr( 0u, epos );
+  }
+
+  /** Strip leading/trailing whitespace from a string to create a new string. */
+  inline std::string strip( const std::string & s,
+                            const std::locale & loc = std::locale() ) {
+    return lstrip( rstrip( s, loc ), loc );
   }
 
 }/* namespace xylose */
