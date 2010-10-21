@@ -112,7 +112,7 @@ namespace xylose {
       MultiBinType bins[nbins];
 
       /** Histogram of binning. */
-      int hist[nbins];
+      double hist[nbins];
 
       /** Constructor.
        * @param mn
@@ -152,7 +152,7 @@ namespace xylose {
       inline void bin(const TKey & key, const MultiBinType & v) {
         register int i = int( ( (key<max?(key>min?key:min):max) - min) * scale);
         bins[i] += v;
-        hist[i]++;
+        hist[i] += 1.0;
       }
 
       /** Returns the size of the histogram. */
@@ -161,7 +161,7 @@ namespace xylose {
       /** Sets the entire histogram to zero. */
       inline void clearBins() {
         std::fill(bins, bins+nbins,0);
-        std::fill(hist, hist+nbins,0);
+        std::fill(hist, hist+nbins,0.0);
       }
 
       /** Stream the histogram out.
@@ -266,7 +266,7 @@ namespace xylose {
             double scale;
             int print_extra_newline_mod;
             MultiBinType bins[nbins];
-            int hist[nbins];
+            double hist[nbins];
           }
       */
       template <class TKey, unsigned int L, unsigned int nbins, class Block>
@@ -280,7 +280,7 @@ namespace xylose {
         int offs = ((char*)&bob->bins) - ((char*)bob);
         blocks.push_back(Block(1,offs));    /* pad */
         blocks.push_back(Block(nbins*L,sizeof(double),MPI::DOUBLE)); /* v */
-        blocks.push_back(Block(nbins,sizeof(int),MPI::INT)); /* hist */
+        blocks.push_back(Block(nbins,sizeof(double),MPI::DOUBLE)); /* hist */
 
         /* now we'll add any remaining padding necessary--helpful for arrays */
         int pad = sizeof(MultiValued<TKey,double,L,nbins>)
@@ -296,7 +296,7 @@ namespace xylose {
             double scale;
             int print_extra_newline_mod;
             MultiBinType bins[nbins];
-            int hist[nbins];
+            double hist[nbins];
           }
       */
       template <class TKey, unsigned int L, unsigned int nbins, class Block>
@@ -310,7 +310,7 @@ namespace xylose {
         int offs = ((char*)&bob->bins) - ((char*)bob);
         blocks.push_back(Block(1,offs));    /* pad */
         blocks.push_back(Block(nbins*L,sizeof(float),MPI::FLOAT)); /* v */
-        blocks.push_back(Block(nbins,sizeof(int),MPI::INT)); /* hist */
+        blocks.push_back(Block(nbins,sizeof(double),MPI::DOUBLE)); /* hist */
 
         /* now we'll add any remaining padding necessary--helpful for arrays */
         int pad = sizeof(MultiValued<TKey,float,L,nbins>)
@@ -326,7 +326,7 @@ namespace xylose {
             double scale;
             int print_extra_newline_mod;
             MultiBinType bins[nbins];
-            int hist[nbins];
+            double hist[nbins];
           }
       */
       template <class TKey, unsigned int L, unsigned int nbins, class Block>
@@ -340,7 +340,7 @@ namespace xylose {
         int offs = ((char*)&bob->bins) - ((char*)bob);
         blocks.push_back(Block(1,offs));    /* pad */
         blocks.push_back(Block(nbins*L,sizeof(int),MPI::INT)); /* v */
-        blocks.push_back(Block(nbins,sizeof(int),MPI::INT)); /* hist */
+        blocks.push_back(Block(nbins,sizeof(double),MPI::DOUBLE)); /* hist */
 
         /* now we'll add any remaining padding necessary--helpful for arrays */
         int pad = sizeof(MultiValued<TKey,int,L,nbins>)
