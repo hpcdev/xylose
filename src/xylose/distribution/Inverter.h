@@ -177,7 +177,7 @@ namespace xylose {
        * @see lever(double).
        */
       inline double operator() (void) const {
-        return leverarm( rng.rand() );
+        return leverarm( rng.randExc() );
       }
 
       /** Sample the inverted distribution.
@@ -185,10 +185,10 @@ namespace xylose {
        * will be reading from invalid/unallocated memory.  Therefore, be sure to
        * keep rf in range. 
        * @param rf
-       *     A fraction in the range [0,1] (inclusive).
+       *     A fraction in the range [0,1).
        */
       inline double leverarm(const double & rf) const {
-        double r = rf * L * 0.99999999999;
+        double r = rf * L;
         register int ri = int(r);
         return q[ri] + (q[ri+1] - q[ri]) * (r - ri);
       }
@@ -197,7 +197,7 @@ namespace xylose {
        * Calls leverarm(double).
        */
       inline double lever() const {
-        return leverarm( rng.rand() );
+        return leverarm( rng.randExc() );
       }
 
       /** Copy operator. */
