@@ -29,7 +29,7 @@
  *
  */
 
-#ifndef xylose_random_gaussianDeviate_h
+#ifndef xylose_random_GaussianDeviate_h
 #define xylose_random_GaussianDeviate_h
 
 #include <xylose/random/Kiss.hpp>
