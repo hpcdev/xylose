@@ -255,6 +255,11 @@ namespace xylose {
         xmlAddChildList( this->node, xmlCopyNodeList(x.node) );
       }
 
+      /** Return the unparsed/unformatted text of this current node. */
+      std::string name() const {
+        return reinterpret_cast<const char*>(node->name);
+      }
+
     };
 
 
