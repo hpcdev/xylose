@@ -266,15 +266,15 @@ namespace xylose {
     /** Context less than operator (uses the Context::Comparator object).
      * @see Context::Comparator.
      */
-    static inline bool operator< ( const Context & lhs, const Context & rhs ) {
+    inline bool operator< ( const Context & lhs, const Context & rhs ) {
       return Context::Comparator()(lhs,rhs);
     }
 
     /** Context equals operator (uses the Context::Comparator object).
      * @see Context::Comparator.
      */
-    static inline bool operator== ( const Context & lhs, const Context & rhs ) {
-      return !Context::Comparator()(lhs,rhs) and
+    inline bool operator== ( const Context & lhs, const Context & rhs ) {
+      return !Context::Comparator()(lhs,rhs) &&
              !Context::Comparator()(rhs,lhs);
     }
 
