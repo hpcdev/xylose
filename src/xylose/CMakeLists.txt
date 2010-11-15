@@ -92,6 +92,7 @@ macro( xylose_unit_test test_name )
     find_package( Boost REQUIRED COMPONENTS unit_test_framework )
     set(BOOST_USE_STATIC_LIBS ${Boost_USE_STATIC_LIBS_TMP})
     include_directories( ${Boost_INCLUDE_DIRS} )
+    add_definitions( ${Boost_DEFINITIONS} )
     add_executable( xylose.${test_name}.test ${ARGN} )
     target_link_libraries( xylose.${test_name}.test 
         ${PROJECT_NAME}
