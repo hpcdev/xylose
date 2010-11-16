@@ -7,6 +7,11 @@
 #include <ostream>
 #include <cassert>
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 namespace xylose {
 
 /** This class is a 3D vector.  It can

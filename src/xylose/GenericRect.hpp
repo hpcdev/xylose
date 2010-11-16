@@ -17,6 +17,11 @@
 #include <algorithm>
 #include <limits>
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 namespace xylose {
 
 /** This function is a generic rectangle.

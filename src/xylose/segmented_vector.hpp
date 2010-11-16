@@ -38,6 +38,11 @@
 
 #include <cassert>
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 namespace xylose {
 
   /** A segmented_vector is a dynamically sized list broken into statically sized

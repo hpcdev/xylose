@@ -45,6 +45,11 @@
 
 #include <ctime>
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 namespace xylose {
   namespace compat {
 

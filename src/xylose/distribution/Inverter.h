@@ -84,6 +84,11 @@
 
 #include <xylose/random/Kiss.hpp>
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 namespace xylose {
   namespace distribution {
 

@@ -60,6 +60,11 @@
 #  include "mpi_init.h"
 #endif
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 namespace xylose {
   namespace binning {
 

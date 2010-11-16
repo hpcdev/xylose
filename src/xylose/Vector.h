@@ -70,6 +70,11 @@
 
 #include <cstdarg>
 
+#if defined(_MSC_VER)
+  #undef min
+  #undef max
+#endif
+
 
 namespace xylose {
 
