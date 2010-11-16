@@ -28,7 +28,7 @@
 namespace xylose {
   namespace nsort {
     namespace map {
-      struct pivot {
+      struct Pivot {
         Vector<double,3> pivot;
       };
 

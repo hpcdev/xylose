@@ -41,7 +41,7 @@ namespace xylose {
        * provided the given set of rules (supplied by info) are followed.  
        * */
       template <unsigned int _dir>
-      struct _1D : pivot {
+      struct _1D : Pivot {
         /* TYPEDEFS */
         typedef map::tag::_1D<_dir> tag;
         typedef void super;
