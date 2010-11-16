@@ -25,10 +25,15 @@
 #include <xylose/Timer.h>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/cstdint.hpp>
 
 #include <fstream>
 #include <vector>
 #include <iostream>
+
+namespace {
+  using boost::uint32_t;
+}
 
 
 BOOST_AUTO_TEST_CASE( generation ) {

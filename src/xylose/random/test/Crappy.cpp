@@ -25,11 +25,16 @@
 #include <xylose/Timer.h>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/cstdint.hpp>
 
 #include <fstream>
 #include <vector>
 #include <iostream>
 
+namespace {
+  using  boost::int32_t;
+  using boost::uint32_t;
+}
 
 BOOST_AUTO_TEST_CASE( generation ) {
   BOOST_TEST_MESSAGE(
@@ -77,8 +82,7 @@ BOOST_AUTO_TEST_CASE( generation ) {
   }
 
   {
-    static const uint64_t mx = total_rolls; //static_cast<uint32_t>(-1);
-    for ( uint64_t i = 0; i <= mx; ++i) {
+    for ( int i = 0; i <= total_rolls; ++i) {
       double n = Crappy( static_cast<uint32_t>(i) ).randExc();
       if ( n >= 1 || n < 0 )
         BOOST_CHECK_MESSAGE( n >= 0 && n < 1,
