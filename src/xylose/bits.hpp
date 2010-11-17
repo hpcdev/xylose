@@ -48,6 +48,8 @@ namespace xylose {
     using boost::uint16_t;
     using  boost::int32_t;
     using boost::uint32_t;
+    using  boost::int64_t;
+    using boost::uint64_t;
 
     /* {***** BEGIN OPERATIONS ON NATIVE TYPES (char,int,long,...) ***** */
 
@@ -69,7 +71,7 @@ namespace xylose {
     }
 
 #if !defined( __PGIC__ )
-    /* For some reason, the other compilers thing int8_t and char are different
+    /* For some reason, the other compilers think int8_t and char are different
      * types. */
     /** Must specialize for signed types because (-1)>>1u == -1 */
     template<>
@@ -94,6 +96,21 @@ namespace xylose {
     template<>
     inline int32_t reverse( int32_t v ) {
       return static_cast<int32_t>( reverse( static_cast<uint32_t>(v) ) );
+    }
+
+#if defined( _MSC_VER )
+    /* MSVC thinks that int32_t and int are different types. */
+    /** Must specialize for signed types because (-1)>>1u == -1 */
+    template<>
+    inline int reverse( int v ) {
+      return static_cast<int>( reverse( static_cast<uint32_t>(v) ) );
+    }
+#endif
+
+    /** Must specialize for signed types because (-1)>>1u == -1 */
+    template<>
+    inline int64_t reverse( int64_t v ) {
+      return static_cast<int64_t>( reverse( static_cast<uint64_t>(v) ) );
     }
 
     /* }***** END OPERATIONS ON NATIVE TYPES (char,int,long,...) ***** */
