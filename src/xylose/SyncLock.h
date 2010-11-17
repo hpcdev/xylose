@@ -73,7 +73,7 @@
 #  define IF_PTHREAD(x)
 #endif
 
-#if defined(WIN32) && !defined(THREAD_SYS_DEFINED)
+#if defined(WIN32) && !(defined(NO_WINTHREADS) || defined(THREAD_SYS_DEFINED))
 #  include <windows.h>
 #  define IF_WIN32(x) x
 #  define THREAD_SYS_DEFINED
@@ -113,7 +113,7 @@ namespace xylose {
     SyncLock() {
       IF_OMP(omp_init_lock(&omplock);)
       IF_PTHREAD(pthread_spin_init(&pthread_spin, 0);)
-      IF_WIN32(InitializeCriticalSection(&critical_section);)
+      IF_WIN32(InitializeCriticalSectionEx(&critical_section,4000,0);)
     }
 
     /** Destructor destroys relevant mutex object. */

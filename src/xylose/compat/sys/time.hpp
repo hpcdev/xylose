@@ -35,6 +35,7 @@
 #if defined(USE_WINSOCK)
 // you will also have to link to ws2_32.lib
 #  include <winsock2.h> // for gethostname
+#  pragma comment(lib, "ws2_32.lib")
 #endif
 
 #include <windows.h>
