@@ -139,7 +139,7 @@ namespace xylose {
 
       /** Test randExc for a random number generator. */
       template < typename RNG >
-      inline void testRandExc( const int & total_rolls ) {
+      inline void testRandExc( const int & total_rolls, bool test_first_roll ) {
         RNG r;
         for ( int i = 0; i < total_rolls; ++i) {
           double n = r.randExc();
@@ -148,17 +148,20 @@ namespace xylose {
               __FILE__ "got a bad rand nubmer (" <<n <<")  on "<<i<<"th roll"
             );
 
-          n = RNG( static_cast<uint32_t>(i) ).randExc();
-          if ( n >= 1 || n < 0 )
-            BOOST_CHECK_MESSAGE( n >= 0 && n < 1,
-              __FILE__ "got a bad rand nubmer (" <<n <<") for seed ("<<i<<')'
-            );
+          if ( test_first_roll ) {
+            n = RNG( static_cast<uint32_t>(i) ).randExc();
+            if ( n >= 1 || n < 0 )
+              BOOST_CHECK_MESSAGE( n >= 0 && n < 1,
+                __FILE__ "got a bad rand nubmer (" <<n <<") for seed ("<<i<<')'
+              );
+          }
         }
       }
 
       /** Run the tests defined above. */
       template < typename RNG >
       inline void run( const std::string & label,
+                       const bool & test_first_roll = false,
                        const int & total_rolls = 6000000 ) {
         BOOST_TEST_MESSAGE(
           "This program is for generating binary output files from the \n"
@@ -180,7 +183,7 @@ namespace xylose {
         );
 
         generate_files<RNG>(label, total_rolls);
-        testRandExc<RNG>(total_rolls);
+        testRandExc<RNG>(total_rolls, test_first_roll);
         timeRNG<RNG>();
       }
 

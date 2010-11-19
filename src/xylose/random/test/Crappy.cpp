@@ -36,7 +36,7 @@ namespace {
 
 BOOST_AUTO_TEST_CASE( generation ) {
   namespace XRNG = xylose::random;
-  XRNG::test::run< XRNG::Crappy >("crappy");
+  XRNG::test::run< XRNG::Crappy >("crappy", true);
 
   {
     xylose::make_vector<uint32_t,5u> mkV5;
