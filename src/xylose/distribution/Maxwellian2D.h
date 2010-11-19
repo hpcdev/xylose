@@ -105,8 +105,7 @@ namespace xylose {
        *     Independent variable.
        */
       double operator() (const double & v) const {
-        using std::exp;
-        return fabs(v) * exp(-SQR(v-v0) * beta );
+        return std::abs(v) * std::exp(-SQR(v-v0) * beta );
       }
     };
 

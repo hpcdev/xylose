@@ -35,6 +35,7 @@
 #include <xylose/timing/element/Base.h>
 
 #include <xylose/power.h>
+#include <xylose/compat/math.hpp>
 
 #include <limits>
 
@@ -68,13 +69,13 @@ namespace xylose {
 
         /* MEMBER FUNCTIONS */
         /** Constructor. */
-        Exponential( const double & dt   = 0.0,
-                     const double & exp   = 1.0,
+        Exponential( const double & dt    = 0.0,
+                     const double & expnt = 1.0,
                      const double & vi    = 0.0,
                      const double & vf    = 1.0 ) :
           super(dt),
-          exponent(fabs(exp)),
-          reverse(exp < 0.0),
+          exponent( std::abs(expnt) ),
+          reverse(expnt < 0.0),
           val_i(vi), val_f(vf) { }
 
         /** Required virtual destructor.  This one is a NO-OP. */
