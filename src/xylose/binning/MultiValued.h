@@ -54,7 +54,7 @@
 
 #include <iostream>
 #include <string>
-#include <cfloat>
+#include <limits>
 
 #ifdef USE_MPI
 #  include "mpi_init.h"
@@ -146,10 +146,13 @@ namespace xylose {
       inline void init( const double & mn,
                         const double & mx,
                         const int & nl = 0 ) {
+        static const double one_eps
+          = 1.0 - std::numeric_limits<double>::epsilon();
         max = mx;
         min = mn;
         print_extra_newline_mod = nl;
-        scale = (mn==0 && mx==0 ? DBL_MAX : double(nbins)/(max - min) * 0.999999);
+        scale = ( mn==0 && mx==0 ? std::numeric_limits<double>::max()
+                                 : double(nbins)/(max - min) * one_eps );
         clearBins();
       }
 
@@ -195,6 +198,9 @@ namespace xylose {
 
       /** The maximum range of this histogrammer. */
       const double & getMax() const { return max; }
+
+      /** The maximum range of this histogrammer. */
+      const double & getScale() const { return scale; }
 
       /** Add in the histogram values.  Note that only the histogram
        * and associated data is SUMMED. This function relies on the
