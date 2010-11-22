@@ -94,22 +94,29 @@ namespace xylose {
   }
 
   /** Transform a string to lower case. */
-  inline std::string tolower( const std::string & ToLower,
-                              const std::locale & loc = std::locale() ) {
-    std::string retval = ToLower;
+  inline std::string tolower( const std::string& str,
+                              const std::locale& loc = std::locale() ) 
+  {
+    std::string retval = str;
     const std::ctype<char> & ct = std::use_facet< std::ctype<char> >(loc);
     std::transform(retval.begin(), retval.end(), retval.begin(),
-                   std::bind1st( std::mem_fun( &std::ctype<char>::tolower ), &ct ));
+      std::bind1st( std::mem_fun( 
+        // This static_cast tells the compiler which overload of tolower to use.
+        static_cast< char( std::ctype<char>::* )( char ) const >( 
+          &std::ctype<char>::tolower ) ), &ct ) );
     return retval;
   }
 
   /** Transform a string to upper case. */
-  inline std::string toupper( const std::string & ToUpper,
-                              const std::locale & loc = std::locale() ) {
-    std::string retval = ToUpper;
+  inline std::string toupper( const std::string& str,
+                              const std::locale& loc = std::locale() ) {
+    std::string retval = str;
     const std::ctype<char> & ct = std::use_facet< std::ctype<char> >(loc);
     std::transform(retval.begin(), retval.end(), retval.begin(),
-                   std::bind1st( std::mem_fun( &std::ctype<char>::toupper ), &ct ));
+      std::bind1st( std::mem_fun( 
+        // This static_cast tells the compiler which overload of toupper to use.
+        static_cast< char( std::ctype<char>::* )( char ) const >( 
+          &std::ctype<char>::toupper ) ), &ct ) );
     return retval;
   }
 
