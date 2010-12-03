@@ -94,7 +94,11 @@ namespace {
   BOOST_AUTO_TEST_CASE( function_default_args ) {
     BOOST_CHECK_EQUAL( fun<double>(), 0 );
     BOOST_CHECK_EQUAL( fun<bool>(), false );
-    BOOST_CHECK_EQUAL( fun_bool(), false );
+    /* calling fun_bool before the BOOST_CHECK_EQUAL is a workaround for intel
+     * 11.1 which does something funky -- greatly simplified bug report
+     * submitted to intel already. */
+    bool fun_bool_answer = fun_bool();
+    BOOST_CHECK_EQUAL( fun_bool_answer, false );
     BOOST_CHECK_EQUAL( fun_double(), 42 );
   }
 
