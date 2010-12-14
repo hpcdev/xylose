@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<APPSPack>
+  <Minimize>prob-file-io.py</Minimize>
+  <Parameters>
+    <Param name="p0">
+      <Lower>-10.0</Lower>
+      <Initial>1.0</Initial>
+      <Upper>10.0</Upper>
+      <Scaling>20.0</Scaling>
+    </Param>
+
+    <Param name="p1">
+      <Lower>-10.0</Lower>
+      <Initial>1.0</Initial>
+      <Upper>10.0</Upper>
+      <Scaling>20.0</Scaling>
+    </Param>
+  </Parameters>
+
+  <Constraints>
+    <Eq>
+      <!-- at least one of Upper or Lower MUST BE SPECIFIED -->
+      <Multiply param="p0">1.0</Multiply>
+      <Multiply param="p2">1.0</Multiply>
+      <Upper>3.0</Upper>
+    </Eq>
+  </Constraints>
+
+  <Solver>
+    <InitialStep>0.25</InitialStep>
+    <StepTolerance>1e-3</StepTolerance>
+    <BoundsTolerance>1e-3</BoundsTolerance>
+
+    <!-- More advanced options -->
+    <Debug>3</Debug>
+    <CacheInput>eval_output.dat</CacheInput>
+    <CacheOutput>eval_output.dat</CacheOutput>
+  </Solver>
+
+</APPSPack>
