@@ -4,7 +4,25 @@
 
 project( Xylose )
 
-set( VERSION xylose-0.1.1-1-g4bd0cc3 )
+################################################################################
+# Obtain the xylose version
+################################################################################
+set( VERSION )
+
+find_program( GIT_EXECUTABLE NAMES git )
+if( GIT_EXECUTABLE )
+  exec_program(
+    ${GIT_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR} ARGS describe
+    OUTPUT_VARIABLE VERSION
+    RETURN_VALUE GIT_RETVAL )
+  if( NOT ${GIT_RETVAL} EQUAL 0 )
+    # Something went wrong, fall back on other methods.
+    # We still didn't find a version, so it's really unknown.
+    set( VERSION "xylose-unknownversion" )
+  endif()
+endif()
+
+message( STATUS "xylose VERSION: ${VERSION}" )
 
 if( MSVC )
     set( USE_WINSOCK TRUE )
@@ -15,7 +33,7 @@ if( MSVC )
 endif()
 
 add_definitions(
-    -DXYLOSE_VERSION=\"${VERSION}\"
+    -DXYLOSE_VERSION=${VERSION}
 )
 
 set( ${PROJECT_NAME}_HEADERS 
@@ -68,6 +86,11 @@ set( ${PROJECT_NAME}_SOURCES
     compat/sys/time.cpp
     compat/math.c
 )
+
+# FIXME:  physical needs a find module
+# find_package( physical )
+add_definitions( ${physical_DEFINITIONS} )
+include_directories( ${physical_INCLUDE_DIRS} )
 
 find_package( LibXml2 )
 

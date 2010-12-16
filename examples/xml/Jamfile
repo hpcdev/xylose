@@ -11,14 +11,14 @@ path-constant XML_EXAMPLE2 : ./file-2.xml ;
 exe testXML
     : testXML.cpp
       /xylose//xml /physical//calc
-    : <define>XML_FILENAME=\\\"$(XML_EXAMPLE)\\\"
+    : <define>XML_FILENAME=$(XML_EXAMPLE)
     ;
 
 exe simple
     : simple.cpp
       /xylose//xml /physical//calc
-    : <define>XML_FILENAME=\\\"$(XML_EXAMPLE)\\\"
-      <define>XML_FILENAME2=\\\"$(XML_EXAMPLE2)\\\"
+    : <define>XML_FILENAME=$(XML_EXAMPLE)
+      <define>XML_FILENAME2=$(XML_EXAMPLE2)
     ;
 
 install convenient-copy : testXML simple : <location>. ;
