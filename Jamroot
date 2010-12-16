@@ -98,6 +98,48 @@ lib xylose
     ;
 
 
+import path ;
+# crude find-appspack routine
+if [ path.exists $(TOP)/../third-party/appspack/Jamroot ] {
+    constant APPSPACK : true ;
+} else {
+    constant APPSPACK : "" ;
+}
+
+# crude find-pstreams(redi) routine
+if [ path.exists $(TOP)/../third-party/pstreams/Jamroot ] {
+    constant PSTREAMS : <define>HAVE_PSTREAMS <library>/pstreams//pstreams ;
+} else {
+    local PSTREAMS = "" ;
+}
+
+local binaries = ;
+if $(APPSPACK) {
+    exe appsPack
+      : src/xylose/fit/appspack/appsPack.cpp
+      : #properties
+        <library>/xylose//xylose
+        <library>/xylose//xml
+        <library>/appspack//appspack
+        <library>/boost//program_options/<link>static
+        $(PSTREAMS)
+        <threading>multi
+        <toolset>gcc:<linkflags>-pthread
+        <toolset>gcc:<cflags>-pthread
+        <toolset>pathscale:<linkflags>-pthread
+        <toolset>pathscale:<cflags>-pthread
+        <toolset>intel:<linkflags>-pthread
+        <toolset>intel:<cflags>-pthread
+      ;
+
+    install convenient-copy : appsPack : <location>. ;
+
+
+
+    binaries = $(binaries) appsPack ;
+}
+
+
 # installation configuration
 
 # options:
@@ -110,7 +152,6 @@ if [ modules.peek : NT ] {
 } else if [ modules.peek : UNIX ] {
     install-properties += <install-default-prefix>/usr/local ;
 }
-
 
 # the list of libraries to build and install
 local libraries = xylose ;
@@ -128,7 +169,7 @@ explicit install ;
 package.install install-code
     : $(install-properties)
       <install-source-root>$(TOP)/src
-    :
+    : $(binaries)
     : $(libraries)
     : $(all_headers)
     ;

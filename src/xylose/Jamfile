@@ -2,3 +2,4 @@ build-project random ;
 build-project xml ;
 build-project nsort ;
 build-project test ;
+build-project fit ;

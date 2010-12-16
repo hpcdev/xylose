@@ -1,0 +1,5 @@
+# xylose::fit
+
+if $(APPSPACK) {
+    build-project appspack ;
+}

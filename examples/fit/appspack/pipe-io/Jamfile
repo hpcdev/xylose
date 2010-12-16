@@ -1,0 +1,8 @@
+path-constant HERE : . ;
+echo To test pipe-io with appspack execute ;
+echo     $(EXAMPLES_TOP)/../appsPack -p -i $(HERE)/input.xml ;
+echo ;
+echo To plot the results, also execute ;
+echo     $(HERE)/prob-pipe-io.py save ;
+echo ;
+echo then plot with $(HERE)/../plot.plt ;

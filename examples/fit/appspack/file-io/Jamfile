@@ -1,0 +1,10 @@
+path-constant HERE : . ;
+echo To test file-io with appspack execute ;
+echo     $(EXAMPLES_TOP)/../appsPack -i $(HERE)/input.xml ;
+echo ;
+echo To plot the results, also execute ;
+echo     $(HERE)/prob-file-io.py save ;
+echo ;
+echo then plot with $(HERE)/../plot.plt ;
+
+
