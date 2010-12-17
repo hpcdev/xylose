@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<APPSPack>
+  <Minimize>d1_pulser/Prob.py</Minimize>
+  <Parameters>
+
+    <!-- Parameter specification
+    @name     required
+    Lower     optional   [ Default:  do-not-evaluate ]
+              Currently, the only way to specify 'do-not-evaluate' is to omit
+              this tag.
+    Initial   required
+               (could default to 0.5*(upper+lower) or perhaps
+                lower <= random value <= upper
+                AS long as upper and lower are specified)
+    Upper     optional   [ Default:  do-not-evaluate ]
+              Currently, the only way to specify 'do-not-evaluate' is to omit
+              this tag.
+    Scaling   optional   [ Default:  1.0 ], must be > 0.0
+    -->
+
+    <Param name="p0">
+      <Lower>0.0</Lower>
+      <Initial>0.5</Initial>
+      <Upper>1.0</Upper>
+      <Scaling>1.0</Scaling>
+    </Param>
+
+    <Param name="p1">
+      <Lower>0.0</Lower>
+      <Initial>0.5</Initial>
+      <Scaling>1.0</Scaling>
+    </Param>
+
+    <Param name="p2">
+      <Initial>0.5</Initial>
+      <Upper>2.0</Upper>
+      <Scaling>1.0</Scaling>
+    </Param>
+  </Parameters>
+
+  <Constraints>
+
+    <!-- Constraint equation specification
+    @name     required
+    Lower     optional   [ Default:  do-not-evaluate ]
+                Currently, the only way to specify 'do-not-evaluate' is to omit
+                this tag.
+    Multiply: optional
+      param=  required
+                This must correspond to a real parameter name from the
+                Parameters section
+      [text]  required
+                Must be parsable as a floating-point number.  This is the factor
+                on for the particular parameter value in the equation.
+    Upper     optional   [ Default:  do-not-evaluate ]
+              Currently, the only way to specify 'do-not-evaluate' is to omit
+              this tag.
+    -->
+
+    <Eq>
+      <!-- at least one of Upper or Lower MUST BE SPECIFIED -->
+      <Lower>0.0</Lower>
+      <Multiply param="p0">0.2</Multiply>
+      <Multiply param="p2">0.8</Multiply>
+      <Upper>10.0</Lower>
+    </Eq>
+  </Constraints>
+
+  <Solver>
+    <InitialStep>0.10</InitialStep>
+    <StepTolerance>0.04</StepTolerance>
+    <CacheComparisonTolerance>0.02</CacheComparisonTolerance>
+    <BoundsTolerance>1e-3</BoundsTolerance>
+
+    <!-- More advanced options -->
+    <Debug>3</Debug>
+    <CacheOutput>eval_output.dat</CacheOutput>
+    <CacheInput>eval_output.dat</CacheInput>
+  </Solver>
+
+</APPSPack>

@@ -1,0 +1,3 @@
+if $(APPSPACK) {
+    build-project appspack ;
+}
