@@ -44,7 +44,7 @@ namespace xylose {
                   const Iter & f = Iter()) : i(i), f(f) {}
     const Iter & begin() const { return i; }
     const Iter & end() const { return f; }
-    int size() const { return f - i; }
+    size_t size() const { return f - i; }
   };
 
 }
