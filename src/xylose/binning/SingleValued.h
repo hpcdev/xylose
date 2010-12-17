@@ -137,7 +137,7 @@ namespace xylose {
 
       /** Sets the entire histogram to zero. */
       inline void clearBins() {
-        std::fill(bins, bins+nbins, 0);
+        std::fill(bins, bins+nbins, TBin());
       }
 
       /** Operator for multiplying the whole distrib by a factor. */
