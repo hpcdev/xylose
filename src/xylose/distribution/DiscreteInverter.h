@@ -22,7 +22,7 @@
 /** \file
  * Generic discrete distribution inverter.
  *
- * This class is optimal for inverting distributions that have discrtete data
+ * This class is optimal for inverting distributions that have discrete data
  * and for which memory efficiency is a requirement.  It should be noted that
  * the generic continuous distribution inverter (the Inverter class in
  * Inverter.h) can handle discrete data sets as long as the sampling rate is
