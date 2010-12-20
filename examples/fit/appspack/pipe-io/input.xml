@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <APPSPack>
-  <Minimize>prob-pipe-io.py</Minimize>
+  <Minimize>./prob-pipe-io.py</Minimize>
   <Parameters>
     <Param name="p0">
       <Lower>-10.0</Lower>
