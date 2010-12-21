@@ -87,26 +87,10 @@ set( ${PROJECT_NAME}_SOURCES
     compat/math.c
 )
 
-# FIXME:  physical needs a find module
-# find_package( physical )
-add_definitions( ${physical_DEFINITIONS} )
-include_directories( ${physical_INCLUDE_DIRS} )
-
-find_package( LibXml2 )
-
-if( LIBXML2_FOUND )
-    include_directories( ${LIBXML2_INCLUDE_DIR} )
-    add_definitions( ${LIBXML2_DEFINITIONS} )
-endif()
-
 add_library( ${PROJECT_NAME} 
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES}
 )
-
-if( LIBXML2_FOUND )
-    target_link_libraries( ${PROJECT_NAME} ${LIBXML2_LIBRARIES} )
-endif()
 
 # utility macro to add a unit test to be shared by all subdirectories.
 macro( xylose_unit_test test_name )
@@ -126,6 +110,8 @@ endmacro()
 # add sub-directories to get the unit tests added recursively
 add_subdirectory( nsort )
 add_subdirectory( random )
+
+find_package( LibXml2 )
 if( LIBXML2_FOUND )
     add_subdirectory( xml )
 endif()
