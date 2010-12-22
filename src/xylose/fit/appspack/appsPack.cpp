@@ -60,10 +60,11 @@ struct options {
     #ifdef HAVE_PSTREAMS
       ("pipe-comm,p", "Communicate to merit function on stdout/stderr instead "
                       "of using input/output files.  ")
-      ("num-threads,n", po::value<unsigned  int>()->default_value(1u),
-                        "Use up to <value> threads.  This can also be "
-                        "specified by the environment variable NUM_PTHREADS")
     #endif
+      ("num-threads,n", po::value<unsigned  int>()->default_value(2u),
+                        "Use up to <value> threads.  This can also be "
+                        "specified by the environment variable\n"
+                        "NUM_PTHREADS")
       ;
   }
 

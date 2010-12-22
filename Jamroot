@@ -115,7 +115,7 @@ if [ path.exists $(TOP)/../third-party/pstreams/Jamroot ] {
 
 local binaries = ;
 if $(APPSPACK) {
-    exe appsPack
+    exe appspack_pthread
       : src/xylose/fit/appspack/appsPack.cpp
       : #properties
         <library>/xylose//xylose
@@ -132,11 +132,11 @@ if $(APPSPACK) {
         <toolset>intel:<cflags>-pthread
       ;
 
-    install convenient-copy : appsPack : <location>. ;
+    install convenient-copy : appspack_pthread : <location>. ;
 
 
 
-    binaries = $(binaries) appsPack ;
+    binaries = $(binaries) appspack_pthread ;
 }
 
 
