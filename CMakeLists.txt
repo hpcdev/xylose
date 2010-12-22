@@ -105,6 +105,50 @@ add_library( ${PROJECT_NAME}
     ${${PROJECT_NAME}_SOURCES}
 )
 
+LIST(APPEND targets_to_install ${PROJECT_NAME})
+
+find_package( appspack )
+find_package( LibXml2 )
+find_package( Threads )
+find_package( Boost COMPONENTS program_options )
+if ( appspack_FOUND AND LIBXML2_FOUND AND
+     THREADS_FOUND AND CMAKE_USE_PTHREADS_INIT AND
+     Boost_PROGRAM_OPTIONS_FOUND )
+    add_definitions(
+        ${appspack_DEFINITIONS}
+        ${LIBXML2_DEFINITIONS}
+        ${Boost_DEFINITIONS}
+    )
+    include_directories(
+        ${appspack_INCLUDE_DIRS}
+        ${LIBXML2_INCLUDE_DIR}
+        ${Boost_INCLUDE_DIRS}
+    )
+
+    enable_language( Fortran )
+    add_executable( appspack_pthread
+        src/xylose/fit/appspack/appsPack.cpp
+        ${appspack_DUMMY_FORTRAN_FILE}
+    )
+    target_link_libraries( appspack_pthread
+        ${PROJECT_NAME}
+        ${appspack_LIBRARIES}
+        ${LIBXML2_LIBRARIES}
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+    )
+    if( THREADS_HAVE_PTHREAD_ARG )
+        set_source_files_properties(
+            src/xylose/fit/appspack/appsPack.cpp
+            COMPILE_FLAGS ${CMAKE_THREAD_LIBS_INIT}
+        )
+    endif()
+    set_target_properties( appspack_pthread
+        PROPERTIES
+        LINK_FLAGS ${CMAKE_THREAD_LIBS_INIT}
+    )
+    LIST(APPEND targets_to_install appspack_pthread)
+endif()
+
 
 # Stuff to help a simple local find module for this project
 MESSAGE(STATUS "Creating xylose-config.cmake")
@@ -126,6 +170,13 @@ FILE(WRITE
     "     ${PROJECT_NAME}\n"
     ")\n"
 )
+
+install( TARGETS ${targets_to_install}
+    ARCHIVE DESTINATION lib/static
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+
 
 # add source directory to get the unit tests recursively
 add_subdirectory( src )
