@@ -98,12 +98,8 @@ namespace xylose {
                               const std::locale& loc = std::locale() ) 
   {
     std::string retval = str;
-    const std::ctype<char> & ct = std::use_facet< std::ctype<char> >(loc);
-    std::transform(retval.begin(), retval.end(), retval.begin(),
-      std::bind1st( std::mem_fun( 
-        // This static_cast tells the compiler which overload of tolower to use.
-        static_cast< char( std::ctype<char>::* )( char ) const >( 
-          &std::ctype<char>::tolower ) ), &ct ) );
+    std::use_facet< std::ctype<char> >(loc)
+      .tolower( &*retval.begin(), &*retval.end() );
     return retval;
   }
 
@@ -111,12 +107,8 @@ namespace xylose {
   inline std::string toupper( const std::string& str,
                               const std::locale& loc = std::locale() ) {
     std::string retval = str;
-    const std::ctype<char> & ct = std::use_facet< std::ctype<char> >(loc);
-    std::transform(retval.begin(), retval.end(), retval.begin(),
-      std::bind1st( std::mem_fun( 
-        // This static_cast tells the compiler which overload of toupper to use.
-        static_cast< char( std::ctype<char>::* )( char ) const >( 
-          &std::ctype<char>::toupper ) ), &ct ) );
+    std::use_facet< std::ctype<char> >(loc)
+      .toupper( &*retval.begin(), &*retval.end() );
     return retval;
   }
 
