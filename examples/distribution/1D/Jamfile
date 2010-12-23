@@ -1,2 +1,3 @@
 exe testdist : testdist.cpp /xylose//headers ;
-install convenient-copy : testdist : <location>. ;
+exe testpoi : testpoi.cpp /xylose//headers ;
+install convenient-copy : testpoi testdist : <location>. ;

@@ -138,7 +138,7 @@ namespace xylose {
         else if (lam > lambda_max)
           /* just return lambda if we can't really represent the full
            * distribution in the dynamic range of the unsigned long long. */
-          return lam;
+          return static_cast<unsigned long long>(lam);
         else
           return ptrs(lam, rng);
       }
