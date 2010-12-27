@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -117,7 +117,12 @@ namespace xylose {
     public:
       static RNG global_rng;
 
-      static const unsigned long long lambda_max;
+      static inline const double & lambda_max() {
+        static const double value =
+            std::numeric_limits<unsigned long long>::max() -
+            10.0* std::sqrt( std::numeric_limits<unsigned long long>::max() );
+        return value;
+      }
 
 
       /* MEMBER FUNCTIONS */
@@ -135,7 +140,7 @@ namespace xylose {
           return mult(lam, rng);
         else if (lam <= 0.0)
           return 0u;
-        else if (lam > lambda_max)
+        else if (lam > lambda_max() )
           /* just return lambda if we can't really represent the full
            * distribution in the dynamic range of the unsigned long long. */
           return static_cast<unsigned long long>(lam);
@@ -147,13 +152,6 @@ namespace xylose {
 
     template < typename RNG >
     RNG PoissonianDeviate<RNG>::global_rng;
-
-    template < typename RNG >
-    const unsigned long long PoissonianDeviate<RNG>::lambda_max =
-        std::numeric_limits<unsigned long long>::max() - 
-        static_cast<unsigned long long>(
-          10.0* std::sqrt( std::numeric_limits<unsigned long long>::max() )
-        );
 
   }/* namespace xylose::random */
 }/* namespace xylose */
