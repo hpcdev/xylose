@@ -18,9 +18,14 @@ using xylose::binning::SingleValued;
 
 typedef dist::Inverter<> Inverter;
 
-/** SOME DISTRIBUTION FUNCTIONS. **/
+/* The deviate returns integers.  We set the key for BinD to an integer so that
+ * the bin location will be correct when it is printed out (instead of off by
+ * +0.5). */
+typedef xylose::binning::SingleValued<int,10000> BinD;
 
-typedef xylose::binning::SingleValued<double,10000> Bin;
+/* The inverted poissonian returns double values that are not necessarily whole
+ * numbers.  The key here is therefore a double. */
+typedef xylose::binning::SingleValued<double,10000> BinI;
 
 int main() {
   int iter = 0;
@@ -29,30 +34,30 @@ int main() {
   if (iter == 0) return EXIT_FAILURE;
 
   double lambda = 0;
-  std::cout << "Enter lambda:  " << std::flush;
+  std::cout << "Enter lambda (note: the histogram range is 0-9999):  " << std::flush;
   std::cin >> lambda;
 
   std::cout << iter << " samples requested with lambda=" << lambda << std::endl;
 
-  const double max_bin = std::sqrt(lambda) * 10.0;
+  const double max_bin = lambda + std::sqrt(lambda) * 10.0;
   Inverter poi = Inverter(dist::Poissonian(lambda), 0.0, max_bin, 10000);
   xylose::random::PoissonianDeviate<> poi_deviate;
 
 
-  Bin bin0(0.0, 9999);
-  Bin bin1(0.0, 9999);
+  BinD binD(0.0, 9999);
+  BinI binI(0.0, 9999);
 
   for ( int i = 0; i < iter; ++i ) {
-    bin0.bin( poi_deviate(lambda) );
-    bin1.bin( poi() );
+    binD.bin( poi_deviate(lambda) );
+    binI.bin( poi() );
   }
 
   std::ofstream outf("poissonian-deviate.dat");
-  bin0.print(outf,"") << "\n\n";
+  binD.print(outf,"") << "\n\n";
   outf.close();
 
   outf.open("poissonian-inverted.dat");
-  bin1.print(outf,"") << "\n\n";
+  binI.print(outf,"") << "\n\n";
   outf.close();
 
   return 0;
