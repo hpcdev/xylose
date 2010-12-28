@@ -111,7 +111,7 @@ find_package( appspack )
 find_package( LibXml2 )
 find_package( Threads )
 find_package( Boost COMPONENTS program_options )
-if ( appspack_FOUND AND LIBXML2_FOUND AND
+if ( APPSPACK_FOUND AND LIBXML2_FOUND AND
      THREADS_FOUND AND CMAKE_USE_PTHREADS_INIT AND
      Boost_PROGRAM_OPTIONS_FOUND )
     add_definitions(
@@ -163,10 +163,7 @@ FILE(WRITE
     "set( ${PROJECT_NAME}_INCLUDE_DIRS\n"
     "   ${${PROJECT_NAME}_INCLUDE_DIRS}\n"
     ")\n"
-    "set( ${PROJECT_NAME}_LIBRARY\n"
-    "     ${PROJECT_NAME}\n"
-    ")\n"
-    "set( ${PROJECT_NAME}_LIBRARIES\n"
+    "set( ${PROJECT_NAME}_${PROJECT_NAME}_LIBRARY\n"
     "     ${PROJECT_NAME}\n"
     ")\n"
 )
