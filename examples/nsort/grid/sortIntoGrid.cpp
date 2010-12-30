@@ -14,12 +14,21 @@ int main() {
   const int N = 50;
   const unsigned int n_types = 4;
 
+  using xylose::V3;
   using xylose::nsort::NSort;
   using test::Particle;
   using xylose::nsort::map::make_arg;
 
-  test::Grid<n_types,1u>                        grid( 5.0, 20, -50.0 );
-  typedef test::map::make_grid_map<n_types,0u>::type grid_map;
+  typedef xylose::Dimensions<0u>                dims;
+  typedef test::Grid<n_types,dims>              Grid;
+  Grid                                          grid( 5.0, V3(20u,0u,0u), -50.0 );
+
+  typedef xylose::nsort::map::w_species<
+    xylose::nsort::map::uniform_grid<
+      Grid,
+      dims
+    >
+  >                                             grid_map;
 
   std::vector< Particle >                       pv;
   grid_map                                      map(make_arg(n_types, grid));

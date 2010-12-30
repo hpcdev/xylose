@@ -6,7 +6,9 @@
 #include "Cell.h"
 
 #include <xylose/Vector.h>
+#include <xylose/Dimensions.hpp>
 #include <xylose/nsort/map/w_species.h>
+#include <xylose/nsort/map/uniform_grid.h>
 
 #include <ostream>
 #include <vector>
@@ -14,12 +16,10 @@
 
 namespace test {
   using xylose::Vector;
+  using xylose::multiply;
 
-  template < unsigned int n_species = 1u,
-             unsigned int ndims = 3u > struct Grid;
-
-  template < unsigned int n_species >
-  struct Grid<n_species, 1u> {
+  template < unsigned int n_species, typename dims >
+  struct Grid {
     /* TYPEDEFS */
     typedef test::Cell<n_species> Cell;
     typedef typename std::vector< Cell >::iterator iterator;
@@ -30,13 +30,17 @@ namespace test {
     std::vector< Cell > cells;
     Vector<double,3u> dx;
     Vector<double,3u> x0;
+    Vector<unsigned int,3u> N;
 
 
     /* MEMBER FUNCTIONS */
     Grid( const Vector<double,3u> & dx,
-          const unsigned int & N = 0,
+          const Vector<unsigned int,3u> & N = 0u,
           const Vector<double,3u> & x0 = 0.0 )
-      : cells( N, Cell() ), dx(dx), x0(x0) {
+      : cells( multiply<dims>(N), Cell() ),
+        dx(dx),
+        x0(x0),
+        N(N) {
       for ( int i = cells.size() - 1u; i >= 0; --i ) {
         Cell & c = cells[i];
         c.min = x0 + (i+0.0)*dx;
@@ -50,6 +54,8 @@ namespace test {
 
     const_iterator begin() const { return cells.begin(); }
     const_iterator end() const { return cells.end(); }
+
+    const Vector<unsigned int,3u> size() const { return N; }
 
     int getNumberCells() const { return cells.size(); }
 
@@ -68,54 +74,10 @@ namespace test {
   };
 
 
-  template < unsigned int N, unsigned int D >
-  std::ostream & operator<< ( std::ostream & out, const Grid<N,D> & grid ) {
+  template < unsigned int N, typename dims >
+  std::ostream & operator<< ( std::ostream & out, const Grid<N,dims> & grid ) {
     walk( grid, CellPrinter(out) );
     return out;
-  }
-
-
-
-  namespace map {
-    template < unsigned int n_species,
-               unsigned int dir0,
-               unsigned int dir1 = dir0,
-               unsigned int dir2 = dir0 >
-    struct grid_location;
-
-    template < unsigned int n_species,
-               unsigned int dir0 >
-    struct grid_location<n_species, dir0,dir0,dir0> {
-      typedef void super;
-
-      const Grid<n_species,1u> & g;
-      const int max_cell;
-
-      grid_location( const Grid<n_species,1u> & g )
-        : g(g), max_cell( g.getNumberCells() - 1 ) {
-        assert( max_cell >= 0 );
-      }
-
-      int getNumberValues() const {
-        return max_cell + 1;
-      }
-
-      template <class _Particle>
-      int operator()(const _Particle & p) const {
-        int L = static_cast<int>((position(p)[dir0] - g.x0[dir0]) / g.dx[dir0]);
-        return std::max(0, std::min( max_cell, L ) );
-      }
-    };
-
-    template < unsigned int n_species,
-               unsigned int dir0,
-               unsigned int dir1 = dir0,
-               unsigned int dir2 = dir0 >
-    struct make_grid_map {
-      typedef xylose::nsort::map::w_species<
-        grid_location<n_species,dir0,dir1,dir2>
-      > type;
-    };
   }
 
 }
