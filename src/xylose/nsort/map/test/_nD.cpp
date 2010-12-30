@@ -26,7 +26,7 @@
 
 #include <xylose/Vector.h>
 
-#define BOOST_TEST_MODULE  remap
+#define BOOST_TEST_MODULE  map_nD_tests
 
 #include <boost/test/unit_test.hpp>
 #include <iostream>
