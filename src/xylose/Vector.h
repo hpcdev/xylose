@@ -62,6 +62,7 @@
 
 #include <xylose/power.h>
 #include <xylose/compat/math.hpp>
+#include <xylose/Dimensions.hpp>
 
 #include <limits>
 #include <sstream>
@@ -701,6 +702,51 @@ namespace xylose {
     }
     return retval;
   }
+
+  /** Calculate the product of the elements of this vector. */
+  template <typename T, unsigned int L>
+  inline T multiply(const Vector<T,L> & v) {
+    return v.prod();
+  }
+
+  /* *** BEGIN SOME SPECIALIZED THREE DIMENSIONAL MULTIPLICATION ROUTINES *** */
+  namespace detail {
+    template < typename dims > struct MultVector;
+
+    template < unsigned int dir0,
+               unsigned int dir1,
+               unsigned int dir2 >
+    struct MultVector< Dimensions<dir0,dir1,dir2> > {
+      template < typename T>
+      inline T operator() (const Vector<T,3u> & v) {
+        return v[dir0] * v[dir1] * v[dir2];
+      }
+    };
+
+    template < unsigned int dir0,
+               unsigned int dir1 >
+    struct MultVector< Dimensions<dir0,dir1> > {
+      template < typename T>
+      inline T operator() (const Vector<T,3u> & v) {
+        return v[dir0] * v[dir1];
+      }
+    };
+
+    template < unsigned int dir0 >
+    struct MultVector< Dimensions<dir0> > {
+      template < typename T>
+      inline T operator() (const Vector<T,3u> & v) {
+        return v[dir0];
+      }
+    };
+  }
+
+  /** Calculate the product of the elements of this vector. */
+  template < typename dimensions, typename T>
+  inline T multiply(const Vector<T,3u> & v) {
+    return detail::MultVector<dimensions>()(v);
+  }
+  /* ***   END SOME SPECIALIZED THREE DIMENSIONAL MULTIPLICATION ROUTINES *** */
 
   /** Calculate the mean value of this vector.
    * Because of truncation, this function doesn't really mean anything unless
