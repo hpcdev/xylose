@@ -1,7 +1,4 @@
-exe testNSort : testNSort_obj ;
-exe timeNSort : timeNSort_obj /xylose//xylose ;
+# NSort tests and examples
+build-project basic ;
+build-project grid ;
 
-obj testNSort_obj : testNSort.cpp /xylose//headers ;
-obj timeNSort_obj : testNSort.cpp /xylose//headers : <define>DO_TIMING ;
-
-install convenient-copy : testNSort timeNSort : <location>. ;

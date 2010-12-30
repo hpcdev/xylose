@@ -41,7 +41,7 @@ namespace xylose {
         typedef map::tag::remap_3D tag;
         typedef remap_base< _3D<_dir0,_dir1,_dir2>, 8u > super;
         /** Default constructor required by wrapping components. */
-        remap() {}
+        remap() : super() {}
         /** Single arg constructor required by wrapping components.*/
         template <class TT> remap(const TT & tt) : super(tt) {}
       };

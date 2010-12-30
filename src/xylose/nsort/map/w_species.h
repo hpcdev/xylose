@@ -25,6 +25,7 @@
 #ifndef xylose_nsort_map_w_species_h
 #define xylose_nsort_map_w_species_h
 
+#include <utility>
 
 namespace xylose {
   namespace nsort {
@@ -48,6 +49,12 @@ namespace xylose {
 
         w_species(const unsigned int & n_species) : n_species(n_species) {}
         template <class TT> w_species(const TT & tt) : T(tt) {}
+
+        template < typename T1,
+                   typename T2 >
+        w_species( const std::pair<T1,T2> & args )
+          : T(args.second), n_species( args.first ) { }
+
 
         inline int getNumberValues() const {
           return T::getNumberValues() * n_species;

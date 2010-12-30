@@ -1,0 +1,3 @@
+exe sortIntoGrid : sortIntoGrid.cpp ;
+
+install convenient-copy : sortIntoGrid : <location>. ;

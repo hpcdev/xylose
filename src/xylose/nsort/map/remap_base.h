@@ -63,7 +63,7 @@ namespace xylose {
 
         /** Single arg constructor required by wrapping components.*/
         template <class TT>
-        remap_base(const TT & tt) : T(tt) {
+        remap_base(const TT & tt) : super(tt) {
           reset();
         }
 
@@ -86,7 +86,7 @@ namespace xylose {
         /** Actual remap operation used when performing sorting. */
         template<class _Particle>
         inline int operator()(const _Particle & p) const {
-          return m_remap[T::operator()(p)];
+          return m_remap[super::operator()(p)];
         }
       };
 
