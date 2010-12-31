@@ -1,4 +1,5 @@
 unit-test bits : bits.cpp ;
+unit-test Dimensions : Dimensions.cpp ;
 unit-test pool_allocator : pool_allocator.cpp ;
 unit-test Test_segmented_vector : Test_segmented_vector.cpp ;
 unit-test Time_segmented_vector : Time_segmented_vector.cpp ;

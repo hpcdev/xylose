@@ -8,6 +8,7 @@ xylose_unit_test( SyncLock_nothreads SyncLock.cpp )
 xylose_unit_test( Vector Vector.cpp )
 xylose_unit_test( TestTypedFactory TestTypedFactory.cpp )
 xylose_unit_test( bits bits.cpp )
+xylose_unit_test( Dimensions Dimensions.cpp )
 
 
 find_package( Threads )
