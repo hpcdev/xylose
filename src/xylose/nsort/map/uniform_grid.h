@@ -77,7 +77,6 @@ namespace xylose {
       private:
         typedef uniform_grid<Uniform, Dimensions<dir0> > oneD;
       public:
-        typedef void super;
 
         uniform_grid( const Uniform & g ) : oneD( g ) {
           assert( g.size()[_dir] > 0 );
@@ -111,7 +110,6 @@ namespace xylose {
       private:
         typedef uniform_grid<Uniform, Dimensions<dir0,dir1> > twoD;
       public:
-        typedef void super;
 
         uniform_grid( const Uniform & g ) : twoD( g ) {
           assert( g.size()[_dir] > 0 );
