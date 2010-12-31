@@ -743,7 +743,8 @@ namespace xylose {
 
   /** Calculate the product of the elements of this vector. */
   template < typename dimensions, typename T>
-  inline T multiply(const Vector<T,3u> & v) {
+  inline T multiply( const Vector<T,3u> & v,
+                     const dimensions & D = dimensions() ) {
     return detail::MultVector<dimensions>()(v);
   }
   /* ***   END SOME SPECIALIZED THREE DIMENSIONAL MULTIPLICATION ROUTINES *** */
