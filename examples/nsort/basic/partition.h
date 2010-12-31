@@ -1,3 +1,7 @@
+
+#ifndef example_nsort_basic_partition_h
+#define example_nsort_basic_partition_h
+
 #include <xylose/Vector.h>
 #include <algorithm>
 #include <iterator>
@@ -11,10 +15,10 @@ inline Iter partition(const Iter & Ai, const Iter & Af, const double & pivot) {
     Iter left = Ai, right = Af-1;
     while ( left < right ) {
 	/* Move left while item < pivot */
-	while( left < right && left->x[dir] <= pivot ) left++;
+	while( left < right && position(*left)[dir] <= pivot ) left++;
 
 	/* Move right while item > pivot */
-	while( left < right && right->x[dir] > pivot ) right--;
+	while( left < right && position(*right)[dir] > pivot ) right--;
 
 	if ( left < right ) {
             std::iter_swap(left,right);
@@ -24,7 +28,7 @@ inline Iter partition(const Iter & Ai, const Iter & Af, const double & pivot) {
 
     /* if there have been no swaps, then we need to determine whether it was
      * already sorted. */
-    if (swaps || (Ai->x[dir] <= pivot && (Af-1)->x[dir] > pivot))
+    if (swaps || (position(*Ai)[dir] <= pivot && position(*(Af-1))[dir] > pivot))
         return right;
     else {
         /* didn't have to sort because everything was on one side of the
@@ -42,7 +46,7 @@ struct partition_position_pred {
     partition_position_pred(const xylose::Vector<double,3> & pivot = 0.0)
         : pivot(pivot) {}
     inline bool operator() (const T & p) {
-        return dref(p).x[dir] < pivot[dir];
+        return position(dref(p))[dir] < pivot[dir];
     }
 };
 
@@ -82,3 +86,4 @@ inline void octpartition(const Iter & Ai, const Iter & Af,
     quadpartition<dirx,diry>(m, Af, p);
 }
 
+#endif // example_nsort_basic_partition_h

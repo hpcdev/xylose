@@ -20,11 +20,11 @@
  -----------------------------------------------------------------------------*/
 
 
-#include <xylose/nsort/map/remap-_1D.h>
-#include <xylose/nsort/map/remap-_2D.h>
-#include <xylose/nsort/map/remap-_3D.h>
+#include <xylose/nsort/map/remap.h>
+#include <xylose/nsort/map/pivot.h>
 
 #include <xylose/Vector.h>
+#include <xylose/Dimensions.hpp>
 
 #define BOOST_TEST_MODULE  remap
 
@@ -35,42 +35,34 @@
 namespace {
   using xylose::Vector;
   using xylose::V3;
+  using xylose::Dimensions;
+
   struct Particle {
-    typedef std::vector<Particle> list;
-  
     Vector<double, 3> x;
-    Vector<double, 3> v;
-  
-    Particle(const Vector<double,3> & x = 0.0,
-             const Vector<double,3> & v = 0.0 ) : x(x), v(v) {}
+    Particle(const Vector<double,3> & x = 0.0 ) : x(x) {}
   };
-  
-  std::ostream & operator<< (std::ostream & out, const Particle & p) {
-    return out << "{x: (" << p.x[0] << ", " << p.x[1] << ", " << p.x[2] << "), "
-                   "v: (" << p.v[0] << ", " << p.v[1] << ", " << p.v[2] << ") "
-                  "}";
+
+  inline const Vector<double,3u> & position( const Particle & p ) {
+    return p.x;
   }
+
 }
 
 
-BOOST_AUTO_TEST_SUITE( remap );
-
 BOOST_AUTO_TEST_CASE( remap_1D ) {
   using xylose::nsort::map::remap;
-  using xylose::nsort::map::_1D;
-  using xylose::nsort::map::pivot_ctor;
-  typedef pivot_ctor< remap< _1D<0> > > map_t;
+  using xylose::nsort::map::pivot;
+  typedef remap< pivot< Dimensions<0u> > > map_t;
   map_t rmap(V3(0,0,0));
 
   Particle p;
-
 
   /* This for loop should check for a remapping of every value, one at a time.
    * It also ensures that the unmapped values continue to perform an identity
    * transformation.
    * */
-  for (unsigned int ri = 0; ri < rmap.nval; ++ri) {
-    for (unsigned int rv = 0; rv < rmap.nval; ++rv) {
+  for (unsigned int ri = 0; ri < rmap.number_values; ++ri) {
+    for (unsigned int rv = 0; rv < rmap.number_values; ++rv) {
       rmap.reset();
       rmap.m_remap[ri] = rv;
       unsigned int rii = 0;
@@ -109,9 +101,8 @@ BOOST_AUTO_TEST_CASE( remap_1D ) {
 
 BOOST_AUTO_TEST_CASE( remap_2D ) {
   using xylose::nsort::map::remap;
-  using xylose::nsort::map::_2D;
-  using xylose::nsort::map::pivot_ctor;
-  typedef pivot_ctor< remap< _2D<0,1> > > map_t;
+  using xylose::nsort::map::pivot;
+  typedef remap< pivot< Dimensions<0u,1u> > > map_t;
   map_t rmap(V3(0,0,0));
 
   Particle p;
@@ -120,8 +111,8 @@ BOOST_AUTO_TEST_CASE( remap_2D ) {
    * It also ensures that the unmapped values continue to perform an identity
    * transformation.
    * */
-  for (unsigned int ri = 0; ri < rmap.nval; ++ri) {
-    for (unsigned int rv = 0; rv < rmap.nval; ++rv) {
+  for (unsigned int ri = 0; ri < rmap.number_values; ++ri) {
+    for (unsigned int rv = 0; rv < rmap.number_values; ++rv) {
       rmap.reset();
       rmap.m_remap[ri] = rv;
       unsigned int rii = 0;
@@ -157,9 +148,8 @@ BOOST_AUTO_TEST_CASE( remap_2D ) {
 
 BOOST_AUTO_TEST_CASE( remap_3D ) {
   using xylose::nsort::map::remap;
-  using xylose::nsort::map::_3D;
-  using xylose::nsort::map::pivot_ctor;
-  typedef pivot_ctor< remap< _3D<0,1,2> > > map_t;
+  using xylose::nsort::map::pivot;
+  typedef remap< pivot< Dimensions<0u,1u,2u> > > map_t;
   map_t rmap(V3(0,0,0));
 
   Particle p;
@@ -168,8 +158,8 @@ BOOST_AUTO_TEST_CASE( remap_3D ) {
    * It also ensures that the unmapped values continue to perform an identity
    * transformation.
    * */
-  for (unsigned int ri = 0; ri < rmap.nval; ++ri) {
-    for (unsigned int rv = 0; rv < rmap.nval; ++rv) {
+  for (unsigned int ri = 0; ri < rmap.number_values; ++ri) {
+    for (unsigned int rv = 0; rv < rmap.number_values; ++rv) {
       rmap.reset();
       rmap.m_remap[ri] = rv;
       unsigned int rii = 0;
@@ -215,6 +205,4 @@ BOOST_AUTO_TEST_CASE( remap_3D ) {
   BOOST_CHECK_EQUAL( rmap(p), 1 );
 
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 

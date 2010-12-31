@@ -20,13 +20,12 @@
  -----------------------------------------------------------------------------*/
 
 
-#include <xylose/nsort/map/_1D.h>
-#include <xylose/nsort/map/_2D.h>
-#include <xylose/nsort/map/_3D.h>
+#include <xylose/nsort/map/pivot.h>
 
 #include <xylose/Vector.h>
+#include <xylose/Dimensions.hpp>
 
-#define BOOST_TEST_MODULE  map_nD_tests
+#define BOOST_TEST_MODULE  pivot_tests
 
 #include <boost/test/unit_test.hpp>
 #include <iostream>
@@ -35,37 +34,27 @@
 namespace {
   using xylose::Vector;
   using xylose::V3;
+  using xylose::Dimensions;
+
   struct Particle {
-    typedef std::vector<Particle> list;
-  
     Vector<double, 3> x;
-    Vector<double, 3> v;
-  
-    Particle(const Vector<double,3> & x = 0.0,
-             const Vector<double,3> & v = 0.0 ) : x(x), v(v) {}
+    Particle(const Vector<double,3> & x = 0.0 ) : x(x) {}
   };
-  
-  std::ostream & operator<< (std::ostream & out, const Particle & p) {
-    return out << "{x: (" << p.x[0] << ", " << p.x[1] << ", " << p.x[2] << "), "
-                   "v: (" << p.v[0] << ", " << p.v[1] << ", " << p.v[2] << ") "
-                  "} ";
+
+  inline const Vector<double,3u> & position( const Particle & p ) {
+    return p.x;
   }
+  
 }
 
 
-BOOST_AUTO_TEST_SUITE( map_nD );
-
-BOOST_AUTO_TEST_CASE( map_1D ) {
-  using xylose::nsort::map::_1D;
-  using xylose::nsort::map::pivot_ctor;
-  typedef pivot_ctor< _1D<0> > map_t;
+BOOST_AUTO_TEST_CASE( pivot_1D ) {
+  using xylose::nsort::map::pivot;
+  typedef pivot< Dimensions<0u> > map_t;
   map_t map(V3(0,0,0));
 
   /* make sure the dimensionality is correct. */
-  int j = map.spatial_dimensions;
-  int i = map_t::spatial_dimensions;
-  BOOST_CHECK_EQUAL( i, 1 );
-  BOOST_CHECK_EQUAL( j, 1 );
+  BOOST_CHECK_EQUAL( static_cast<int>(map_t::dimensions::ndims), 1 );
 
   Particle p;
 
@@ -81,18 +70,13 @@ BOOST_AUTO_TEST_CASE( map_1D ) {
   BOOST_CHECK_EQUAL( map(p), 1 );
 }
 
-BOOST_AUTO_TEST_CASE( map_2D ) {
-  using xylose::nsort::map::_2D;
-  using xylose::nsort::map::pivot_ctor;
-  typedef pivot_ctor< _2D<0,1> > map_t;
+BOOST_AUTO_TEST_CASE( pivot_2D ) {
+  using xylose::nsort::map::pivot;
+  typedef pivot< Dimensions<0u,1u> > map_t;
   map_t map(V3(0,0,0));
 
   /* make sure the dimensionality is correct. */
-  int j = map.spatial_dimensions;
-  int i = map_t::spatial_dimensions;
-  BOOST_CHECK_EQUAL( i, 2 );
-  BOOST_CHECK_EQUAL( j, 2 );
-
+  BOOST_CHECK_EQUAL( static_cast<int>(map_t::dimensions::ndims), 2 );
 
   Particle p;
 
@@ -115,18 +99,13 @@ BOOST_AUTO_TEST_CASE( map_2D ) {
   BOOST_CHECK_EQUAL( map(p), 3 );
 }
 
-BOOST_AUTO_TEST_CASE( map_3D ) {
-  using xylose::nsort::map::_3D;
-  using xylose::nsort::map::pivot_ctor;
-  typedef pivot_ctor< _3D<2,1,0> > map_t;
+BOOST_AUTO_TEST_CASE( pivot_3D ) {
+  using xylose::nsort::map::pivot;
+  typedef pivot< Dimensions<2u,1u,0u> > map_t;
   map_t map(V3(0,0,0));
 
   /* make sure the dimensionality is correct. */
-  int j = map.spatial_dimensions;
-  int i = map_t::spatial_dimensions;
-  BOOST_CHECK_EQUAL( i, 3 );
-  BOOST_CHECK_EQUAL( j, 3 );
-
+  BOOST_CHECK_EQUAL( static_cast<int>(map_t::dimensions::ndims), 3 );
 
   Particle p;
 
@@ -162,6 +141,4 @@ BOOST_AUTO_TEST_CASE( map_3D ) {
   p.x[0] =  1; p.x[1] =  1; p.x[2] =  1;
   BOOST_CHECK_EQUAL( map(p), 7 );
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 

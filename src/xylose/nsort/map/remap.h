@@ -21,10 +21,8 @@
 
 
 
-#ifndef xylose_nsort_map_remap_base_h
-#define xylose_nsort_map_remap_base_h
-
-#include <xylose/nsort/map/_3D.h>
+#ifndef xylose_nsort_map_remap_h
+#define xylose_nsort_map_remap_h
 
 #include <set>
 
@@ -32,7 +30,8 @@ namespace xylose {
   namespace nsort {
     namespace map {
       namespace tag {
-        struct remap_base {};
+        template < typename T >
+        struct remap {};
       }
 
       /** Re-maps an underlying map function onto a different set of mapped
@@ -41,35 +40,40 @@ namespace xylose {
        * underlying map function onto another portion of the map function's
        * domain.
        * */
-      template < typename T , unsigned int _nval = 0u >
-      struct remap_base : T {
-        typedef map::tag::remap_base tag;
+      template < typename T,
+                 unsigned int _nval = T::number_values >
+      struct remap : T {
+        typedef map::tag::remap<T> tag;
         typedef T super;
 
+        /** Maximum number of possible values. */
+        static const unsigned int number_values = _nval;
+
         /* STORAGE MEMBER(S) */
-        /** Outside access to the maximum number of possible values. */
-        static const unsigned int nval = _nval;
 
         /** The remap map. */
-        int m_remap[nval];
+        int m_remap[number_values];
       
 
         /* FUNCTION MEMBERS */
         /** Default constructor calls 'reset'.
          * @see reset. */
-        remap_base() {
+        remap() : super() {
           reset();
         }
 
-        /** Single arg constructor required by wrapping components.*/
+        /** Constructor passes to super as required by wrapping components.
+         * Default constructor calls 'reset'.
+         * @see reset.
+         */
         template <class TT>
-        remap_base(const TT & tt) : super(tt) {
+        remap(const TT & tt) : super(tt) {
           reset();
         }
 
         /** Resets the m_remap[] array to 1..nval. */
         void reset() {
-          for (unsigned int i = 0; i < nval; ++i)
+          for ( unsigned int i = 0; i < number_values; ++i )
             m_remap[i] = i;
         }
 
@@ -79,32 +83,20 @@ namespace xylose {
          * */
         inline int getNumberValues() const {
           /** \todo Is there a way to make this not rely on heap allocation? */
-          std::set<int> s(m_remap, m_remap+nval);
+          std::set<int> s( m_remap, m_remap + number_values );
           return s.size();
         }
 
         /** Actual remap operation used when performing sorting. */
-        template<class _Particle>
-        inline int operator()(const _Particle & p) const {
+        template < typename Particle >
+        inline int operator()(const Particle & p) const {
           return m_remap[super::operator()(p)];
         }
       };
 
-
-      template < typename T >
-      struct remap : remap_base< T > {
-        static const int USING_NON_SPECIALIZATION = T::IS_NOT_ALLOWED;
-
-        /** Default constructor required by wrapping components.
-         * Specializations must implement this. */
-        remap() {}
-        /** Single arg constructor required by wrapping components.
-         * Specializations must implement this. */
-        template <class TT> remap(const TT & tt) : T(tt) {}
-      };
     }
   }
 }
 
-#endif // xylose_nsort_map_remap_base_h
+#endif // xylose_nsort_map_remap_h
 

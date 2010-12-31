@@ -1,4 +1,9 @@
+
+#ifndef example_nsort_basic_Particle_h
+#define example_nsort_basic_Particle_h
+
 #include <xylose/Vector.h>
+#include <vector>
 
 
 struct Particle {
@@ -14,6 +19,10 @@ struct Particle {
 
 const int & species( const Particle & p ) {
   return p.species;
+}
+
+const xylose::Vector<double,3u> & position( const Particle & p ) {
+  return p.x;
 }
 
 
@@ -78,3 +87,5 @@ struct species_comp {
     }
 };
 
+
+#endif // example_nsort_basic_Particle_h
