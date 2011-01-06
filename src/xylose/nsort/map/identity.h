@@ -25,6 +25,8 @@
 #ifndef xylose_nsort_map_identity_h
 #define xylose_nsort_map_identity_h
 
+#include <utility>
+
 namespace xylose {
   namespace nsort {
     namespace map {
@@ -33,16 +35,44 @@ namespace xylose {
         struct identity {};
       }
 
-     /** Identity nsort_map wrapper.  Useful as a default parameter in a templated
+     /** Identity nsort::map wrapper.  Useful as a default parameter in a templated
       * nsort::map wrap.
+      *
+      * @tparam T
+      *   The underlying nsort map to inherit.
+      *
+      * @tparam consume_argument
+      *   A boolean parameter to specify whether this identity class should
+      *   expect to consume constructor arguments or not.  <br>
+      *   [Default false]
       * */
-      template <class T>
-      struct identity : T {
+      template < typename T, bool consume_argument = false >
+      struct identity;
+
+      /** Identity nsort::map wrapper that does NOT consume constructor
+       * arguments. */
+      template < typename T >
+      struct identity<T,false> : T {
         typedef map::tag::identity tag;
         typedef T super;
 
         identity() {}
-        template <class TT> identity(const TT & tt) : T(tt) {}
+        template < typename TT > identity(const TT & tt) : T(tt) { }
+      };
+
+      /** Identity nsort::map wrapper that does consume one constructor
+       * argument. */
+      template < typename T >
+      struct identity<T,true> : T {
+        typedef map::tag::identity tag;
+        typedef T super;
+
+        identity() {}
+
+        template < typename T1,
+                   typename T2 >
+        identity( const std::pair<T1,T2> & args )
+          : T(args.second) { }
       };
     }/*namespace map */
   }/*namespace nsort */
