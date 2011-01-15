@@ -67,6 +67,12 @@ namespace xylose {
           setSpeciesRanges( begin, s, s_i );
         }
 
+        Range & getSpecies( const unsigned int & i ) { return species[i]; }
+
+        const Range & getSpecies( const unsigned int & i ) const {
+          return species[i];
+        }
+
         /** Sets each of the ranges for the species.  This function is only
          * called for Octree leaf nodes. */
         template < typename NSort >
@@ -85,10 +91,15 @@ namespace xylose {
       template< typename ParticleIterator >
       struct w_species_fields<ParticleIterator, 1u> {
         /* TYPEDEFS */
+        typedef xylose::IteratorRange<ParticleIterator> Range;
         static const unsigned int n_species = 1u;
 
         /** NO-OP. */
         w_species_fields() {}
+
+        Range getSpecies( const unsigned int & i ) const {
+          return Range();
+        }
 
         /** NO-OP. */
         template < typename NSort >
@@ -123,6 +134,12 @@ namespace xylose {
                           const int & s_i,
                           const unsigned int & n_species ) {
           setSpeciesRanges( begin, s, s_i, n_species );
+        }
+
+        Range & getSpecies( const unsigned int & i ) { return species[i]; }
+
+        const Range & getSpecies( const unsigned int & i ) const {
+          return species[i];
         }
 
         /** Sets each of the ranges for the species.  This function is only
