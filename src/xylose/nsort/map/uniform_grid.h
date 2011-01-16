@@ -60,7 +60,7 @@ namespace xylose {
         template <class _Particle>
         int operator()(const _Particle & p) const {
           register int L = static_cast<int>(
-                             ( position(p)[_dir] - g.x0[_dir] ) / g.dx[_dir]
+                             ( position(p)[_dir] - g.x0()[_dir] ) / g.dx()[_dir]
                            );
           register int max_val = static_cast<int>(g.size()[_dir]) - 1;
           return std::max(0, std::min( max_val, L ) );
@@ -89,8 +89,8 @@ namespace xylose {
         template < typename  Particle >
         int operator() (const Particle & p) const {
           register int L = static_cast<int>(
-                               ( position(p)[_dir] - this->g.x0[_dir] )
-                             / this->g.dx[_dir]
+                               ( position(p)[_dir] - this->g.x0()[_dir] )
+                             / this->g.dx()[_dir]
                            );
           register int max_val = static_cast<int>(this->g.size()[_dir]) - 1;
           return oneD::operator()(p)
@@ -124,8 +124,8 @@ namespace xylose {
         template < typename  Particle >
         int operator() (const Particle & p) const {
           register int L = static_cast<int>(
-                               ( position(p)[_dir] - this->g.x0[_dir] )
-                             / this->g.dx[_dir]
+                               ( position(p)[_dir] - this->g.x0()[_dir] )
+                             / this->g.dx()[_dir]
                            );
           register int max_val = static_cast<int>(this->g.size()[_dir]) - 1;
           return twoD::operator()(p)

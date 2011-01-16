@@ -28,8 +28,8 @@ namespace test {
 
     /* MEMBER STORAGE */
     std::vector< Cell > cells;
-    Vector<double,3u> dx;
-    Vector<double,3u> x0;
+    Vector<double,3u> m_dx;
+    Vector<double,3u> m_x0;
     Vector<unsigned int,3u> N;
 
 
@@ -38,13 +38,13 @@ namespace test {
           const Vector<unsigned int,3u> & N = 0u,
           const Vector<double,3u> & x0 = 0.0 )
       : cells( multiply<dims>(N), Cell() ),
-        dx(dx),
-        x0(x0),
+        m_dx(dx),
+        m_x0(x0),
         N(N) {
       for ( int i = cells.size() - 1u; i >= 0; --i ) {
         Cell & c = cells[i];
-        c.min = x0 + (i+0.0)*dx;
-        c.max = x0 + (i+1.0)*dx;
+        c.min = m_x0 + (i+0.0)*m_dx;
+        c.max = m_x0 + (i+1.0)*m_dx;
       }
       cells.back().last = true;
     }
@@ -56,6 +56,10 @@ namespace test {
     const_iterator end() const { return cells.end(); }
 
     const Vector<unsigned int,3u> size() const { return N; }
+
+    const Vector<double,3u> & dx() const { return m_dx; }
+
+    const Vector<double,3u> & x0() const { return m_x0; }
 
     int getNumberCells() const { return cells.size(); }
 
