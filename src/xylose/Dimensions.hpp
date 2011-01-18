@@ -34,7 +34,7 @@ namespace xylose {
     static const unsigned int dir1 = _dir1;
     static const unsigned int dir2 = _dir2;
 
-    typedef Dimensions<dir2,dir1,dir0> reverse;
+    typedef Dimensions<_dir2,_dir1,_dir0> reverse;
   };
 
 
@@ -45,7 +45,7 @@ namespace xylose {
     static const unsigned int dir0 = _dir0;
     static const unsigned int dir1 = _dir1;
 
-    typedef Dimensions<dir1,dir0> reverse;
+    typedef Dimensions<_dir1,_dir0> reverse;
   };
 
   template < unsigned int _dir0 >
@@ -53,7 +53,7 @@ namespace xylose {
     static const unsigned int ndims = 1u;
     static const unsigned int dir0 = _dir0;
 
-    typedef Dimensions<dir0> reverse;
+    typedef Dimensions<_dir0> reverse;
   };
 
 
