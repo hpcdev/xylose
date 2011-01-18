@@ -74,7 +74,7 @@ namespace xylose {
   }
 
   template <class A, class B>
-  static void parse_item(data_point<A,B> & out, const xml::Context & x) {
+  inline void parse_item(data_point<A,B> & out, const xml::Context & x) {
     A a = x.query<A>("@x");
     B b = x.query<B>("@y");
     out = data_point<A,B>(a,b);
@@ -82,7 +82,7 @@ namespace xylose {
 
 
   template <class A, class B>
-  static void parse_item(data_set<A,B> & out, const xml::Context & x) {
+  inline void parse_item(data_set<A,B> & out, const xml::Context & x) {
     A xscale = x.query<A>("@xscale");
     B yscale = x.query<B>("@yscale");
 

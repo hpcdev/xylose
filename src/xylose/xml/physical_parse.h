@@ -28,8 +28,8 @@
 
 namespace xylose {
   namespace xml {
-    static inline void parse_item( runtime::physical::Quantity & out,
-                                   const Context & x) {
+    inline void parse_item( runtime::physical::Quantity & out,
+                            const Context & x) {
       using runtime::physical::calc::Driver;
       out = Driver::instance().eval( x.text() );
     }

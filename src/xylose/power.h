@@ -245,7 +245,7 @@ namespace xylose {
  * @param y The exponent.
  * @return \f$ x^{y} \f$
  * */
-static inline double fast_pow( const double & x, const double & y ) {
+inline double fast_pow( const double & x, const double & y ) {
     FAST_POW_CODE(x,y);
 }
 #   else /* else lang = c */
@@ -302,7 +302,7 @@ double fast_pow(double x,double y);
  * I regularly observe this function perform around 40 times faster than GCC's
  * libm::log2 function.
  * */
-static inline double fast_log2 ( const double & x ) {
+inline double fast_log2 ( const double & x ) {
   FAST_LOG2_CODE(x);
 }
 
@@ -333,7 +333,7 @@ double fast_log2 ( const double x );
  *
  * @returns \f$ \log_{n}\right(x\left) \f$
  * */
-static inline double logn ( const double & n, const double & x ) {
+inline double logn ( const double & n, const double & x ) {
   return fast_log2( x ) / fast_log2( n );
 }
 
