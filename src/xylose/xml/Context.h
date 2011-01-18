@@ -203,7 +203,7 @@ namespace xylose {
           T retval;
           parse_item(retval, x);
           return retval;
-        } catch (nonsingle_result_error) {
+        } catch (const nonsingle_result_error & e) {
           return _default;
         }
       }
@@ -284,7 +284,7 @@ namespace xylose {
     inline void parse_item(A & out, const Context & x) {
       try {
         out = xylose::from_string<A>(x.text());
-      } catch (xylose::string_error& e) {
+      } catch (const xylose::string_error& e) {
         throw error(e.what());
       }
     }
