@@ -41,10 +41,13 @@ namespace {
   
   template < unsigned int dir0 >
   struct UniformGrid< Dimensions<dir0> > {
-    Vector<double,3u> x0;
-    Vector<double,3u> dx;
+    Vector<double,3u> m_x0;
+    Vector<double,3u> m_dx;
 
-    UniformGrid( ) : x0( 0.0 ), dx (1.0) { }
+    UniformGrid( ) : m_x0( 0.0 ), m_dx (1.0) { }
+
+    const Vector<double,3u> & x0() const { return m_x0; }
+    const Vector<double,3u> & dx() const { return m_dx; }
 
     Vector<unsigned int,3U> size() const {
       Vector<unsigned int, 3u> retval(0u);
@@ -102,7 +105,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_1D ) {
 
     BOOST_CHECK_EQUAL( map( Particle( 0.0 ) ), 0 );
 
-    grid.x0[0u] = -5.0;
+    grid.m_x0[0u] = -5.0;
     BOOST_CHECK_EQUAL( map( Particle( -6.0  ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( -10.0 ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( -5.0  ) ), 0 );
@@ -119,7 +122,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_1D ) {
     BOOST_CHECK_EQUAL( map( Particle(  6.0  ) ), 9 );
     BOOST_CHECK_EQUAL( map( Particle(  10.0 ) ), 9 );
 
-    grid.x0[0u] = -10.0;
+    grid.m_x0[0u] = -10.0;
     BOOST_CHECK_EQUAL( map( Particle( 0.0 ) ), 9 );
   }
 }
@@ -134,7 +137,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_2D ) {
 
     BOOST_CHECK_EQUAL( map( Particle( 0.0 ) ), 0 );
 
-    grid.x0[0u] = -5.0;
+    grid.m_x0[0u] = -5.0;
     BOOST_CHECK_EQUAL( map( Particle( V3(-6.0 , 0., 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-10.0, 0., 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0 , 0., 0. ) ) ), 0 );
@@ -151,7 +154,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_2D ) {
     BOOST_CHECK_EQUAL( map( Particle( V3( 6.0 , 0., 0. ) ) ), 9 );
     BOOST_CHECK_EQUAL( map( Particle( V3( 10.0, 0., 0. ) ) ), 9 );
 
-    grid.x0[1u] = -2.5;
+    grid.m_x0[1u] = -2.5;
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -3.5, 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -2.5, 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -1.5, 0. ) ) ), 10 );
@@ -159,7 +162,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_2D ) {
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0,  1.5, 0. ) ) ), 40 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0,  2.5, 0. ) ) ), 40 );
 
-    grid.x0[0u] = -10.0;
+    grid.m_x0[0u] = -10.0;
     BOOST_CHECK_EQUAL( map( Particle( 0.0 ) ), 29 );
   }
 }
@@ -174,7 +177,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_3D ) {
 
     BOOST_CHECK_EQUAL( map( Particle( 0.0 ) ), 0 );
 
-    grid.x0[0u] = -5.0;
+    grid.m_x0[0u] = -5.0;
     BOOST_CHECK_EQUAL( map( Particle( V3(-6.0 , 0., 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-10.0, 0., 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0 , 0., 0. ) ) ), 0 );
@@ -191,7 +194,7 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_3D ) {
     BOOST_CHECK_EQUAL( map( Particle( V3( 6.0 , 0., 0. ) ) ), 9 );
     BOOST_CHECK_EQUAL( map( Particle( V3( 10.0, 0., 0. ) ) ), 9 );
 
-    grid.x0[1u] = -2.5;
+    grid.m_x0[1u] = -2.5;
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -3.5, 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -2.5, 0. ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -1.5, 0. ) ) ), 10 );
@@ -199,13 +202,13 @@ BOOST_AUTO_TEST_CASE( map_uniform_grid_3D ) {
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0,  1.5, 0. ) ) ), 40 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0,  2.5, 0. ) ) ), 40 );
 
-    grid.x0[2u] = -1.0;
+    grid.m_x0[2u] = -1.0;
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -3.5, -2.0 ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -3.5, -1.0 ) ) ), 0 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -3.5,  0.0 ) ) ), 50 );
     BOOST_CHECK_EQUAL( map( Particle( V3(-5.0, -3.5,  1.0 ) ) ), 50 );
 
-    grid.x0[0u] = -10.0;
+    grid.m_x0[0u] = -10.0;
     BOOST_CHECK_EQUAL( map( Particle( 0.0 ) ), 79 );
   }
 }
