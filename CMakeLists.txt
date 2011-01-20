@@ -107,7 +107,7 @@ add_library( ${PROJECT_NAME}
 
 LIST(APPEND targets_to_install ${PROJECT_NAME})
 
-find_package( appspack )
+find_package( appspack QUIET )
 find_package( LibXml2 )
 find_package( Threads )
 find_package( Boost COMPONENTS program_options )
