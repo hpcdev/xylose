@@ -161,14 +161,14 @@ BOOST_AUTO_TEST_SUITE( XML_tests );//{
     }
 
     inline std::ostream & operator<< ( std::ostream & out,
-                                              const Term & t ) {
+                                       const Term & t ) {
       if (t.n > 1)
         out << t.n << ' ';
       return out << t.p;
     }
 
     inline std::ostream & operator<< ( std::ostream & out,
-                                              const std::set<Term> & s ) {
+                                       const std::set<Term> & s ) {
       typedef std::set<Term>::const_iterator Iter;
       const char * sep = "";
       const char * plus = " + ";
@@ -181,18 +181,18 @@ BOOST_AUTO_TEST_SUITE( XML_tests );//{
     }
 
     inline std::ostream & operator<< ( std::ostream & out,
-                                              const Equation & eq ) {
+                                       const Equation & eq ) {
       return out << eq.in << "  -->  " << eq.out;
     }
 
     inline void parse_item( Term & t,
-                                   const xml::Context & x ) {
+                            const xml::Context & x ) {
       t.n = x.query<int>("n",1);
       t.p = x.query<std::string>("P");
     }
 
     inline void parse_item( std::set<Term> & s,
-                                   const xml::Context & x ) {
+                            const xml::Context & x ) {
       typedef xml::Context::list Clist;
 
       Clist xl = x.eval("T");
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_SUITE( XML_tests );//{
     }
 
     inline void parse_item( Equation & eq,
-                                   const xml::Context & x ) {
+                            const xml::Context & x ) {
       eq.in  = x.query< std::set<Term> >("In");
       eq.out = x.query< std::set<Term> >("Out");
     }
