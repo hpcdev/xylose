@@ -30,6 +30,7 @@
 #define xylose_upper_triangle_h
 
 #include <vector>
+#include <cassert>
 
 namespace xylose {
 
@@ -40,7 +41,7 @@ namespace xylose {
    * @see upper_triangle
    */
   struct SymmetryFix {
-    void operator()(int & i, int & j) {
+    void operator()(int & i, int & j) const {
       if (j < i)
         std::swap(i,j);
     }
@@ -48,7 +49,9 @@ namespace xylose {
 
   /** The NO-OP fix for the order of indices for the upper_triangular class. */
   struct NullSymmetryFix {
-    void operator()(int & i, int & j) {}
+    void operator()(const int & i, const int & j) const {
+      assert( i <= j );
+    }
   };
 
 
