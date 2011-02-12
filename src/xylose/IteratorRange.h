@@ -29,6 +29,8 @@
 #ifndef xylose_IteratorRange_h
 #define xylose_IteratorRange_h
 
+#include <cstddef>
+
 namespace xylose {
 
   template <class Iter>
