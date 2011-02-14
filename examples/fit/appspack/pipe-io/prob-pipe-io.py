@@ -2,13 +2,12 @@
 
 import sys
 from math import sqrt, sin
-from numpy import arange
 
 def sinc( params, shift=[0] ):
     rho = 0.0
 
     parm = [] + params
-    for i in range(0,len(parm)):
+    for i in range(0,len(shift)):
         parm[i] = float(parm[i]) + shift[i]
 
     for p in parm:
@@ -28,6 +27,7 @@ def meritFunction( params ):
             - 2.4*sinc(params, [0, -3])
 
 def saveMerit():
+    from numpy import arange
     d = arange(-5,5,.1)
     f = open('func.dat','w')
     for x in d:
