@@ -53,6 +53,10 @@ namespace xylose {
           assert( g.size()[_dir] > 0 );
         }
 
+        uniform_grid( const Uniform * g ) : g(*g) {
+          assert( g->size()[_dir] > 0 );
+        }
+
         int getNumberValues() const {
           return g.size()[_dir];
         }
@@ -80,6 +84,10 @@ namespace xylose {
 
         uniform_grid( const Uniform & g ) : oneD( g ) {
           assert( g.size()[_dir] > 0 );
+        }
+
+        uniform_grid( const Uniform * g ) : oneD( *g ) {
+          assert( g->size()[_dir] > 0 );
         }
 
         int getNumberValues() const {
@@ -113,6 +121,10 @@ namespace xylose {
 
         uniform_grid( const Uniform & g ) : twoD( g ) {
           assert( g.size()[_dir] > 0 );
+        }
+
+        uniform_grid( const Uniform * g ) : twoD( *g ) {
+          assert( g->size()[_dir] > 0 );
         }
 
         int getNumberValues() const {
