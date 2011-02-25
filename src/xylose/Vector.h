@@ -251,7 +251,7 @@ namespace xylose {
 
     /** Compute the magnitude of this vector. */
     inline T abs () const {
-      return std::sqrt ((*this) * (*this));
+      return static_cast<T>( std::sqrt ((*this) * (*this)) );
     }
 
 
