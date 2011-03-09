@@ -43,11 +43,14 @@ namespace xylose {
 
     struct ExecFunc {
       /* MEMBER STORAGE */
-      std::string program_name;
+      const std::string program_name;
+      const std::string extra_args;
 
       /* MEMBER FUNCTIONS */
-      ExecFunc( const std::string & program_name )
-        : program_name( program_name ) { }
+      ExecFunc( const std::string & program_name,
+                const std::string & extra_args = "" )
+        : program_name( program_name ),
+          extra_args( extra_args ) { }
 
       template < typename V0, typename V1 >
       std::string operator() ( const V0 & x,
@@ -65,7 +68,9 @@ namespace xylose {
                         + ' '
                         + std::string(outfile)
                         + ' '
-                        + to_string(tag);
+                        + to_string(tag)
+                        + ' '
+                        + extra_args;
 
         { /* write program the inputs values. */
           std::ofstream ifile(infile);

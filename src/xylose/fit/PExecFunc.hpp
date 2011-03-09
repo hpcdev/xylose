@@ -44,16 +44,21 @@ namespace xylose {
     struct PExecFunc {
       /* MEMBER STORAGE */
       const std::string program_name;
+      const std::string extra_args;
 
       /* MEMBER FUNCTIONS */
-      PExecFunc( const std::string & program_name )
-        : program_name( program_name ) { }
+      PExecFunc( const std::string & program_name,
+                 const std::string & extra_args = "" )
+        : program_name( program_name ),
+          extra_args( extra_args ) { }
 
       template < typename V0, typename V1 >
       std::string operator() ( const V0 & x,
                                      V1 & f,
                                const int & tag = 0 ) const {
-        redi::pstream prog( program_name + ' ' + to_string(tag),
+        redi::pstream prog( program_name
+                              + ' ' + to_string(tag)
+                              + ' ' + extra_args,
                             redi::pstreams::pstdin |
                             redi::pstreams::pstdout );
 

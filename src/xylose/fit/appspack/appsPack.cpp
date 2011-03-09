@@ -123,7 +123,8 @@ int main(int argc, char* argv[]) {
     opts.map["num-threads"].as<unsigned int>()
   );
 
-  xylose::fit::appspack::Input P( opts.map["input-file"].as<std::string>() );
+  const std::string input_file = opts.map["input-file"].as<std::string>();
+  xylose::fit::appspack::Input P( input_file );
 
   /* get the parameter information */
   xylose::fit::appspack::PackedParameters pp = P.packParameters();
@@ -168,7 +169,7 @@ int main(int argc, char* argv[]) {
 #ifdef HAVE_PSTREAMS
   if ( opts.map.count("pipe-comm") ) {
     // *** Create the MinFunc
-    PMinFunc minFunc( P.getProbFile() );
+    PMinFunc minFunc( P.getProbFile(), input_file );
 
     // *** Instantiate the custom executor ***
     xylose::fit::appspack::ThreadedExecutor<PMinFunc> executor(minFunc);
@@ -179,7 +180,7 @@ int main(int argc, char* argv[]) {
 #endif
   {
     // *** Create the MinFunc
-    MinFunc minFunc( P.getProbFile() );
+    MinFunc minFunc( P.getProbFile(), input_file );
 
     // *** Instantiate the custom executor ***
     xylose::fit::appspack::ThreadedExecutor<MinFunc> executor(minFunc);
