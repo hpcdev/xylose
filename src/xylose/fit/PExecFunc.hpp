@@ -55,10 +55,12 @@ namespace xylose {
       template < typename V0, typename V1 >
       std::string operator() ( const V0 & x,
                                      V1 & f,
-                               const int & tag = 0 ) const {
+                               const int & tag = 0,
+                               const std::string & extra_args2 = "" ) const {
         redi::pstream prog( program_name
                               + ' ' + to_string(tag)
-                              + ' ' + extra_args,
+                              + ' ' + extra_args
+                              + ' ' + extra_args2,
                             redi::pstreams::pstdin |
                             redi::pstreams::pstdout );
 

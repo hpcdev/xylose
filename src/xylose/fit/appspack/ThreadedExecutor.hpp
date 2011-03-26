@@ -30,6 +30,7 @@
 #ifndef xylose_fit_appspack_ThreadedExecutor_hpp
 #define xylose_fit_appspack_ThreadedExecutor_hpp
 
+#include <xylose/strutil.h>
 #include <xylose/PThreadCache.h>
 
 #include <appspack/APPSPACK_Executor_Interface.hpp> // Abstract interface for class
@@ -79,7 +80,8 @@ namespace xylose {
 
           /** Execute the APPSPACK MinFunc function. */
           virtual void exec() {
-            msg_out = minFunc( x.getStlVector(), f, tag );
+            msg_out = minFunc( x.getStlVector(), f, tag,
+                               to_string( pthread_self() ) );
 
             if (f.size() > 0 && msg_out.size() == 0)
               msg_out = "success";

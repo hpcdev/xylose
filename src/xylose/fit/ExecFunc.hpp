@@ -55,7 +55,8 @@ namespace xylose {
       template < typename V0, typename V1 >
       std::string operator() ( const V0 & x,
                                      V1 & f,
-                               const int & tag = 0 ) const {
+                               const int & tag = 0,
+                               const std::string & extra_args2 = "" ) const {
         /* create temporary input and output filenames. */
         char infile[100]  = "infile.XXXXXX";
         char outfile[100] = "outfile.XXXXXX";
@@ -70,7 +71,9 @@ namespace xylose {
                         + ' '
                         + to_string(tag)
                         + ' '
-                        + extra_args;
+                        + extra_args
+                        + ' '
+                        + extra_args2;
 
         { /* write program the inputs values. */
           std::ofstream ifile(infile);
