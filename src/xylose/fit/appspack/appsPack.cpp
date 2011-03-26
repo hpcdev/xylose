@@ -29,6 +29,7 @@
 #ifdef HAVE_PSTREAMS
   #include <xylose/fit/PExecFunc.hpp>
 #endif
+#include <xylose/XSTR.h>
 #include <xylose/PThreadCache.h>
 
 #include <appspack/APPSPACK_Solver.hpp>             ///< Provides APPSPACK::Solver
@@ -72,6 +73,7 @@ struct options {
     out <<
       "  Threaded AppsPack Executor Help\n"
       "  ===============================\n"
+      "  xylose version : " XSTR(XYLOSE_VERSION) "\n"
       "\n"
       "\n"
       "  usage:  appsPack [options]...\n\n"
