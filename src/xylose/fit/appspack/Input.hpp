@@ -29,7 +29,6 @@
 #include <appspack/APPSPACK_Vector.hpp>
 #include <appspack/APPSPACK_Matrix.hpp>
 
-#include <map>
 #include <string>
 #include <iostream>
 #include <cassert>
@@ -54,7 +53,7 @@ namespace xylose {
       class Input {
         /* MEMBER STORAGE */
         std::string probFile;
-        detail::parameter::Map parameters;
+        detail::parameter::Vector parameters;
         detail::constraint::Vector constraints;
         double initialStep;
         double stepTolerance;
@@ -70,9 +69,12 @@ namespace xylose {
         Input( const std::string & filename ) {
           xml::Doc db( filename );
           probFile = db.query< std::string >("/APPSPack/Minimize");
-          parameters = db.query<detail::parameter::Map>("/APPSPack/Parameters");
-          constraints
-            = db.query<detail::constraint::Vector>("/APPSPack/Constraints");
+          parameters
+            = db.query<detail::parameter::Vector>("/APPSPack/Parameters");
+          constraints = db.query<detail::constraint::Vector>(
+            "/APPSPack/Constraints",
+            detail::constraint::Vector()
+          );
 
           initialStep = db.query<double>("/APPSPack/Solver/InitialStep", 0.0);
           stepTolerance = db.query<double>("/APPSPack/Solver/StepTolerance", 0.0);
@@ -95,9 +97,10 @@ namespace xylose {
 
         PackedParameters packParameters() const {
           PackedParameters retval;
-          for ( detail::parameter::Map::const_iterator i = parameters.begin(),
-                                                     end = parameters.end();
-                                                      i != end; ++i ) {
+          typedef detail::parameter::Vector::const_iterator Iter;
+          for ( Iter i = parameters.begin(),
+                   end = parameters.end();
+                    i != end; ++i ) {
             retval.lower.push_back( i->second.lower );
             retval.initial.push_back( i->second.initial );
             retval.upper.push_back( i->second.upper );

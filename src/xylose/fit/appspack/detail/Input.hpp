@@ -27,6 +27,7 @@
 #include <appspack/APPSPACK_Float.hpp> /* we get dne() from here */
 
 #include <map>
+#include <vector>
 #include <string>
 #include <iostream>
 
@@ -52,7 +53,7 @@ namespace xylose {
           };
 
           struct Parameter : std::pair< std::string, Details > { };
-          struct Map : std::map< std::string, Details > { };
+          struct Vector : std::vector< Parameter > { };
 
           inline void parse_item( Parameter & p, const xml::Context & x ) {
             p.first = x.query< std::string >("@name");
@@ -64,17 +65,12 @@ namespace xylose {
                        );
           }
 
-          inline void parse_item( Map & m, const xml::Context & x ) {
+          inline void parse_item( Vector & m, const xml::Context & x ) {
             xml::Context::list xl = x.eval("Param");
             for ( xml::Context::list::iterator i = xl.begin(),
                                              end = xl.end();
                                               i != end; ++i ) {
-              std::pair< Map::iterator, bool > ret
-                = m.insert( i->parse< Parameter >() );
-              if ( !ret.second )
-                std::cerr << "WARNING:  duplicate parameter "
-                             "'" << ret.first->first << "' specified"
-                          << std::endl;
+              m.push_back( i->parse< Parameter >() );
             }
           }
 
@@ -126,10 +122,11 @@ namespace xylose {
             }
           }
 
-          inline std::vector<double> makeRow( const parameter::Map & p,
+          inline std::vector<double> makeRow( const parameter::Vector & p,
                                               const FactorMap & f ) {
+            typedef parameter::Vector::const_iterator PIter;
             std::vector<double> retval;
-            for (parameter::Map::const_iterator i = p.begin(); i != p.end(); ++i){
+            for ( PIter i = p.begin(); i != p.end(); ++i ) {
               FactorMap::const_iterator fi = f.find( i->first );
               if ( fi == f.end() )
                 retval.push_back(0.0);
