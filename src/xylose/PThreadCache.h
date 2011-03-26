@@ -40,12 +40,15 @@
 #ifndef xylose_PThreadCache_h
 #define xylose_PThreadCache_h
 
-
+#include <xylose/strutil.h>
 
 #include <pthread.h>
+#include <sched.h>
 #include <set>
 #include <queue>
+#include <string>
 #include <algorithm>
+#include <stdexcept>
 
 #include <cstdio>
 
@@ -65,18 +68,23 @@ namespace xylose {
 
   /** A PThreads threads cache and associated tasks manager. */
   class PThreadCache {
+    /* MEMBER STORAGE */
   private:
-    int max_threads;    /* protected by max_threads_spinlock */
-    int active_threads; /* protected by max_threads_spinlock (yes, same one) */
+    int max_threads;    /**< protected by max_threads_spinlock*/
+    int total_threads;  /**< protected by total_threads_spinlock*/
+    int active_threads; /**< protected by max_threads_spinlock (yes, same one)*/
+    const bool create_threads_on_demand; /**< whether to create threads on
+                                              demand ( up to max_threads ). */
 
-    pthread_attr_t  pthread_attr;
+    pthread_attr_t  pthread_attr; /**< protected by max_threads_spinlock */
     pthread_mutex_t task_queue_mutex; /* mutex to protect the queue items. */
     pthread_cond_t  task_ready_cond;  /* condition for task queue additions. */
     pthread_cond_t  task_finished_cond;
     pthread_mutex_t task_finished_mutex;/* mutex to protect the finished set. */
     pthread_spinlock_t max_threads_spinlock;/* mutex to protect max_threads. */
+    pthread_spinlock_t total_threads_spinlock;/* mutex to protect total_threads. */
 
-    pthread_t * threads; /* do we actually need to keep thread ids? */
+    pthread_t ** threads; /* thread id of each live thread */
 
 
     std::queue<PThreadTask *> task_queue; /* a linked list of tasks to do. */
@@ -84,6 +92,10 @@ namespace xylose {
 
     bool slavesQuit;
 
+
+
+    /* MEMBER FUNCTIONS */
+  private:
     inline void signalSlavesQuit() {
       /* We'll use the task_queue_mutex, just because each slave will exit the
        * cond_wait() holding this mutex.  So, if we already hold it,
@@ -136,6 +148,8 @@ namespace xylose {
 
     /** Executes all tasks placed in the task queue. */
     static void taskSlave(PThreadCache * cache) {
+      cache->incrementTotalThreads();    /* inc total     */
+
       /* check queue, if we get NULL back, that means that we were
        * requested to terminate. */
       PThreadTask * task;
@@ -145,6 +159,8 @@ namespace xylose {
         cache->decrementActiveThreads(); /* dec active    */
         cache->signalTaskFinished(task); /* signal finish */
       }
+
+      cache->decrementTotalThreads();    /* dec total     */
     }
 
     /** Increment the active threads counter--this should only ever be called by
@@ -163,7 +179,59 @@ namespace xylose {
       pthread_spin_unlock(&max_threads_spinlock);
     }
 
+    /** Decrement the active threads counter--this should only ever be called by
+     * the taskSlave function. */
+    void decrementTotalThreads() {
+      pthread_spin_lock(&total_threads_spinlock);
+      --total_threads;
+      pthread_spin_unlock(&total_threads_spinlock);
+    }
 
+    /** Increment the active threads counter--this should only ever be called by
+     * the taskSlave function. */
+    void incrementTotalThreads() {
+      pthread_spin_lock(&total_threads_spinlock);
+      ++total_threads;
+      pthread_spin_unlock(&total_threads_spinlock);
+    }
+
+    static bool getOnDemandOption() {
+      const char * ondemand_cstr = getenv("ONDEMAND_PTHREADS");
+      if ( ondemand_cstr ) {
+        const std::string s =  tolower( ondemand_cstr );
+
+        if ( s == "f" || s == "false" || s == "0" || s == "no" )
+          return false;
+      }
+
+      return true;
+    }
+
+    static void start_thread( pthread_t ** id,
+                              pthread_attr_t & attr,
+                              PThreadCache * c ) {
+      std::cout << "STARTING THREAD!!!!!" << std::endl;
+      if ( (*id) == NULL )
+        (*id) = new pthread_t;
+
+      if ( pthread_create( *id, &attr, (void*(*)(void*))taskSlave, c ) != 0 )
+        throw std::runtime_error("PThreadCache:  could not start thread!");
+    }
+
+    void waitForStartedThread( const int & tot ) {
+      bool again = true;
+      while ( again ) {
+        /* we want to make sure that the thread has at least started before we
+         * continue. */
+        pthread_spin_lock(&total_threads_spinlock);
+          if ( tot <= total_threads )
+            again = false;
+        pthread_spin_unlock(&total_threads_spinlock);
+
+        if ( again )
+          sched_yield();
+      }
+    }
 
 
 
@@ -175,7 +243,9 @@ namespace xylose {
      * manager.
      */
     PThreadCache() : max_threads(0),
+                     total_threads(0),
                      active_threads(0),
+                     create_threads_on_demand( getOnDemandOption() ),
                      threads(NULL),
                      task_queue(),
                      finished_tasks() {
@@ -183,6 +253,7 @@ namespace xylose {
       pthread_mutex_init(&task_queue_mutex, NULL);
       pthread_mutex_init(&task_finished_mutex,NULL);
       pthread_spin_init(&max_threads_spinlock,0);
+      pthread_spin_init(&total_threads_spinlock,0);
       pthread_cond_init(&task_ready_cond, NULL);
       pthread_cond_init(&task_finished_cond, NULL);
 
@@ -210,6 +281,7 @@ namespace xylose {
       pthread_mutex_destroy(&task_queue_mutex);
       pthread_mutex_destroy(&task_finished_mutex);
       pthread_spin_destroy(&max_threads_spinlock);
+      pthread_spin_destroy(&total_threads_spinlock);
       pthread_cond_destroy(&task_ready_cond);
       pthread_cond_destroy(&task_finished_cond);
     }
@@ -222,13 +294,49 @@ namespace xylose {
      *   available [Default false].
      */
     void addTask( PThreadTask * task, bool self_if_none_avail = false ) {
+      pthread_spin_lock(&total_threads_spinlock);
       pthread_spin_lock(&max_threads_spinlock);
         bool serial = max_threads <= 1 ||
                       ( self_if_none_avail && 
                         ( max_threads - active_threads ) == 0 );
 
+        std::cout << "addTask:"
+                     "  max_threads:"<< max_threads
+                  << ", active_threads:"<< active_threads
+                  << ", total_threads:"<< total_threads
+                  << ", serial:"<<serial
+                  << ", task_queue.size():"<<task_queue.size()
+                  << std::endl;
+        bool thread_start = false;
+        int new_total = -1;
+
         if ( !serial ) {
           pthread_mutex_lock(&task_queue_mutex);      /* locked queue */
+
+          thread_start = create_threads_on_demand &&
+                         total_threads < max_threads &&
+                         (active_threads == total_threads ||
+                          total_threads <= static_cast<int>(task_queue.size()));
+
+          if ( thread_start ) {
+            new_total = total_threads + 1;
+
+            /* no live thread is available for performing a task.
+             * Start by finding an empty thread id holder. */
+            int i = 0;
+            for ( ; i < max_threads; ++i ) {
+              if ( threads[i] == NULL )
+                break;
+            }
+
+            if ( i >= max_threads )
+              throw std::runtime_error(
+                "PThreadCache:  expected to find empty thread slot!"
+              );
+
+            /* start the thread. */
+            start_thread( &threads[i], pthread_attr, this );
+          }
 
           task_queue.push(task);
           /* now we should probably signal some thread that there is a task
@@ -238,6 +346,10 @@ namespace xylose {
           pthread_mutex_unlock(&task_queue_mutex);    /* unlocked queue */
         }
       pthread_spin_unlock(&max_threads_spinlock);
+      pthread_spin_unlock(&total_threads_spinlock);
+
+      if ( thread_start )
+        waitForStartedThread(new_total);
 
       if ( serial ) {
         task->exec();
@@ -294,8 +406,12 @@ namespace xylose {
           signalSlavesQuit();
 
           /* join each of the threads. */
-          for (int i = 0; i < max_threads; i++) {
-            pthread_join(threads[i],NULL);
+          for ( int i = 0; i < max_threads; ++i ) {
+            if ( threads[i] ) {
+              pthread_join(*threads[i],NULL);
+              delete threads[i];
+              threads[i] = NULL;
+            }
           }
 
           resetSlavesQuit();
@@ -312,16 +428,24 @@ namespace xylose {
          * the point of addTask(). */
         if(max_threads > 1) {
           /* we are instructed to prepare for threaded processing. */
-          threads = new pthread_t[max_threads];
+          threads = new pthread_t * [max_threads];
 
-          for (int i = 0; i < max_threads; i++) {
-            pthread_create(&threads[i], &pthread_attr, (void*(*)(void*))taskSlave, this);
+          if ( create_threads_on_demand ) {
+            std::fill( threads, threads + max_threads, (pthread_t*)(NULL) );
+          } else {
+            for ( int i = 0; i < max_threads; ++i ) {
+              start_thread( &threads[i], pthread_attr, this );
+            }
           }
         }/* if more than one thread requested */
       }/* if the request is a change */
 
       mx = max_threads;
       pthread_spin_unlock(&max_threads_spinlock);
+
+      if ( mx > 1 && !create_threads_on_demand )
+        waitForStartedThread(mx);
+
       return mx;
     }
 
@@ -342,6 +466,16 @@ namespace xylose {
       std::pair<int,int> retval( max_threads, active_threads );
       pthread_spin_unlock(&max_threads_spinlock);
       return retval;
+    }
+
+    /** Get the current number of threads that are alive (created).  This is
+     * necessarily less than get_max_threads().
+     * */
+    inline int get_live_threads() {
+      pthread_spin_lock(&total_threads_spinlock);
+      int tot = total_threads;
+      pthread_spin_unlock(&total_threads_spinlock);
+      return tot;
     }
   };
 
