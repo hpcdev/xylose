@@ -47,10 +47,6 @@ def main():
         2.  call the merit function,
         3.  and write the result to file
     '''
-    if len(sys.argv) > 2:
-        usage(sys.argv[0])
-        return
-
     # load params
     n_params = int(sys.stdin.readline())
     params = []
@@ -79,4 +75,8 @@ if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] == 'save':
         saveMerit()
     else:
-        sys.exit( main() )
+        if len(sys.argv) > 2:
+            usage(sys.argv[0])
+        else:
+            sys.exit( main() )
+

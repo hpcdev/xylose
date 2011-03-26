@@ -40,17 +40,13 @@ def saveMerit():
 def usage(prog):
     print 'usage:  ', prog, ' <input-file-name> <output-file-name>'
 
-def main():
+def main( infile, outfile ):
     ''' 1.  load the input params,
         2.  call the merit function,
         3.  and write the result to file
     '''
-    if len(sys.argv) < 3:
-        usage(sys.argv[0])
-        return
-
     # load params
-    f = open(sys.argv[1])
+    f = open(infile)
     n_params = f.readline()
     params = f.readlines()
     f.close()
@@ -68,7 +64,7 @@ def main():
     
 
     # write result
-    f = open(sys.argv[2],'w')
+    f = open(outfile,'w')
     f.write( str(merit) )
     f.close()
 
@@ -76,4 +72,8 @@ if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] == 'save':
         saveMerit()
     else:
-        main()
+        if len(sys.argv) < 3:
+            usage(sys.argv[0])
+        else:
+            sys.exit( main( sys.argv[1], sys.argv[2] ) )
+
