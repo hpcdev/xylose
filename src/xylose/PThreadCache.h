@@ -40,6 +40,7 @@
 #ifndef xylose_PThreadCache_h
 #define xylose_PThreadCache_h
 
+#include <xylose/logger.h>
 #include <xylose/strutil.h>
 
 #include <pthread.h>
@@ -210,7 +211,7 @@ namespace xylose {
     static void start_thread( pthread_t ** id,
                               pthread_attr_t & attr,
                               PThreadCache * c ) {
-      std::cout << "STARTING THREAD!!!!!" << std::endl;
+      logger::log_fine( "STARTING THREAD!!!!!" );
       if ( (*id) == NULL )
         (*id) = new pthread_t;
 
@@ -300,13 +301,17 @@ namespace xylose {
                       ( self_if_none_avail && 
                         ( max_threads - active_threads ) == 0 );
 
-        std::cout << "addTask:"
-                     "  max_threads:"<< max_threads
-                  << ", active_threads:"<< active_threads
-                  << ", total_threads:"<< total_threads
-                  << ", serial:"<<serial
-                  << ", task_queue.size():"<<task_queue.size()
-                  << std::endl;
+        logger::log_finer(
+          "addTask:   max_threads:%d"
+                   ", active_threads:%d"
+                   ", total_threads:%d"
+                   ", serial:%s"
+                   ", task_queue.size():%lu",
+                  max_threads,
+                  active_threads,
+                  total_threads,
+                  (serial ? "true":"false"),
+                  task_queue.size() );
         bool thread_start = false;
         int new_total = -1;
 
