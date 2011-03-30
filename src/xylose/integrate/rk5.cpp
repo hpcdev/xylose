@@ -66,11 +66,14 @@ namespace xylose {
   namespace integrate {
 
     template < typename DxDt, typename RKTweak >
-    template < unsigned int ndim >
+    template < unsigned int ndim,
+               typename Other >
     void RK<DxDt,5u,RKTweak>::operator() (       Vector<double,ndim> & x,
                                            const double & ti,
                                            const double & dt,
-                                                 double & dt_step ) {
+                                                 Other & other ) {
+      double & dt_step = localDt(other);
+
       /* ensure that dt and dt_step have the same sign */
       dt_step = copysign(dt_step,dt);
 
@@ -109,7 +112,7 @@ namespace xylose {
         dt_step_current = dt_step;
         rkTweak.rkTweakFirst(x, t, (const double&)dt_step_current, dt_step);
 
-        derivs(x, t, dt_step, dxdt);
+        derivs(x, t, dt_step, dxdt, other);
 
         for (unsigned int i = 0; i < ndim; i++) {
           /* Scaling used to monitor accuracy. This
@@ -119,7 +122,7 @@ namespace xylose {
 
         // time is accumulated in this function
         double told = t;
-        rkqs(x, dxdt, t, dt_step, x_cal, dt_step_current, tf);
+        rkqs(x, dxdt, t, dt_step, x_cal, dt_step_current, tf, other);
 
 
         if(std::abs(t - told) <= std::abs(t*1.5*eps)) {
@@ -161,14 +164,16 @@ namespace xylose {
 
 
     template < typename DxDt, typename RKTweak >
-    template < unsigned int ndim >
+    template < unsigned int ndim,
+               typename Other >
     void RK<DxDt,5u,RKTweak>::rkqs(       Vector<double,ndim> & p,
                                     const Vector<double,ndim> & dpdt,
                                           double & t,
                                           double & dt_try,
                                     const Vector<double,ndim> & p_scal,
                                           double & dt_did,
-                                    const double & tf ) {
+                                    const double & tf,
+                                          Other & other ) {
 
       using xylose::fast_pow;
       using std::max;
@@ -185,7 +190,7 @@ namespace xylose {
 
       double maxerr = 0.0;
       while (true) {
-        rkck(p,dpdt,t,dt,p_tmp,p_err); //   Take a step.
+        rkck( p, dpdt, t, dt, p_tmp, p_err, other ); //   Take a step.
         ++number_tries;
 
         //  Evaluate accuracy.
@@ -224,13 +229,15 @@ namespace xylose {
 
 
     template < typename DxDt, typename RKTweak >
-    template < unsigned int ndim >
+    template < unsigned int ndim,
+               typename Other >
     void RK<DxDt,5u,RKTweak>::rkck( const Vector<double,ndim> & p,
                                     const Vector<double,ndim> & D1,
                                     const double & t,
                                     const double & dt,
                                           Vector<double,ndim> & p_out,
-                                          Vector<double,ndim> & p_err ) {
+                                          Vector<double,ndim> & p_err,
+                                          Other & other ) {
       // Cash-Karp parameters for embedded Runge-Kutta
       // a[i] are sub-time step fractions
       // b[i,j] are the jth weights for computing the ith derivative (D[i])
@@ -262,35 +269,35 @@ namespace xylose {
 
       // find D2
       p_tmp = p + ( dt*b21 ) * D1;
-      derivs(p_tmp, t + a2*dt, dt, D2);
+      derivs(p_tmp, t + a2*dt, dt, D2, other);
 
       // find D3
       if ( ndim >= 3u )
         p_tmp = p + (dt*b31)*D1 + (dt*b32)*D2;
       else
         p_tmp = p + dt * ( b31*D1 + b32*D2 );
-      derivs(p_tmp, t + a3*dt, dt, D3);
+      derivs(p_tmp, t + a3*dt, dt, D3, other);
 
       // find D4
       if ( ndim >= 4u )
         p_tmp = p + (dt*b41)*D1 + (dt*b42)*D2 + (dt*b43)*D3;
       else
         p_tmp = p + dt*( b41*D1 + b42*D2 + b43*D3 );
-      derivs(p_tmp, t + a4*dt, dt, D4);
+      derivs(p_tmp, t + a4*dt, dt, D4, other);
 
       // find D5
       if ( ndim >= 5u )
         p_tmp = p + (dt*b51)*D1 + (dt*b52)*D2 + (dt*b53)*D3 + (dt*b54)*D4;
       else
         p_tmp = p + dt * ( b51*D1 + b52*D2 + b53*D3 + b54*D4 );
-      derivs(p_tmp, t + a5*dt, dt, D5);
+      derivs(p_tmp, t + a5*dt, dt, D5, other);
 
       // find D6
       if ( ndim >= 6u )
         p_tmp = p + (dt*b61)*D1 + (dt*b62)*D2 + (dt*b63)*D3 + (dt*b64)*D4 + (dt*b65)*D5;
       else
         p_tmp = p + dt * ( b61*D1 + b62*D2 + b63*D3 + b64*D4 + b65*D5);
-      derivs(p_tmp, t + a6*dt, dt, D6);
+      derivs(p_tmp, t + a6*dt, dt, D6, other);
 
       // Accumulate increments with proper weights.
       if ( ndim >= 5u )

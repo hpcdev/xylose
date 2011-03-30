@@ -139,14 +139,17 @@ namespace xylose {
        *      The starting time in the integral.
        * @param dt
        *      The integration length.
-       * @param dt_step
-       *      The sub-integration length to try for the adaptive method.
+       * @param p
+       *      Auxilliary class that provides at least the variable time step via
+       *      a localDt(p) ADL function.  This class will also be passed to the
+       *      derivs functor as its last argument.
        */
-      template <unsigned int ndim_>
+      template < unsigned int ndim,
+                 typename VariableTimeStepProvider >
       void operator() (       Vector<double,ndim_> & x,
                         const double & ti,
                         const double & dt,
-                              double & dt_step );
+                              VariableTimeStepProvider & p );
 
 
 

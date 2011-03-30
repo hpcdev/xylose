@@ -52,13 +52,27 @@ namespace xylose {
        * @param dt_step
        *      The sub-integration length to try for the adaptive methods.
        */
-      template <unsigned int ndim>
-      inline void operator() (       Vector<double,ndim> & p,
+      template < unsigned int ndim,
+                 typename Optional >
+      inline void operator() (       Vector<double,ndim> & x,
                                const double & t,
                                const double & dt,
-                                     double & dt_step ) {
+                                     Optional & opt ) {
         typedef DerivativeFunctor D;
-        return D::NO_RUNGE_KUTTA_IMPLEMENTATION_AVAILABLE_FOR_THIS_ORDER;
+        return D::NO_RUNGE_KUTTA_IMPLEMENTATION
+                ::WITH_OPTIONAL
+                ::AVAILABLE_FOR_THIS_ORDER;
+      }
+
+
+      template < unsigned int ndim >
+      inline void operator() (       Vector<double,ndim> & x,
+                               const double   & t,
+                               const double   & dt ) {
+        typedef DerivativeFunctor D;
+        return D::NO_RUNGE_KUTTA_IMPLEMENTATION
+                ::WITHOUT_OPTIONAL
+                ::AVAILABLE_FOR_THIS_ORDER;
       }
     };
 

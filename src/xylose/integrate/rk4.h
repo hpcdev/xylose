@@ -60,6 +60,8 @@
 #  include <xylose/integrate/rk.h>
 #endif // xylose_integrate_rk_h
 
+#include <xylose/integrate/detail/Derivs.h>
+
 namespace xylose {
   namespace integrate {
 
@@ -97,36 +99,44 @@ namespace xylose {
        *      The starting time in the integral.
        * @param dt
        *      The integration length.
-       * @param dummy_argument
-       *      Unused for this implementation.
        */
-      template <unsigned int ndim>
-      inline void operator() (       Vector<double,ndim> & p,
+      template < unsigned int ndim,
+                 typename Optional >
+      inline void operator() (       Vector<double,ndim> & x,
                                const double & t,
                                const double & dt,
-                               const double & dummy_argument = 0.0 ) {
-        Vector<double,ndim> p_tmp, D1, D2, D3, D4;
+                                     Optional & opt ) {
+        Vector<double,ndim> x_tmp, D1, D2, D3, D4;
 
         const double dth = 0.5 * dt;
         const double th = t + dth;
 
+        detail::Derivs<Optional> call;
+
         // find D1
-        derivs(p, t, dt, D1);
+        call( derivs, x, t, dt, D1, opt );
 
         // find D2
-        p_tmp = p + dth * D1;
-        derivs(p_tmp, th, dt, D2);
+        x_tmp = x + dth * D1;
+        call( derivs, x_tmp, th, dt, D2, opt );
 
         // find D3
-        p_tmp = p + dth * D2;
-        derivs(p_tmp, th, dt, D3);
+        x_tmp = x + dth * D2;
+        call( derivs, x_tmp, th, dt, D3, opt );
 
         // find D4
-        p_tmp = p + dt * D3;
-        derivs(p_tmp, t+dt, dt, D4);
+        x_tmp = x + dt * D3;
+        call( derivs, x_tmp, t+dt, dt, D4, opt );
 
         // now weight the sum
-        p += 0.16666666666666666667 * dt * ( D1 + 2.0*(D2 + D3) + D4 );
+        x += 0.16666666666666666667 * dt * ( D1 + 2.0*(D2 + D3) + D4 );
+      }
+
+      template < unsigned int ndim >
+      inline void operator() (       Vector<double,ndim> & x,
+                               const double & t,
+                               const double & dt ) {
+        this->operator()( x, t, dt, detail::NoOp() );
       }
     };
 
