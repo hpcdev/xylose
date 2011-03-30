@@ -136,7 +136,8 @@ namespace xylose {
       inline void operator() (       Vector<double,ndim> & x,
                                const double & t,
                                const double & dt ) {
-        this->operator()( x, t, dt, detail::NoOp() );
+        detail::NoOp noop;
+        this->operator()( x, t, dt, noop );
       }
     };
 
