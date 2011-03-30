@@ -146,7 +146,7 @@ namespace xylose {
        */
       template < unsigned int ndim,
                  typename VariableTimeStepProvider >
-      void operator() (       Vector<double,ndim_> & x,
+      void operator() (       Vector<double,ndim> & x,
                         const double & ti,
                         const double & dt,
                               VariableTimeStepProvider & p );
@@ -182,14 +182,16 @@ namespace xylose {
        * are used, care must be taken to fix this.  Compare against the Numerical
        * Recipies for Fortran routines.
        */
-      template < unsigned int ndim >
+      template < unsigned int ndim,
+                 typename Other >
       void rkqs(       Vector<double,ndim> & p,
                  const Vector<double,ndim> & dpdt,
                        double & t,
                        double & dt_try,
                  const Vector<double,ndim> & p_scal,
                        double & dt_did,
-                 const double & tf );
+                 const double & tf,
+                       Other & other );
     
       /* Given values for n variables p and their derivatives dpdt known at t, use the fifth-order
        * Cash-Karp Runge-Kutta method to advance the solution over an interval h and return
@@ -197,13 +199,15 @@ namespace xylose {
        * ror in yout using the embedded fourth-order method. The user supplies the subroutine
        * derivs(p,t,dt,dpdt), which returns derivatives dpdt at p.
        */
-      template < unsigned int ndim >
+      template < unsigned int ndim,
+                 typename Other >
       void rkck( const Vector<double,ndim> & p,
                  const Vector<double,ndim> & D1,
                  const double & t,
                  const double & dt,
                        Vector<double,ndim> & p_out,
-                       Vector<double,ndim> & p_err );
+                       Vector<double,ndim> & p_err,
+                       Other & other );
     };
 
   }/* namespace xylose::integrate */

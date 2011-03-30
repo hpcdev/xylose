@@ -35,37 +35,29 @@ namespace xylose {
       /** Derivative calling wrapper to allow an optional argument.  */
       template < typename Optional >
       struct Derivs {
-        template < typename DerivativeFunctor
-                   typename Arg0,
-                   typename Arg1,
-                   typename Arg2,
-                   typename Arg3,
-                   typename Optional >
-        void operator() ( DerviativeFunctor & derivs,
-                          const Arg0 & arg0,
-                          const Arg1 & arg1,
-                          const Arg2 & arg2,
-                          const Arg3 & arg3,
-                                Optional & opt ) {
-          derivs( arg0, arg1, arg2, arg3, opt );
+        template < typename DerivativeFunctor,
+                   typename Arg >
+        void operator() ( DerivativeFunctor & derivs,
+                          const Arg         & x,
+                          const double      & t,
+                          const double      & dt,
+                                Arg         & F,
+                                Optional    & opt ) {
+          derivs( x, t, dt, F, opt );
         }
       };
 
       template<>
       struct Derivs<NoOp> {
-        template < typename DerivativeFunctor
-                   typename Arg0,
-                   typename Arg1,
-                   typename Arg2,
-                   typename Arg3,
-                   typename NoOp >
-        void operator() ( DerviativeFunctor & derivs,
-                          const Arg0 & arg0,
-                          const Arg1 & arg1,
-                          const Arg2 & arg2,
-                          const Arg3 & arg3,
-                          const NoOp & ) {
-          derivs( arg0, arg1, arg2, arg3 );
+        template < typename DerivativeFunctor,
+                   typename Arg >
+        void operator() ( DerivativeFunctor & derivs,
+                          const Arg         & x,
+                          const double      & t,
+                          const double      & dt,
+                                Arg         & F,
+                          const NoOp        & ) {
+          derivs( x, t, dt, F );
         }
       };
 
