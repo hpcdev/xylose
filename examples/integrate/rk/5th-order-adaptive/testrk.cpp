@@ -44,6 +44,12 @@ const double x0[] = { 0.1, 0.1, 0.1 };
 const double a[] = { + 0.1, - 0.1, + 0.0 };
 
 
+/** ADL function to obtain reference to dt_step from the last argument of
+ * rk5::operator() (which, in this case, is just dt_step itsself. */
+inline double & localDt( double & dt ) {
+  return dt;
+}
+
 struct GetDerivs {
   int num_calls;
   GetDerivs() : num_calls(0) { }
@@ -51,7 +57,8 @@ struct GetDerivs {
   void operator() ( const Particle & p,
                     const double & time,
                     const double & dt,
-                          Vector<double,6u> & F ) {
+                          Vector<double,6u> & F,
+                    const double & dt_step ) {
     ++num_calls;
     /* copy over the dx/dt, dy/dt, and dz/dt */
     F[X] = p[VX];
